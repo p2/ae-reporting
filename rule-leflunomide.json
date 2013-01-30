@@ -2,22 +2,20 @@
 	"scope": "patient",
 	"name": "Leflunomide Hepatotoxicity",
 	"description": "Checks for a documented liver failure (SNOMED 59927004) in patients presently or previously on Leflunomide (Arava, RxNorm 27169)",
-	"conditions": {
-		"all": {
-			"rules": [
-				{
-					"subject": "<http://smartplatforms.org/terms#Medication>",
-					"predicate": "has_ingredient",
-					"object": "<http://purl.bioontology.org/ontology/RXNORM/27169>"
-				},
-				{
-					"subject": "<http://smartplatforms.org/terms#Problem>",
-					"predicate": "isa",
-					"object": "<http://purl.bioontology.org/ontology/SNOMEDCT/59927004>"
-				}
-			]
-		},
-		"any": {}
+	"rule": {
+		"all": [
+			{
+				"subject": "<http://smartplatforms.org/terms#Medication>",
+				"predicate": "has_ingredient",
+				"object": "<http://purl.bioontology.org/ontology/RXNORM/27169>"
+			},
+			{
+				"subject": "<http://smartplatforms.org/terms#Problem>",
+				"predicate": "isa",
+				"object": "<http://purl.bioontology.org/ontology/SNOMEDCT/59927004>"
+			}
+		],
+		"any": []
 	},
 	"actions": []
 }
