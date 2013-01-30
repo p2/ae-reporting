@@ -1,0 +1,13 @@
+{
+	"name": "Adverse Event Reporting", 
+	"description": "Adverse event reporting app", 
+	"author": "Pascal Pfiffner, Harvard Medical School", 
+	"icon": "http://apiverifier.smartplatforms.org/static/images/icon.png", 
+	"id": "ae-reporting@apps.chip.org", 
+	"mode": "ui", 
+	"scope": "record", 
+	"index": "http://coruscant.local/pp/ae-reporting/authorize.html", 
+	"oauth_callback": "http://coruscant.local/pp/ae-reporting/authorize.html", 
+	"smart_version": "0.6", 
+	"version": "1.0"
+}

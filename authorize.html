@@ -1,0 +1,27 @@
+<html>
+<head>
+	<title>Authorize</title>
+	<script>
+	function getVerifier() {
+		var url = document.location.href;
+		var parts = url ? url.split('?', 2) : [];
+		var text = '(No verifier found)';
+		if (2 == parts.length) {
+			params = parts[1].split('&');
+			for (var i = 0; i < params.length; i++) {
+				var parts = params[i].split('=');
+				if (2 == parts.length && 'oauth_verifier' == parts[0]) {
+					text = parts[1];
+				}
+			};
+		}
+		document.getElementById('verifier').innerHTML = text;
+	}
+	</script>
+</head>
+<body onload="getVerifier()">
+	<h1>We've been authorized</h1>
+	<p>Enter this oauth_verifier into the command line:<p>
+	<p id="verifier"></p>
+</body>
+</html>
