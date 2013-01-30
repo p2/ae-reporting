@@ -6,11 +6,14 @@
 import oauth2 as oauth
 import time
 import sys
+import os
 import os.path
+import glob
 import json
 from subprocess import Popen
 
 from smart_client_python.client import SMARTClient
+from rule import Rule
 
 
 # sandbox default setting for testing purposes
@@ -24,8 +27,28 @@ OAUTH_PARAMS = {
 KNOWN_TOKENS = {}
 
 
+def load_rules():
+	""" Loads all bundled rules """
+	rules = []
+	
+	# find all files starting with "rule-*.json"
+	mydir = os.path.realpath(os.getcwd())
+	for rule_file in glob.glob('rule-*.json'):
+		with open(rule_file) as handle:
+			rule_json = handle.read()
+			rule = Rule(json.loads(rule_json))
+			rules.append(rule)
+	
+	return rules
+	
+
+
 # if run as a script, we kick in here
 if __name__ == "__main__":
+	
+	# load all rules
+	print load_rules()
+	sys.exit(1)
 	
 	# load stored tokens
 	if os.path.exists('tokens.json'):

@@ -25,12 +25,20 @@ class Rule(object):
 			self.condition = ConditionSet('all')
 			if len(rule.get('all', [])) > 0:
 				all_cond = ConditionSet('all', rule.get('all'))
-				self.condition.append(all_cond)
+				self.condition.add(all_cond)
 			if len(rule.get('any', [])) > 0:
 				any_cond = ConditionSet('any', rule.get('any'))
-				self.condition.append(any_cond)
+				self.condition.add(any_cond)
 			
 			self.actions = []
 	
 	
-		
+	def __unicode__(self):
+		return '<rule.Rule %s> with condition set %s' % (self.name, self.condition)
+	
+	def __str__(self):
+		return unicode(self).encode('utf-8')
+	
+	def __repr__(self):
+		return str(self)
+

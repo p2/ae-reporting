@@ -15,4 +15,12 @@ class Condition(object):
 			self.object = from_dict.get('object')
 	
 	
+	def __unicode__(self):
+		return '%s %s %s' % (self.subject, self.predicate, self.object)
+	
+	def __str__(self):
+		return unicode(self).encode('utf-8')
+	
+	def __repr__(self):
+		return str(self)
 		
