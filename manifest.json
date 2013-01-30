@@ -6,8 +6,8 @@
 	"id": "ae-reporting@apps.chip.org", 
 	"mode": "ui", 
 	"scope": "record", 
-	"index": "http://coruscant.local/pp/ae-reporting/authorize.html", 
-	"oauth_callback": "http://coruscant.local/pp/ae-reporting/authorize.html", 
+	"index": "http://ae-reporting.aws.af.cm/", 
+	"oauth_callback": "http://ae-reporting.aws.af.cm/authorize", 
 	"smart_version": "0.6", 
 	"version": "1.0"
 }
