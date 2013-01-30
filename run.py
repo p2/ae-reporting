@@ -14,14 +14,15 @@ from subprocess import Popen
 
 from smart_client_python.client import SMARTClient
 from rule import Rule
+from testrecord import TestRecord
 
 
 # sandbox default setting for testing purposes
-API_BASE = 'http://coruscant.local:7000'
-#API_BASE = 'http://sandbox-rest.smartplatforms.org:7000'
+#API_BASE = 'http://coruscant.local:7000'
+API_BASE = 'http://sandbox-rest.smartplatforms.org:7000'
 OAUTH_PARAMS = {
 	'consumer_key': 'ae-reporting@apps.chip.org',
-	'consumer_secret': 'AiwnhVBSGGIHYtYG'
+	'consumer_secret': 'fNpKMtZEhnhLGJqO'
 }
 
 KNOWN_TOKENS = {}
@@ -40,6 +41,10 @@ def load_rules():
 			rules.append(rule)
 	
 	return rules
+
+def forever_alone():
+	with open('forever.txt') as handle:
+		return handle.read()
 	
 
 
@@ -47,8 +52,11 @@ def load_rules():
 if __name__ == "__main__":
 	
 	# load all rules
-	print load_rules()
-	sys.exit(1)
+	rules = load_rules()
+	if len(rules) < 1:
+		print "There are no rules, no point in continuing"
+		print forever_alone()
+		sys.exit(0)
 	
 	# load stored tokens
 	if os.path.exists('tokens.json'):
@@ -81,12 +89,11 @@ if __name__ == "__main__":
 		print 'Reusing existing access token'
 		smart.update_token(known_token)
 	
-	# get meds
-	meds = smart.get_medications()
-	if '200' != meds.response.get('status'):
-		print "Failed to get medications: %s" % meds.response.get('status')
-		sys.exit(1)
+	# create a patient and test it against our rules
+	patient = TestRecord(smart)
+	print '->  Patient %s' % patient
+	for rule in rules:
+		print '-->  Testing against %s' % rule
+		rule.match_against(patient)
 	
-	graph = meds.graph
-	print 'Now do something with those meds...'
 	

@@ -4,7 +4,11 @@
 #
 
 
-class Condition(object):
+from matcher import Matcher
+from testrecord import TestRecord
+
+
+class Condition(Matcher):
 	""" A Condition
 	"""
 	
@@ -15,6 +19,14 @@ class Condition(object):
 			self.object = from_dict.get('object')
 	
 	
+	# -------------------------------------------------------------------------- Testing
+	def match_against(self, patient):
+		graph = patient.property_for(self.subject)
+		print '--->  NOW MATCH AGAINST', graph
+		return False
+	
+	
+	# -------------------------------------------------------------------------- Utilities
 	def __unicode__(self):
 		return '%s %s %s' % (self.subject, self.predicate, self.object)
 	

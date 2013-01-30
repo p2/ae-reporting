@@ -4,15 +4,15 @@
 #
 
 
-from condition import Condition
+from matcher import Matcher
 from conditionset import ConditionSet
 
 
-class Rule(object):
+class Rule(Matcher):
 	""" A Rule
 	
 	A rule is a set of condition-sets, which can be nested and in turn contain other condition-sets or actual
-	conditions.
+	conditions. The rule itself has one top-level condition-set which is an "all" condition set.
 	"""
 	
 	def __init__(self, from_json=None):
@@ -33,8 +33,14 @@ class Rule(object):
 			self.actions = []
 	
 	
+	# -------------------------------------------------------------------------- Testing
+	def match_against(self, patient):
+		return self.condition.match_against(patient)
+	
+	
+	# -------------------------------------------------------------------------- Utilities
 	def __unicode__(self):
-		return '<rule.Rule %s> with condition set %s' % (self.name, self.condition)
+		return '<rule.Rule %s>' % self.name
 	
 	def __str__(self):
 		return unicode(self).encode('utf-8')
