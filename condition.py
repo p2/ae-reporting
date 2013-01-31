@@ -6,6 +6,7 @@
 
 from matcher import Matcher
 from testrecord import TestRecord
+from lookup import Lookup
 
 
 class Condition(Matcher):
@@ -14,6 +15,7 @@ class Condition(Matcher):
 	
 	def __init__(self, from_dict=None):
 		if from_dict is not None:
+			self.system = from_dict.get('system')
 			self.subject = from_dict.get('subject')
 			self.predicate = from_dict.get('predicate')
 			self.object = from_dict.get('object')
@@ -25,25 +27,47 @@ class Condition(Matcher):
 		if graph is None:
 			return False
 		
-		# get all items that we want to test against
+		item_sparql = self.sparql_query_for_item_of_system()
+		if item_sparql is None:
+			raise Exception("I don't know how to extract items for '%s'" % self.system)
+		
+		# extract the actual items that we want to test against
 		query = """
 			PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+			PREFIX sp:<http://smartplatforms.org/terms#>
 			SELECT ?item
 			WHERE {
-			 ?item rdf:type %s .
+				?var1 rdf:type %s .
+				%s
 			}
-		""" % self.subject
+		""" % (self.subject, item_sparql)
 		items = graph.query(query)
 		
 		if len(items) < 1:
 			return False
 		
-		# test the quality of our items
-		print '--->  NOW MATCH AGAINST', graph
+		# get our lookup system
+		lookup = Lookup.for_system(self.system)
+		if lookup is None:
+			raise Exception("We don't have a lookup system for '%s'" % self.system)
+		
+		# test the quality of our items (remember "items" is full of tuples from the sparql query)
 		for item in items:
-			print item
+			if lookup.has_relation(item[0], self.predicate, self.object):
+				print '===>  Matches', self
+				return True
 		
 		return False
+	
+	
+	def sparql_query_for_item_of_system(self):
+		if 'rxnorm' == self.system:
+			return """
+				?var1 sp:drugName ?var2 .
+				?var2 sp:code ?item .
+			"""
+		return None
+			
 	
 	
 	# -------------------------------------------------------------------------- Utilities

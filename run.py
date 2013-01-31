@@ -91,9 +91,9 @@ if __name__ == "__main__":
 	
 	# create a patient and test it against our rules
 	patient = TestRecord(smart)
-	print '->  Patient %s' % patient
+	print '->  Patient', patient
 	for rule in rules:
-		print '-->  Testing against %s' % rule
+		print '-->  Testing against', rule
 		rule.match_against(patient)
 	
 	

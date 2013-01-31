@@ -3,3 +3,7 @@
 tokens.json
 credentials.py
 
+# databases
+databases/*.db
+databases/mysql2sqlite.sh
+

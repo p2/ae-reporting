@@ -21,15 +21,8 @@ class Rule(Matcher):
 			self.name = from_json.get('name')
 			self.description = from_json.get('description')
 			
-			rule = from_json.get('rule')
-			self.condition = ConditionSet('all')
-			if len(rule.get('all', [])) > 0:
-				all_cond = ConditionSet('all', rule.get('all'))
-				self.condition.add(all_cond)
-			if len(rule.get('any', [])) > 0:
-				any_cond = ConditionSet('any', rule.get('any'))
-				self.condition.add(any_cond)
-			
+			cond_dict = from_json.get('condition')
+			self.condition = ConditionSet(cond_dict)
 			self.actions = []
 	
 	

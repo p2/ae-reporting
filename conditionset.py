@@ -17,13 +17,15 @@ class ConditionSet(Matcher):
 	Can't be a subclass of "set" because I then can't add it to lists... :P
 	"""
 	
-	def __init__(self, my_type, conditions=[]):
+	def __init__(self, json_dict):
+		my_type = json_dict.get('type')
 		if my_type not in ["all", "any"]:
 			raise Exception('Must be of type "all" or "any", but I got "%s"' % my_type)
 		self.type = my_type
 		
-		# instantiate our sub-conditions
+		# instantiate our conditions
 		new_conds = []
+		conditions = json_dict.get('conditions')
 		if len(conditions) > 0:
 			for cond_dict in conditions:
 				cond = Condition(cond_dict) if 'subject' in cond_dict else ConditionSet(cond_dict)

@@ -1,2 +1,0 @@
-
-BIOPORTAL_API_KEY = ''
