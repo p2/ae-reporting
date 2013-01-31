@@ -21,8 +21,28 @@ class Condition(Matcher):
 	
 	# -------------------------------------------------------------------------- Testing
 	def match_against(self, patient):
-		graph = patient.property_for(self.subject)
+		graph = patient.graph_for(self.subject)
+		if graph is None:
+			return False
+		
+		# get all items that we want to test against
+		query = """
+			PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+			SELECT ?item
+			WHERE {
+			 ?item rdf:type %s .
+			}
+		""" % self.subject
+		items = graph.query(query)
+		
+		if len(items) < 1:
+			return False
+		
+		# test the quality of our items
 		print '--->  NOW MATCH AGAINST', graph
+		for item in items:
+			print item
+		
 		return False
 	
 	

@@ -33,13 +33,13 @@ class TestRecord(object):
 		
 	
 	# -------------------------------------------------------------------------- Matching data models to properties
-	def property_for(self, data_type):
+	def graph_for(self, data_type):
 		""" calls the appropriate property getter for the given data type """
 		
 		if '<http://smartplatforms.org/terms#Medication>' == data_type:
-			return self.medications
+			return self.medications.graph
 		if '<http://smartplatforms.org/terms#Problem>' == data_type:
-			return self.problems
+			return self.problems.graph
 		return None
 	
 	
