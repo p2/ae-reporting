@@ -4,9 +4,8 @@
 	"author": "Pascal Pfiffner, Harvard Medical School", 
 	"icon": "http://apiverifier.smartplatforms.org/static/images/icon.png", 
 	"id": "ae-reporting@apps.chip.org", 
-	"mode": "ui", 
+	"mode": "background", 
 	"scope": "record", 
-	"index": "http://ae-reporting.aws.af.cm/", 
 	"oauth_callback": "http://ae-reporting.aws.af.cm/authorize", 
 	"smart_version": "0.6", 
 	"version": "1.0"
