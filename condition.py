@@ -66,6 +66,11 @@ class Condition(Matcher):
 				?var1 sp:drugName ?var2 .
 				?var2 sp:code ?item .
 			"""
+		if 'snomed' == self.system:
+			return """
+				?var1 sp:problemName ?var2 .
+				?var2 sp:code ?item .
+			"""
 		return None
 			
 	

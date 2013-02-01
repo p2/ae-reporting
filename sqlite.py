@@ -76,6 +76,10 @@ class SQLite (object):
 		return self.cursor.fetchone()
 	
 	
+	# -------------------------------------------------------------------------- Transactions
+	# The Python SQLite module implicitly begins transaction on DML statements and commits at a certain point, depending
+	# on the `isolation_level` property on the connection. Rollbacks occur automatically on exceptions. So all we need
+	# is a shortcut to `commit`.
 	def commit(self):
 		self.handle.commit()
 	

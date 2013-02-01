@@ -13,6 +13,9 @@ This is now an AppFog app, remember to update:
     $ af update ae-reporting
 
 
+UMLS Terminologies
+------------------
+
 ### RxNORM ###
 
 The script `databases/rxnorm.sh` sets up a local SQLite database from a provided RxNORM download.

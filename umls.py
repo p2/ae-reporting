@@ -43,37 +43,40 @@ class UMLS (object):
 		"""
 		
 		cls.setup_tables()
+		map = {
+			'descriptions': 'snomed_desc.csv',
+			'relationships': 'snomed_rel.csv'
+		}
 		
-		# need to import descriptions?
-		num_query = 'SELECT COUNT(*) FROM descriptions'
-		num_existing = UMLS.sqlite_handle.executeOne(num_query, ())[0]
-		if num_existing > 0:
-			return
-		
-		snomed_file = 'databases/snomed_desc.csv'
-		if not os.path.exists(snomed_file):
-			return
-		
-		cls.import_csv_into_table(snomed_file, 'descriptions')
+		# need to import?
+		for table, filename in map.iteritems():
+			num_query = 'SELECT COUNT(*) FROM %s' % table
+			num_existing = UMLS.sqlite_handle.executeOne(num_query, ())[0]
+			if num_existing > 0:
+				return
+			
+			snomed_file = os.path.join('databases', filename)
+			if not os.path.exists(snomed_file):
+				return
+			
+			cls.import_csv_into_table(snomed_file, table)
 	
 	@classmethod
 	def import_csv_into_table(cls, snomed_file, table_name):
-		print '..>  Importing SNOMED concepts into snomed.db...'
+		print '..>  Importing SNOMED %s into snomed.db...' % table_name
 		
 		# not yet imported, parse tab-separated file and import
 		with open(snomed_file, 'rb') as csv_handle:
+			cls.sqlite_handle.isolation_level = 'EXCLUSIVE'
+			sql = cls.insert_query_for('snomed', table_name)
 			reader = unicode_csv_reader(csv_handle, dialect='excel-tab')
 			i = 0
 			try:
 				for row in reader:
-					if i > 0:
+					if i > 0:			# first row is the header row
 						
 						# execute SQL (we just ignore duplicates)
-						sql = '''INSERT OR IGNORE INTO %s
-							(concept_id, lang, term, active)
-							VALUES
-							(?, ?, ?, ?)''' % table_name
-						params = (int(row[4]), row[5], row[7], row[2])
+						params = cls.insert_tuple_from_csv_row_for('snomed', table_name, row)
 						try:
 							cls.sqlite_handle.execute(sql, params)
 						except Exception as e:
@@ -82,6 +85,8 @@ class UMLS (object):
 				
 				# commit to file
 				cls.sqlite_handle.commit()
+				cls.after_import('snomed', table_name)
+				cls.sqlite_handle.isolation_level = None
 			
 			except csv.Error as e:
 				sys.exit('CSV error on line %d: %s' % (reader.line_num, e))
@@ -91,12 +96,12 @@ class UMLS (object):
 
 	@classmethod
 	def setup_tables(cls):
-		""" Creates the SQLite tables and imports SNOMED from flat files, if
-		not already done
+		""" Creates the SQLite tables we need, not the tables we deserve.
 		"""
 		if cls.sqlite_handle is None:
 			cls.sqlite_handle = SQLite.get('databases/snomed.db')
 		
+		# descriptions
 		cls.sqlite_handle.create('descriptions', '''(
 				concept_id INTEGER PRIMARY KEY,
 				lang TEXT,
@@ -104,6 +109,60 @@ class UMLS (object):
 				active INT
 			)''')
 		
+		# relationships
+		cls.sqlite_handle.create('relationships', '''(
+				relationship_id INTEGER PRIMARY KEY,
+				source_id INT,
+				destination_id INT,
+				rel_type INT,
+				rel_text VARCHAR,
+				active INT
+			)''')
+		cls.sqlite_handle.execute("CREATE INDEX IF NOT EXISTS source_index ON relationships (source_id)")
+		cls.sqlite_handle.execute("CREATE INDEX IF NOT EXISTS destination_index ON relationships (destination_id)")
+		cls.sqlite_handle.execute("CREATE INDEX IF NOT EXISTS rel_type_index ON relationships (rel_type)")
+		cls.sqlite_handle.execute("CREATE INDEX IF NOT EXISTS rel_text_index ON relationships (rel_text)")
+		
+	
+	@classmethod
+	def insert_query_for(cls, db_name, table_name):
+		""" Returns the insert query needed for the given table
+		"""
+		if 'snomed' == db_name:
+			if 'descriptions' == table_name:
+				return '''INSERT OR IGNORE INTO descriptions
+							(concept_id, lang, term, active)
+							VALUES
+							(?, ?, ?, ?)'''
+			if 'relationships' == table_name:
+				return '''INSERT OR IGNORE INTO relationships
+							(relationship_id, source_id, destination_id, rel_type, active)
+							VALUES
+							(?, ?, ?, ?, ?)'''
+		return None
+	
+	@classmethod
+	def insert_tuple_from_csv_row_for(cls, db_name, table_name, row):
+		if 'snomed' == db_name:
+			if 'descriptions' == table_name:
+				return (int(row[4]), row[5], row[7], int(row[2]))
+			if 'relationships' == table_name:
+				return (int(row[0]), int(row[4]), int(row[5]), int(row[7]), int(row[2]))
+		return None
+	
+	@classmethod
+	def after_import(cls, db_name, table_name):
+		""" Allows us to set hooks after tables have been imported
+		"""
+		if 'snomed' == db_name:
+			if 'relationships' == table_name:
+				cls.sqlite_handle.execute('''
+					UPDATE relationships SET rel_text = 'isa' WHERE rel_type = 116680003
+					''')
+				cls.sqlite_handle.execute('''
+					UPDATE relationships SET rel_text = 'finding_site' WHERE rel_type = 363698007
+					''')
+
 
 # the standard Python CSV reader can't do unicode, here's the workaround
 def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):

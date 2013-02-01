@@ -17,6 +17,8 @@ class Lookup(object):
 	def for_system(cls, system):
 		if 'rxnorm' == system:
 			return RxNorm()
+		if 'snomed' == system:
+			return SNOMED()
 		return None
 	
 	
@@ -34,7 +36,7 @@ class Lookup(object):
 		# get the bare URI
 		uri = unicode(something)
 		if '>' == uri[-1:]:
-			uri = uri[1:] + uri[-1:]
+			uri = uri[1:-1]
 		
 		# split and return the last component
 		return os.path.split(uri)[1]
@@ -58,9 +60,37 @@ class RxNorm(Lookup):
 		subject_id = self.id_from_uri(subj)
 		object_id = self.id_from_uri(obj)
 		
+		print '--->  RxNorm check if', subject_id, relation, object_id
 		query = """SELECT COUNT(*) FROM RXNREL
 			WHERE RXCUI1 = ? AND RXCUI2 = ? AND RELA = ?"""
 		
 		res = self.sqlite.executeOne(query, (object_id, subject_id, relation))[0]
 		return res > 0
+
+
+
+# ============================================================================== SNOMED CT
+class SNOMED(Lookup):
+	""" Handling SNOMED lookups.
+	"""
+	
+	def __init__(self):
+		self.sqlite = SQLite.get('databases/snomed.db')
+	
+	
+	def has_relation(self, subj, relation, obj):
+		""" Checks the SNOMED relations for our desired triple.
+		"""
+		
+		subject_id = self.id_from_uri(subj)
+		object_id = self.id_from_uri(obj)
+		
+		print '--->  SNOMED check if', subject_id, relation, object_id
+		query = """SELECT COUNT(*) FROM relationships
+			WHERE source_id = ? AND destination_id = ? AND rel_text = ?"""
+		
+		res = self.sqlite.executeOne(query, (object_id, subject_id, relation))[0]
+		return res > 0
+		
+		
 
