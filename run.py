@@ -19,6 +19,7 @@ from umls import UMLS
 
 
 # sandbox default setting for testing purposes
+APP_ID = 'ae-reporting@apps.chip.org'
 #API_BASE = 'http://coruscant.local:7000'
 API_BASE = 'http://sandbox-rest.smartplatforms.org:7000'
 OAUTH_PARAMS = {
@@ -68,7 +69,7 @@ if __name__ == "__main__":
 		KNOWN_TOKENS = json.loads(token_json)
 	
 	# init our client
-	smart = SMARTClient(API_BASE, OAUTH_PARAMS)
+	smart = SMARTClient(APP_ID, API_BASE, OAUTH_PARAMS)
 	smart.record_id = '1288992'
 	known_token = KNOWN_TOKENS.get(API_BASE, {}).get(smart.record_id)
 	
