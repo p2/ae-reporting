@@ -15,6 +15,7 @@ from subprocess import Popen
 from smart_client_python.client import SMARTClient
 from rule import Rule
 from testrecord import TestRecord
+from umls import UMLS
 
 
 # sandbox default setting for testing purposes
@@ -50,6 +51,7 @@ def forever_alone():
 
 # if run as a script, we kick in here
 if __name__ == "__main__":
+	UMLS.import_snomed_if_necessary()
 	
 	# load all rules
 	rules = load_rules()
@@ -86,7 +88,7 @@ if __name__ == "__main__":
 			with open('tokens.json', 'w') as handle:
 				handle.write(json.dumps(KNOWN_TOKENS))
 	else:
-		print 'Reusing existing access token'
+		print '->  Reusing existing access token'
 		smart.update_token(known_token)
 	
 	# create a patient and test it against our rules

@@ -28,7 +28,11 @@ The script `databases/rxnorm.sh` sets up a local SQLite database from a provided
 
 ### SNOMED CT ###
 
-NOT YET DONE: Setting up SNOMED CT:
+Setting up SNOMED CT:
 
-- download [SNOMED CT](http://download.nlm.nih.gov/umls/kss/IHTSDO20120731/SnomedCT_Release_INT_20120731.zip)
-- Descriptions are in _SnomedCT_Release_INT_20120731/RF2Release/Full/Terminology/sct2_Description_Full-en_INT_20120731.txt_. Those will automatically be imported into a local SQLite database. If you download a different release, update the path in `run.py` to point to the correct file.
+- download [SNOMED CT](http://www.nlm.nih.gov/research/umls/licensedcontent/snomedctfiles.html) and unzip it
+- From the directory _SnomedCT_Release_INT_20120731/RF2Release/Full/Terminology_ place the following files under the given name into `databases`:
+
+  - `sct2_Description_Full-en_INT_20120731.txt`: `snomed_desc.csv`
+  
+  This will automatically import all SNOMED codes into a local SQLite database (if not already done).

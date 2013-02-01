@@ -41,6 +41,7 @@ class SQLite (object):
 		self.cursor = None
 	
 	
+	# -------------------------------------------------------------------------- Executing Queries
 	def executeInsert(self, sql, params=()):
 		""" Executes an SQL command (should be INSERT OR REPLACE) and returns the last row id, 0 on failure.
 		"""
@@ -75,6 +76,11 @@ class SQLite (object):
 		return self.cursor.fetchone()
 	
 	
+	def commit(self):
+		self.handle.commit()
+	
+	
+	# -------------------------------------------------------------------------- Table Creation
 	def create(self, table_name, table_structure):
 		""" Executes a CREATE TABLE IF NOT EXISTS query with the given structure.
 		
@@ -84,10 +90,7 @@ class SQLite (object):
 		self.execute(create_query)
 	
 	
-	def commit(self):
-		self.handle.commit()
-	
-	
+	# -------------------------------------------------------------------------- Connection
 	def connect(self):
 		if self.cursor is not None:
 			return
