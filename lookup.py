@@ -89,7 +89,7 @@ class SNOMED(Lookup):
 		query = """SELECT COUNT(*) FROM relationships
 			WHERE source_id = ? AND destination_id = ? AND rel_text = ?"""
 		
-		res = self.sqlite.executeOne(query, (object_id, subject_id, relation))[0]
+		res = self.sqlite.executeOne(query, (subject_id, object_id, relation))[0]
 		return res > 0
 		
 		

@@ -37,5 +37,6 @@ Setting up SNOMED CT:
 - From the directory _SnomedCT_Release_INT_20120731/RF2Release/Full/Terminology_ place the following files under the given name into `databases`:
 
   - `sct2_Description_Full-en_INT_20120731.txt`: `snomed_desc.csv`
+  - `sct2_Relationship_Full_INT_20130131.txt`: `snomed_rel.csv`
   
   This will automatically import all SNOMED codes into a local SQLite database (if not already done).
