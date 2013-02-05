@@ -1,0 +1,24 @@
+PREFIX sp: <http://smartplatforms.org/terms#>
+PREFIX rxnorm: <http://purl.bioontology.org/ontology/RXNORM/>
+PREFIX rxrel: <http://purl.bioontology.org/ontology/RXNORM#>
+PREFIX snomed: <http://purl.bioontology.org/ontology/SNOMEDCT/>
+ASK
+WHERE {
+	SELECT MIN(?med_start) 
+	WHERE {
+		?medication a sp:Medication .
+		?medication sp:drugName ?med_name .
+		?med_name sp:code ?med_rx .
+		?med_rx rxrel:has_ingredient rxnorm:27169 .
+		?medication sp:startDate ?med_start .
+	}
+	SELECT MIN(?prob_start)
+	WHERE {
+		?problem a sp:Problem .
+		?problem sp:problemName ?prob_name .
+		?prob_name sp:code ?prob_sno .
+		?prob_sno isa snomed:59927004 .
+		?problem sp:startDate ?prob_start .
+	}
+	FILTER xsd:dateTime(?med_start) < xsd:dateTime(?prob_start) .
+}

@@ -22,15 +22,17 @@ class TestRecord(object):
 	def medications(self):
 		if self._medications is None:
 			self._medications = self.smart.get_medications()
+			#self._medications.graph.serialize(destination="medications-%s.rdf" % self.record_id)
 		return self._medications
-		
+	
 	
 	@property
 	def problems(self):
 		if self._problems is None:
 			self._problems = self.smart.get_problems()
+			#self._problems.graph.serialize(destination="problems-%s.rdf" % self.record_id)
 		return self._problems
-		
+	
 	
 	# -------------------------------------------------------------------------- Matching data models to properties
 	def graph_for(self, data_type):

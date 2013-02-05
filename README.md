@@ -13,6 +13,28 @@ This is now an AppFog app, remember to update:
     $ af update ae-reporting
 
 
+RDF Store
+---------
+
+Testing RDF with [4store](http://4store.org/), to setup:
+
+    brew install 4store
+    4s-backend-setup test
+    4s-backend test
+    4s-httpd -p 7777 test
+    
+To import RxNorm:
+
+    cd databases
+    ./rxnorm.sh
+    4s-import test rxnorm.nt
+
+Adding our test patient's RDF and opening a SPARQL shell
+
+    4s-import test --add ../test.rdf
+    4s-query test
+
+
 UMLS Terminologies
 ------------------
 

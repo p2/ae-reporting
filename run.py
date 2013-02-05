@@ -73,6 +73,6 @@ if __name__ == "__main__":
 		for rule in rules:
 			print '-->  Testing against', rule
 			if rule.match_against(record):
-				print '==>  Record %s matches rule %s', (record_id, rule.name)
+				print '==>  Record %s matches rule %s' % (record_id, rule.name)
 	
 	

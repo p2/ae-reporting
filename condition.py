@@ -33,11 +33,10 @@ class Condition(Matcher):
 		
 		# extract the actual items that we want to test against
 		query = """
-			PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 			PREFIX sp:<http://smartplatforms.org/terms#>
 			SELECT ?item
 			WHERE {
-				?var1 rdf:type %s .
+				?var1 a %s .
 				%s
 			}
 		""" % (self.subject, item_sparql)
