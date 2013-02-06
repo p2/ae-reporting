@@ -60,7 +60,7 @@ class RxNorm(Lookup):
 		subject_id = self.id_from_uri(subj)
 		object_id = self.id_from_uri(obj)
 		
-		print '--->  RxNorm check if', subject_id, relation, object_id
+		#print '--->  RxNorm check if', subject_id, relation, object_id
 		query = """SELECT COUNT(*) FROM RXNREL
 			WHERE RXCUI1 = ? AND RXCUI2 = ? AND RELA = ?"""
 		
@@ -85,7 +85,7 @@ class SNOMED(Lookup):
 		subject_id = self.id_from_uri(subj)
 		object_id = self.id_from_uri(obj)
 		
-		print '--->  SNOMED check if', subject_id, relation, object_id
+		#print '--->  SNOMED check if', subject_id, relation, object_id
 		query = """SELECT COUNT(*) FROM relationships
 			WHERE source_id = ? AND destination_id = ? AND rel_text = ?"""
 		

@@ -6,6 +6,7 @@ These aren't the droids you're looking for. You can go about your business.
 Requirements
 ------------
 
+* (stuff for the SMART client)
 * `pip install Jinja2`
 
 
