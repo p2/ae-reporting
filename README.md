@@ -3,6 +3,11 @@ Adverse Event Reporting
 
 These aren't the droids you're looking for. You can go about your business.
 
+Requirements
+------------
+
+* `pip install Jinja2`
+
 
 AppFog
 ------

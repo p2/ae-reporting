@@ -22,8 +22,8 @@ class Condition(Matcher):
 	
 	
 	# -------------------------------------------------------------------------- Testing
-	def match_against(self, patient):
-		graph = patient.graph_for(self.subject)
+	def match_against(self, record):
+		graph = record.graph_for(self.subject)
 		if graph is None:
 			return False
 		
@@ -34,9 +34,9 @@ class Condition(Matcher):
 		# extract the actual items that we want to test against
 		query = """
 			PREFIX sp:<http://smartplatforms.org/terms#>
-			SELECT ?item
+			SELECT ?item ?source
 			WHERE {
-				?var1 a %s .
+				?source a %s .
 				%s
 			}
 		""" % (self.subject, item_sparql)
@@ -54,20 +54,24 @@ class Condition(Matcher):
 		for item in items:
 			if lookup.has_relation(item[0], self.predicate, self.object):
 				print '===>  Matches', self
+				record.did_match_item(item[1], self.system)
 				return True
 		
 		return False
 	
 	
 	def sparql_query_for_item_of_system(self):
+		""" Gets inserted into an existing SPARQL query where `?source` is the original object (e.g. a medication for
+			"rxnorm") and the resulting object should be in `?item`.
+		"""
 		if 'rxnorm' == self.system:
 			return """
-				?var1 sp:drugName ?var2 .
+				?source sp:drugName ?var2 .
 				?var2 sp:code ?item .
 			"""
 		if 'snomed' == self.system:
 			return """
-				?var1 sp:problemName ?var2 .
+				?source sp:problemName ?var2 .
 				?var2 sp:code ?item .
 			"""
 		return None

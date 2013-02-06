@@ -9,6 +9,7 @@ class TestRecord(object):
 	
 	def __init__(self, smart_client):
 		self.smart = smart_client
+		self.matches = {}				# conditions write the matched objects to arrays by system key
 		self._medications = None
 		self._problems = None
 	
@@ -43,6 +44,64 @@ class TestRecord(object):
 		if '<http://smartplatforms.org/terms#Problem>' == data_type:
 			return self.problems.graph
 		return None
+	
+	def did_match_item(self, item, item_system):
+		""" The conditions should call this so the instance can properly fill an ivar for the given item
+		"""
+		to_store = self.get_object_for(item, item_system)
+		if to_store is not None:
+			matches = self.matches.get(item_system, [])
+			matches.append(to_store)
+			self.matches[item_system] = matches
+	
+	
+	# -------------------------------------------------------------------------- Object Extraction
+	def get_object_for(self, item, item_system):
+		""" Get the interesting parts for an item, depending on its system
+		"""
+		
+		# a medication, get the code, name, start- and end-date
+		if 'rxnorm' == item_system:
+			med = self.get_item(item)
+			if med is None:
+				return None
+			print med
+			return {
+				"rxnorm": item,
+				"name": "A medication",
+				"start_date": None,
+				"end_date": None
+			}
+		
+		# SNOMED problems
+		if 'snomed' == item_system:
+			prob = self.get_item(item)
+			if prob is None:
+				return None
+			print prob
+			return {
+				"snomed": item,
+				"name": "A problem",
+				"start_date": None
+			}
+		
+		return None
+	
+	def get_item(self, item_url):
+		""" Uses the SMART client to GET RDF for an item
+		"""
+		
+		body = None
+		try:
+			head, body = self.smart.get(item_url)
+			if head.get('status') != '200':
+				print 'Failed to GET "%s": %s' % (item_url, head.get('status'))
+				return None
+		except Exception, e:
+			print 'Failed to GET "%s": %s' % (item_url, e)
+			return None
+		
+		return body
 	
 	
 	# -------------------------------------------------------------------------- Utilities

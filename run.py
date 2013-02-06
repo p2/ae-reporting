@@ -58,21 +58,21 @@ if __name__ == "__main__":
 		print "There are no rules, no point in continuing"
 		print forever_alone()
 		sys.exit(0)
+	print '->  Did load %d %s' % (len(rules), 'rule' if 1 == len(rules) else 'rules')
 	
 	# init our client
-	print '->  Connecting to SMART'
 	smart = SMARTClient(APP_ID, API_BASE, OAUTH_PARAMS)
 	
 	# loop over all records and test against our rules
 	for record_id in smart.loop_over_records():
-		#if '665677' != record_id:
-		#	continue
+		if '665677' != record_id:
+			continue
 		
 		record = TestRecord(smart)
 		print '->  Record', record
 		for rule in rules:
 			print '-->  Testing against', rule
 			if rule.match_against(record):
-				print '==>  Record %s matches rule %s' % (record_id, rule.name)
+				rule.perform_actions(record)
 	
 	

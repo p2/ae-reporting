@@ -19,5 +19,11 @@
 			}
 		]
 	},
-	"actions": []
+	"actions": [
+		{
+			"name": "Dump XML Report",
+			"template": "leflunomide.xml",
+			"target": "output"
+		}
+	]
 }
