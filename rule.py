@@ -6,6 +6,7 @@
 
 from matcher import Matcher
 from conditionset import ConditionSet
+from action import Action
 
 
 class Rule(Matcher):
@@ -23,12 +24,22 @@ class Rule(Matcher):
 			
 			cond_dict = from_json.get('condition')
 			self.condition = ConditionSet(cond_dict)
+			
+			action_dict = from_json.get('actions')
+			self.actions = Action.from_array(action_dict)
+		else:
+			self.name = None
+			self.condition = None
 			self.actions = []
 	
 	
-	# -------------------------------------------------------------------------- Testing
+	# -------------------------------------------------------------------------- Matching and Acting
 	def match_against(self, patient):
 		return self.condition.match_against(patient)
+	
+	def perform_actions(self, patient):
+		for action in self.actions:
+			action.execute_for(patient)
 	
 	
 	# -------------------------------------------------------------------------- Utilities

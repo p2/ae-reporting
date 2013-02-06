@@ -34,7 +34,7 @@ def load_rules():
 	
 	# find all files starting with "rule-*.json"
 	mydir = os.path.realpath(os.getcwd())
-	for rule_file in glob.glob('rule-*.json'):
+	for rule_file in glob.glob('rules/rule-*.json'):
 		with open(rule_file) as handle:
 			rule_json = handle.read()
 			rule = Rule(json.loads(rule_json))
