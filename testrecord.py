@@ -4,6 +4,9 @@
 #
 
 
+from rdflib.graph import Graph
+
+
 class TestRecord(object):
 	""" Encapsulates a SMART client object so it can be handled like a record and tested against our rules """
 	
@@ -60,25 +63,52 @@ class TestRecord(object):
 		""" Get the interesting parts for an item, depending on its system
 		"""
 		
-		# a medication, get the code, name, start- and end-date
+		# a medication
 		if 'rxnorm' == item_system:
-			med = self.get_item(item)
-			if med is None:
+			body = self.fetch_item(item)		# maybe use self.medications?
+			if body is None:
 				return None
-			print med
+			
+			graph = Graph()
+			graph.parse(data=body, publicID=item)
+			
+			# extract interesting properties
+			sparql = """
+				PREFIX sp: <http://smartplatforms.org/terms#>
+				PREFIX dcterms: <http://purl.org/dc/terms/>
+				SELECT ?code ?name ?start_date ?end_date
+				WHERE {
+					?item sp:drugName ?name_node .
+					?name_node sp:code ?code .
+					OPTIONAL { ?name_node dcterms:title ?name . }
+					OPTIONAL { ?item sp:startDate ?start_date . }
+					OPTIONAL { ?item sp:endDate ?end_date . }
+				}
+			"""
+			
+			results = graph.query(sparql)
+			if len(results) < 1:
+				print "xxx>  get_object_for() SPARQL query for %s didn't match" % item_system
+				return None
+			
+			first = None
+			for res in results:		# yeah, this is ugly...
+				first = res
+				break
+			
 			return {
-				"rxnorm": item,
-				"name": "A medication",
-				"start_date": None,
-				"end_date": None
+				"rxnorm": first[0],
+				"name": first[1],
+				"start_date": first[2],
+				"end_date": first[3]
 			}
 		
 		# SNOMED problems
 		if 'snomed' == item_system:
-			prob = self.get_item(item)
+			prob = self.fetch_item(item)
 			if prob is None:
 				return None
-			print prob
+			#print prob
 			return {
 				"snomed": item,
 				"name": "A problem",
@@ -87,7 +117,7 @@ class TestRecord(object):
 		
 		return None
 	
-	def get_item(self, item_url):
+	def fetch_item(self, item_url):
 		""" Uses the SMART client to GET RDF for an item
 		"""
 		
