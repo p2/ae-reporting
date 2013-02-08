@@ -3,11 +3,8 @@
 	"description": "Adverse event reporting app", 
 	"author": "Pascal Pfiffner, Harvard Medical School", 
 	"id": "ae-reporting@apps.chip.org", 
-	"mode": "ui", 
+	"mode": "background", 
 	"scope": "record", 
-	"index": "http://ae-reporting.aws.af.cm/", 
-	"oauth_callback": "http://ae-reporting.aws.af.cm/authorize", 
-	"icon": "http://localhost:7001/static/smart_common/resources/images/app_icons_32/developers_sandbox.png", 
 	"smart_version": "0.6", 
 	"version": "1.0"
 }
