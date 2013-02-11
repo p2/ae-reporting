@@ -1,2 +1,5 @@
 bottle
 oauth2
+rdflib
+rdfextras
+jinja2

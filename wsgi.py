@@ -1,18 +1,31 @@
+# good morning!
+
 import bottle
-from bottle import static_file
+import json
+
+import rule
+
 
 application = bottle.Bottle()
 
 
 @application.route('/')
 def index():
-	return "Hello World! AppFog Python Support"
+	try:
+		return bottle.static_file('index.html', root='static')
+	except Exception, e:
+		return 'Not possible: %s' % e
 
 
 @application.route('/authorize')
 def authorize():
 	try:
-		return static_file('authorize.html', root='static')
+		return bottle.static_file('authorize.html', root='static')
 	except Exception, e:
 		return 'Not possible: %s' % e
 
+
+@application.route('/rules/')
+def rules():
+	return json.dumps(rule.Rule.load_rules(), cls=rule.JSONRuleEncoder)
+		

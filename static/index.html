@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ng-app>
+<head>
+	<title>Adverse Event Reporting</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+</head>
+<body>
+	<div id="container">
+		<h1>Rules</h1>
+		<div id="rules" ng-controller="RuleController">
+			<div class="rule" ng-repeat="rule in rules">
+				<h2>{{ rule.name }}</h2>
+				<p>{{ rule.description }}</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
