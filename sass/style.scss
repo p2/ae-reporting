@@ -1,1 +1,30 @@
-/* Defaults */
+//
+//  Defaults
+//
+
+
+@import "mixins";
+$col-border:		rgb(120,120,120);
+
+html, body {
+	margin: 0; padding: 20px;
+	font: 11pt "Helvetica-Neue", Helvetica, sans-serif;
+}
+
+#container {
+	max-width: 800px;
+}
+
+.rule {
+	padding: 0.5em 0.75em;
+	border: 1px solid $col-border; @include border-radius-all();
+	background-color: lighten($col-border, 50%);
+	
+	h2 {
+		margin-top: 0.5em;
+		font-size: 1.4em;
+	}
+	button {
+		float: right;
+	}
+}

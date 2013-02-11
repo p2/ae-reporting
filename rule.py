@@ -28,14 +28,44 @@ class Rule(Matcher):
 		# find all files starting with "rule-*.json"
 		mydir = os.path.realpath(os.getcwd())
 		for rule_file in glob.glob('rules/rule-*.json'):
-			with open(rule_file) as handle:
-				rule_json = handle.read()
-				rule = cls(json.loads(rule_json))
+			rule_id_full = os.path.basename(rule_file)
+			rule_id = rule_id_full.replace('.json', '').replace('rule-', '')
+			
+			# load the rule
+			rule = cls._rule_from_file(rule_id, rule_file)
+			if rule:
 				rules.append(rule)
 		
 		return rules
-
-	def __init__(self, from_json=None):
+	
+	@classmethod
+	def rule_named(cls, rule_name):
+		""" Loads the given rule """
+		rule = None
+		filepath = 'rules/rule-%s.json' % rule_name.replace('/', '')
+		
+		# if the file exists, load the rule
+		if os.path.exists(filepath):
+			rule = cls._rule_from_file(rule_name, filepath)
+		
+		return rule		
+	
+	@classmethod
+	def _rule_from_file(cls, rule_id, filepath):
+		""" Load a rule from a given file.
+		The file must exist, it is not checked! """
+		
+		rule = None
+		with open(filepath) as handle:
+			rule_json = handle.read()
+			rule = cls(rule_id, json.loads(rule_json))
+		
+		return rule
+	
+	
+	def __init__(self, rule_id, from_json=None):
+		self.id = rule_id
+		
 		if from_json is not None:
 			self.scope = from_json.get('scope')
 			self.name = from_json.get('name')
@@ -78,6 +108,7 @@ class JSONRuleEncoder(json.JSONEncoder):
 	def default(self, rule):
 		if isinstance(rule, Rule):
 			return {
+				"id": rule.id,
 				"name": rule.name,
 				"description": rule.description,
 				"scope": rule.scope

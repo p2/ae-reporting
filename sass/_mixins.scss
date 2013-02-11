@@ -1,0 +1,11 @@
+//
+//  Useful SASS Mixins
+//
+
+@mixin border-radius-all($radius: 5px) {
+	-webkit-border-radius: $radius $radius $radius $radius;
+	-moz-border-radius: $radius $radius $radius $radius;
+	-ms-border-radius: $radius $radius $radius $radius;
+	-o-border-radius: $radius $radius $radius $radius;
+	border-radius: $radius $radius $radius $radius;
+}

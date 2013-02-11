@@ -2,6 +2,7 @@
 .git*
 
 run.py
+server.py
 
 sass/*
 databases/*
