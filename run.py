@@ -8,7 +8,6 @@ import time
 import sys
 import os
 import os.path
-import glob
 import json
 from subprocess import Popen
 
@@ -27,19 +26,6 @@ from settings import APP_ID, API_BASE, OAUTH_PARAMS
 
 KNOWN_TOKENS = {}
 
-def load_rules():
-	""" Loads all bundled rules """
-	rules = []
-	
-	# find all files starting with "rule-*.json"
-	mydir = os.path.realpath(os.getcwd())
-	for rule_file in glob.glob('rules/rule-*.json'):
-		with open(rule_file) as handle:
-			rule_json = handle.read()
-			rule = Rule(json.loads(rule_json))
-			rules.append(rule)
-	
-	return rules
 
 def forever_alone():
 	with open('forever.txt') as handle:
@@ -52,7 +38,7 @@ if __name__ == "__main__":
 	UMLS.import_snomed_if_necessary()
 	
 	# load all rules
-	rules = load_rules()
+	rules = Rule.load_rules()
 	if len(rules) < 1:
 		print "There are no rules, no point in continuing"
 		print forever_alone()

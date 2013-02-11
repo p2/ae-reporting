@@ -4,6 +4,10 @@
 #
 
 
+import os.path
+import glob
+import json
+
 from matcher import Matcher
 from conditionset import ConditionSet
 from action import Action
@@ -16,6 +20,21 @@ class Rule(Matcher):
 	conditions. The rule itself has one top-level condition-set which is an "all" condition set.
 	"""
 	
+	@classmethod
+	def load_rules(cls):
+		""" Loads all bundled rules """
+		rules = []
+		
+		# find all files starting with "rule-*.json"
+		mydir = os.path.realpath(os.getcwd())
+		for rule_file in glob.glob('rules/rule-*.json'):
+			with open(rule_file) as handle:
+				rule_json = handle.read()
+				rule = cls(json.loads(rule_json))
+				rules.append(rule)
+		
+		return rules
+
 	def __init__(self, from_json=None):
 		if from_json is not None:
 			self.scope = from_json.get('scope')
@@ -51,4 +70,18 @@ class Rule(Matcher):
 	
 	def __repr__(self):
 		return str(self)
+
+
+class JSONRuleEncoder(json.JSONEncoder):
+	""" Encode a rule as JSON easily """
+	
+	def default(self, rule):
+		if isinstance(rule, Rule):
+			return {
+				"name": rule.name,
+				"description": rule.description,
+				"scope": rule.scope
+			}
+		return json.JSONEncoder.default(self, rule)
+
 
