@@ -1,7 +1,7 @@
 .DS_Store
 *.pyc
 tokens.json
-credentials.py
+settings.py
 
 # databases
 databases/

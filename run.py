@@ -17,19 +17,15 @@ from rule import Rule
 from testrecord import TestRecord
 from umls import UMLS
 
+# import settings
+if not os.path.exists('settings.py'):
+	print "x>  You haven't created the settings.py file. Look at settings.py.default and copy it to settings.py."
+	sys.exit(1)
 
-# sandbox default setting for testing purposes
-APP_ID = 'ae-reporting@apps.chip.org'
-#API_BASE = 'http://coruscant.local:7000'
-API_BASE = 'http://sandbox-rest.smartplatforms.org:7000'
-OAUTH_PARAMS = {
-	'consumer_key': 'ae-reporting@apps.chip.org',
-#	'consumer_secret': 'EPFPDvHsrbVkLEJn'
-	'consumer_secret': 'xxx'
-}
+from settings import APP_ID, API_BASE, OAUTH_PARAMS
+
 
 KNOWN_TOKENS = {}
-
 
 def load_rules():
 	""" Loads all bundled rules """
