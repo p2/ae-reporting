@@ -24,11 +24,11 @@ var Rule = Base.extend({
 		this.description = ('description' in json) ? json.description : '';
 	},
 	
-	check: function(sender) {
+	run: function(sender) {
 		var self = this;
 		$(sender).attr('disabled', true);
 		
-		$.ajax('rules/' + self.id + '/run', {
+		$.ajax('rules/' + self.id + '/run_against/' + _record_id, {
 			success: function(json) {
 				console.log(json);
 				if (json) {
