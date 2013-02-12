@@ -12,6 +12,7 @@ from jinja2 import Template
 from jinja2 import Environment, PackageLoader
 env = Environment(loader=PackageLoader('action', 'templates'), trim_blocks=True)
 
+
 class Action(object):
 	""" Defines an action to take if a Rule matches.
 	"""

@@ -5,4 +5,4 @@
 
 import wsgi
 
-wsgi.application.run(host='localhost', port=8080)
+wsgi.app.run(host='0.0.0.0', port=8080)
