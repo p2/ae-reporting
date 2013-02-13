@@ -2,8 +2,7 @@
 
 import bottle
 import json
-from jinja2 import Template
-from jinja2 import Environment, PackageLoader
+from jinja2 import Template, Environment, PackageLoader
 
 from tokenstore import TokenStore
 from smart_client_python.client import SMARTClient
@@ -15,7 +14,8 @@ from settings import APP_ID, API_BASE, OAUTH_PARAMS
 
 # bottle and Jinja setup
 app = bottle.Bottle()
-env = Environment(loader=PackageLoader('action', 'templates'), trim_blocks=True)
+application = app				# needed for AppFog			
+_jinja = Environment(loader=PackageLoader('action', 'templates'), trim_blocks=True)
 _smart = None
 DEBUG = True
 
@@ -69,22 +69,27 @@ def _request_token_for_record_if_needed(record_id):
 	# we already got a token, test if it still works
 	if token is not None and _test_record_token(record_id, token):
 		_log_debug("reusing existing token")
-		return False
+		return False, None
 	
 	# request a token
 	_log_debug("requesting token for record %s" % record_id)
 	smart = _smart_client(record_id)
 	smart.token = None
-	token = smart.fetch_request_token()
+	try:
+		token = smart.fetch_request_token()
+	except Exception, e:
+		return False, str(e)
+	
+	# got a token, store it
 	if token is not None:
 		ts = TokenStore(API_BASE)
 		if not ts.storeTokenForRecord(record_id, token):
-			return False
+			return False, "Failed to store request token"
 	
 	# now go and authorize the token
 	_log_debug("redirecting to authorize token")
 	bottle.redirect(smart.auth_redirect_url)
-	return True
+	return True, None
 
 
 def _exchange_token(req_token, verifier):
@@ -118,7 +123,7 @@ def _exchange_token(req_token, verifier):
 @app.get('/')
 @app.get('/index.html')
 def index():
-	""" The index page makes sure we have a token """
+	""" The index page makes sure we select a patient and we have a token """
 	record_id = bottle.request.query.get('record_id')
 	
 	# no record id, call launch page
@@ -132,11 +137,14 @@ def index():
 		return
 	
 	# do we have a token?
-	if _request_token_for_record_if_needed(record_id):
+	did_fetch, error_msg = _request_token_for_record_if_needed(record_id)
+	if did_fetch:
 		return		# the call above will redirect if true anyway, but let's be sure to exit here
+	if error_msg:
+		return error_msg
 	
 	# render index
-	template = env.get_template('index.html')
+	template = _jinja.get_template('index.html')
 	return template.render(record_id=record_id)
 
 
