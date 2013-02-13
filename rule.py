@@ -66,20 +66,19 @@ class Rule(Matcher):
 	def __init__(self, rule_id, from_json=None):
 		self.id = rule_id
 		
-		if from_json is not None:
-			self.scope = from_json.get('scope')
-			self.name = from_json.get('name')
-			self.description = from_json.get('description')
-			
-			cond_dict = from_json.get('condition')
-			self.condition = ConditionSet(cond_dict)
-			
-			action_dict = from_json.get('actions')
-			self.actions = Action.from_array(action_dict)
-		else:
-			self.name = None
-			self.condition = None
-			self.actions = []
+		if from_json is None:
+			from_json = {}
+		
+		self.scope = from_json.get('scope')
+		self.name = from_json.get('name')
+		self.description = from_json.get('description')
+		self.references = from_json.get('references', [])
+		
+		cond_dict = from_json.get('condition')
+		self.condition = ConditionSet(cond_dict)
+		
+		action_dict = from_json.get('actions')
+		self.actions = Action.from_array(action_dict)
 	
 	
 	# -------------------------------------------------------------------------- Matching and Acting
