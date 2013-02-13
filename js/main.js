@@ -26,18 +26,38 @@ var Rule = Base.extend({
 	
 	run: function(sender) {
 		var self = this;
-		$(sender).attr('disabled', true);
+		var btn = $(sender);
+		btn.text("Running...").attr('disabled', true);
 		
 		$.ajax('rules/' + self.id + '/run_against/' + _record_id, {
-			success: function(json) {
-				console.log(json);
-				if (json) {
+			success: function(response) {
+				var area = btn.parent().find('.rule_output').first();
+				btn.text("Check").removeAttr('disabled');
+				
+				// no match
+				if (0 == response) {
+					if (area.is("*")) {
+						area.empty().html("<i>No match</i>");
+					}
+					else {
+						alert("The rule did not match");
+					}
 				}
-				$(sender).removeAttr('disabled');
+				
+				// match
+				else {
+					if (area.is("*")) {
+						area.empty().append("<h3>The rule did match</h3>").append('<pre/>');
+						area.find('pre').first().text(response);
+					}
+					else {
+						alert("The rule did match");
+					}
+				}
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {
 				alert('Failed to run rule ' + self.name + ': ' + errorThrown);
-				$(sender).removeAttr('disabled');
+				btn.text("Try again").removeAttr('disabled');
 			}
 		});
 	}
@@ -84,15 +104,15 @@ function _call(func) {
 			func.id = Math.round((new Date()).getTime() * 1000) + '' + Math.round(Math.random() * 1000);
 		}
 		_globals[func.id] = func;
-		return "_doCall('" + func.id + "')";
+		return "_doCall(this, '" + func.id + "')";
 	}
 	return '';
 }
 
-function _doCall(call_id) {
+function _doCall(sender, call_id) {
 	var func = _globals[call_id];
 	if (func) {
-		func();
+		func(sender);
 	}
 	else {
 		console.error('No call for id', call_id);

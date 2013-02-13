@@ -47,5 +47,5 @@ class Action(object):
 		
 		# load the template
 		template = env.get_template(self.template)
-		print template.render(patient=patient, date=datetime.datetime.utcnow())
+		return template.render(patient=patient, date=datetime.datetime.utcnow())
 		

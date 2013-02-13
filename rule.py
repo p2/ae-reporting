@@ -87,8 +87,13 @@ class Rule(Matcher):
 		return self.condition.match_against(patient)
 	
 	def perform_actions(self, patient):
+		results = []
 		for action in self.actions:
-			action.execute_for(patient)
+			result = action.execute_for(patient)
+			if result is not None:
+				results.append(result)
+		
+		return results
 	
 	
 	# -------------------------------------------------------------------------- Utilities

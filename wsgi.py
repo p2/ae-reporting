@@ -5,9 +5,10 @@ import json
 from jinja2 import Template
 from jinja2 import Environment, PackageLoader
 
-import rule
 from tokenstore import TokenStore
 from smart_client_python.client import SMARTClient
+from testrecord import TestRecord
+from rule import Rule, JSONRuleEncoder
 
 from settings import APP_ID, API_BASE, OAUTH_PARAMS
 
@@ -156,19 +157,28 @@ def authorize():
 # ------------------------------------------------------------------------------ RESTful paths
 @app.get('/rules/')
 def rules(rule_id=None):
-	return json.dumps(rule.Rule.load_rules(), cls=rule.JSONRuleEncoder)
+	return json.dumps(Rule.load_rules(), cls=JSONRuleEncoder)
 
 @app.get('/rules/<rule_id>/run_against/<record_id>')
 def run_rule(rule_id, record_id):
 	""" This runs the given rule against the given record """
-	my_rule = rule.Rule.rule_named(rule_id)
-	if my_rule is None:
+	rule = Rule.rule_named(rule_id)
+	if rule is None:
 		bottle.abort(404)
 	
 	# make sure we have the tokens
+	ts = TokenStore(API_BASE)
+	token = ts.tokenForRecord(record_id)
+	if token is None:
+		bottle.abort(403)
 	
-	
-	return my_rule.description
+	# create the test record and run the rule!
+	smart = _smart_client(record_id)
+	smart.update_token(token)
+	patient = TestRecord(smart)
+	if rule.match_against(patient):
+		return rule.perform_actions(patient)
+	return 0
 
 
 # ------------------------------------------------------------------------------ Static requests
