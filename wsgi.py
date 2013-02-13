@@ -81,10 +81,8 @@ def _request_token_for_record_if_needed(record_id):
 		return False, str(e)
 	
 	# got a token, store it
-	if token is not None:
-		ts = TokenStore(API_BASE)
-		if not ts.storeTokenForRecord(record_id, token):
-			return False, "Failed to store request token"
+	if token is not None and not ts.storeTokenForRecord(record_id, token):
+		return False, "Failed to store request token"
 	
 	# now go and authorize the token
 	_log_debug("redirecting to authorize token")

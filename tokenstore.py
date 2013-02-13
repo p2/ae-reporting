@@ -53,7 +53,7 @@ class TokenStore(object):
 		query = "SELECT token, secret, record_id FROM record_tokens WHERE token = ? AND on_server = ?"
 		res = self.sqlite.executeOne(query, (token.get('oauth_token'), self.api_base))
 		if res is None:
-			return None
+			return None, None
 		
 		return {
 			'oauth_token': res[0],

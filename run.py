@@ -12,6 +12,7 @@ import json
 from subprocess import Popen
 
 from smart_client_python.client import SMARTClient
+from tokenstore import TokenStore
 from rule import Rule
 from testrecord import TestRecord
 from umls import UMLS
@@ -24,13 +25,9 @@ if not os.path.exists('settings.py'):
 from settings import APP_ID, API_BASE, OAUTH_PARAMS
 
 
-KNOWN_TOKENS = {}
-
-
 def forever_alone():
 	with open('forever.txt') as handle:
 		return handle.read()
-	
 
 
 # if run as a script, we kick in here
@@ -45,21 +42,17 @@ if __name__ == "__main__":
 		sys.exit(0)
 	print '->  Did load %d %s' % (len(rules), 'rule' if 1 == len(rules) else 'rules')
 	
-	# load stored tokens
-	if os.path.exists('tokens.json'):
-		token_json = ''
-		with open('tokens.json') as handle:
-			token_json = handle.read()
-		KNOWN_TOKENS = json.loads(token_json)
-	
-	# init our client
+	# init our client and token store
 	smart = SMARTClient(APP_ID, API_BASE, OAUTH_PARAMS)
 	smart.record_id = '665677'
-	known_token = KNOWN_TOKENS.get(API_BASE, {}).get(smart.record_id)
+	ts = TokenStore(API_BASE)
+	known_token = ts.tokenForRecord(smart.record_id)
 	
 	# request a token for a specific record id
 	if known_token is None:
-		smart.fetch_request_token()
+		token = smart.fetch_request_token()
+		ts.storeTokenForRecord(smart.record_id, token)
+		
 		print 'Now visit:  %s' % smart.auth_redirect_url
 		Popen(['open', smart.auth_redirect_url])
 		oauth_verifier = raw_input('Enter the oauth_verifier: ')
@@ -67,11 +60,7 @@ if __name__ == "__main__":
 		# exchange and store the token
 		token = smart.exchange_token(oauth_verifier)
 		if token and token.get('oauth_token') and token.get('oauth_token_secret'):
-			if KNOWN_TOKENS.get(API_BASE) is None:
-				KNOWN_TOKENS[API_BASE] = {}
-			KNOWN_TOKENS[API_BASE][smart.record_id] = token
-			with open('tokens.json', 'w') as handle:
-				handle.write(json.dumps(KNOWN_TOKENS))
+			ts.storeTokenForRecord(smart.record_id, token)
 	else:
 		print '->  Reusing existing access token'
 		smart.update_token(known_token)
@@ -92,7 +81,3 @@ if __name__ == "__main__":
 	# 		print '-->  Testing against', rule
 	# 		if rule.match_against(record):
 	# 			print '==>  Record %s matches rule %s' % (record_id, rule.name)
-	
-	
-
-	

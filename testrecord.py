@@ -26,6 +26,9 @@ class TestRecord(object):
 	def medications(self):
 		if self._medications is None:
 			self._medications = self.smart.get_medications()
+			status = self._medications.response.get('status')
+			if '200' != status:
+				raise Exception("Failed to get medications: %s" % status)
 			#self._medications.graph.serialize(destination="medications-%s.rdf" % self.record_id)
 		return self._medications
 	
@@ -34,6 +37,9 @@ class TestRecord(object):
 	def problems(self):
 		if self._problems is None:
 			self._problems = self.smart.get_problems()
+			status = self._problems.response.get('status')
+			if '200' != status:
+				raise Exception("Failed to get problems: %s" % status)
 			#self._problems.graph.serialize(destination="problems-%s.rdf" % self.record_id)
 		return self._problems
 	
