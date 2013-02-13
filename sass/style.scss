@@ -9,6 +9,7 @@ $col-border:		rgb(120,120,120);
 html, body {
 	margin: 0; padding: 20px;
 	font: 11pt "Helvetica-Neue", Helvetica, sans-serif;
+	background-color: rgb(246,246,246);
 }
 
 #container {
@@ -18,7 +19,7 @@ html, body {
 .rule {
 	padding: 0.5em 0.75em;
 	border: 1px solid $col-border; @include border-radius-all();
-	background-color: lighten($col-border, 50%);
+	background-color: white;
 	
 	h2 {
 		margin-top: 0.5em;

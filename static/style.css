@@ -1,7 +1,7 @@
-html, body { margin: 0; padding: 20px; font: 11pt "Helvetica-Neue", Helvetica, sans-serif; }
+html, body { margin: 0; padding: 20px; font: 11pt "Helvetica-Neue", Helvetica, sans-serif; background-color: #f6f6f6; }
 
 #container { max-width: 800px; }
 
-.rule { padding: 0.5em 0.75em; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; background-color: #f8f8f8; }
+.rule { padding: 0.5em 0.75em; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; background-color: white; }
 .rule h2 { margin-top: 0.5em; font-size: 1.4em; }
 .rule button { float: right; }

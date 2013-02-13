@@ -31,7 +31,8 @@ def _smart_client(record_id=None):
 	global _smart
 	if _smart is None:
 		_smart = SMARTClient(APP_ID, API_BASE, OAUTH_PARAMS)
-		_smart.record_id = record_id
+	
+	_smart.record_id = record_id
 	return _smart
 
 def _log_debug(log):
@@ -66,6 +67,7 @@ def _request_token_for_record_if_needed(record_id):
 	
 	# we already got a token, test if it still works
 	if token is not None and _test_record_token(record_id, token):
+		_log_debug("reusing existing token")
 		return False
 	
 	# request a token
@@ -79,6 +81,7 @@ def _request_token_for_record_if_needed(record_id):
 			return False
 	
 	# now go and authorize the token
+	_log_debug("redirecting to authorize token")
 	bottle.redirect(smart.auth_redirect_url)
 	return True
 
@@ -117,10 +120,19 @@ def index():
 	""" The index page makes sure we have a token """
 	record_id = bottle.request.query.get('record_id')
 	
+	# no record id, call launch page
+	if record_id is None:
+		smart = _smart_client()
+		launch = smart.launch_url
+		if launch is None:
+			return "Unknown app start URL, cannot launch without a record id"
+		
+		bottle.redirect(launch)
+		return
+	
 	# do we have a token?
-	if record_id:
-		if _request_token_for_record_if_needed(record_id):
-			return		# the call above will redirect if true anyway, but let's be sure to exit here
+	if _request_token_for_record_if_needed(record_id):
+		return		# the call above will redirect if true anyway, but let's be sure to exit here
 	
 	# render index
 	template = env.get_template('index.html')
