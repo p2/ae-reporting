@@ -7,17 +7,17 @@
 <body>
 	<div id="container">
 		<h1>AE Reporting</h1>
-		<div id="rules">
-			Loading rules...
+		<h2>Choose a SMART container</h2>
+		<div id="endpoints">
+			{% for ep in endpoints %}
+			<a href="{{ callback }}api_base={{ ep.url }}">
+				{{ ep.name }}
+				<span>{{ ep.url }}</span>
+			</a>
+			{% else %}
+			<span>No SMART containers have been defined</span>
+			{% endfor %}
 		</div>
 	</div>
 </body>
-<script>
-var _api_base = "{{ api_base }}";
-var _record_id = "{{ record_id }}";
-</script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script src="static/jquery.view.ejs.min.js"></script>
-<script src="static/Base.min.js"></script>
-<script src="static/main.min.js"></script>
 </html>

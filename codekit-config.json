@@ -13,17 +13,6 @@
       "outputAbbreviatedPath" : "\/static\/Base.min.min.js",
       "fileType" : 64
     },
-    "\/js\/main.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/js\/main.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/main.min.js",
-      "fileType" : 64
-    },
     "\/js\/Base.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -35,6 +24,17 @@
       "outputAbbreviatedPath" : "\/static\/Base.min.js",
       "fileType" : 64
     },
+    "\/js\/main.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/js\/main.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/main.min.js",
+      "fileType" : 64
+    },
     "\/static\/authorize.html" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -44,17 +44,14 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/sass\/style.scss" : {
+    "\/static\/style.css" : {
       "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
+      "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/sass\/style.scss",
-      "outputStyle" : 2,
-      "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/static\/style.css",
-      "fileType" : 4,
-      "debugStyle" : 0
+      "inputAbbreviatedPath" : "\/static\/style.css",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 16
     },
     "\/sass\/_mixins.scss" : {
       "ignoreWasSetByUser" : 0,
@@ -68,14 +65,17 @@
       "fileType" : 4,
       "debugStyle" : 0
     },
-    "\/static\/style.css" : {
+    "\/sass\/style.scss" : {
       "ignoreWasSetByUser" : 0,
-      "ignore" : 1,
+      "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/style.css",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 16
+      "inputAbbreviatedPath" : "\/sass\/style.scss",
+      "outputStyle" : 2,
+      "shouldRunBless" : 0,
+      "outputAbbreviatedPath" : "\/static\/style.css",
+      "fileType" : 4,
+      "debugStyle" : 0
     },
     "\/static\/main.min.js" : {
       "ignoreWasSetByUser" : 0,
@@ -98,6 +98,15 @@
       "syntaxCheckerStyle" : 0,
       "outputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.min.js",
       "fileType" : 64
+    },
+    "\/templates\/endpoint_select.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/templates\/endpoint_select.html",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/templates\/index.html" : {
       "ignoreWasSetByUser" : 0,
@@ -167,7 +176,7 @@
     "javascriptAutoOutputPathReplace1" : "js",
     "stylusOutputStyle" : 0,
     "javascriptAutoOutputPathReplace2" : "static",
-    "sassAutoOutputPathRelativePath" : "..\/static",
+    "sassAutoOutputPathRelativePath" : "..\/css",
     "coffeeAutoOutputPathReplace1" : "",
     "hamlUseDoubleQuotes" : 0,
     "coffeeAutoOutputPathReplace2" : "",
@@ -267,7 +276,7 @@
     "uglifyFlags" : {
       "no-mangle-functions" : 0,
       "no-mangle" : 0,
-      "no-copyright" : 0,
+      "no-copyright" : 1,
       "no-dead-code" : 0,
       "inline-script" : 0,
       "ascii" : 0,
@@ -285,13 +294,13 @@
     "slimRailsCompatible" : 0,
     "kitAutoOutputPathReplace2" : "",
     "lessDebugStyle" : 0,
-    "javascriptAutoOutputPathRelativePath" : "",
+    "javascriptAutoOutputPathRelativePath" : "..\/js\/",
     "slimAutoOutputPathStyle" : 0
   },
   "projectAttributes" : {
     "bourbonEnabled" : 0,
     "displayValue" : "ae-reporting",
-    "displayValueWasSetByUser" : 0,
+    "displayValueWasSetByUser" : 1,
     "compassEnabled" : 0
   }
 }

@@ -29,7 +29,7 @@ var Rule = Base.extend({
 		var btn = $(sender);
 		btn.text("Running...").attr('disabled', true);
 		
-		$.ajax('rules/' + self.id + '/run_against/' + _record_id, {
+		$.ajax('rules/' + self.id + '/run_against/' + _record_id + '?api_base=' + _api_base, {
 			success: function(response) {
 				var area = btn.parent().find('.rule_output').first();
 				btn.text("Check").removeAttr('disabled');
