@@ -6,8 +6,13 @@ These aren't the droids you're looking for. You can go about your business.
 Requirements
 ------------
 
-* (stuff for the SMART client)
-* `pip install Jinja2`
+Required Python modules:
+
+* bottle
+* oauth2
+* rdflib
+* rdfextras
+* jinja2
 
 
 AppFog
@@ -22,7 +27,7 @@ This is now an AppFog app, remember to update:
 RDF Store
 ---------
 
-Testing RDF with [4store](http://4store.org/), to setup:
+Not currently used in the app, was testing RDF magic with [4store](http://4store.org/), to setup:
 
     brew install 4store
     4s-backend-setup test
