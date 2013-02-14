@@ -91,7 +91,8 @@ class TokenStore(object):
 		if not os.path.exists(DB_FILE):
 			
 			# make sure the parent directory exists
-			if not os.path.exists(os.path.dirname(DB_FILE)):
+			if len(os.path.dirname(DB_FILE)) > 0 \
+				and not os.path.exists(os.path.dirname(DB_FILE)):
 				try:
 					os.makedirs(os.path.dirname(DB_FILE))
 				except Exception, e:

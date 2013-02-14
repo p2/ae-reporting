@@ -2,8 +2,6 @@
 
 import bottle
 import json
-import urlparse
-import urllib
 from jinja2 import Template, Environment, PackageLoader
 
 from tokenstore import TokenStore
@@ -17,7 +15,7 @@ from settings import ENDPOINTS
 # bottle and Jinja setup
 app = bottle.Bottle()
 application = app				# needed for AppFog			
-_jinja = Environment(loader=PackageLoader('action', 'templates'), trim_blocks=True)
+_jinja = Environment(loader=PackageLoader('wsgi', 'templates'), trim_blocks=True)
 _smart = None
 DEBUG = True
 
