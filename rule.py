@@ -10,6 +10,7 @@ import json
 
 from matcher import Matcher
 from conditionset import ConditionSet
+from condition import Condition
 from action import Action
 
 
@@ -75,7 +76,7 @@ class Rule(Matcher):
 		self.references = from_json.get('references', [])
 		
 		cond_dict = from_json.get('condition')
-		self.condition = ConditionSet(cond_dict)
+		self.condition = Condition(cond_dict) if 'subject' in cond_dict else ConditionSet(cond_dict)
 		
 		action_dict = from_json.get('actions')
 		self.actions = Action.from_array(action_dict)

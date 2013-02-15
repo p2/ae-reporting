@@ -1,8 +1,8 @@
 {
-	"name": "Adverse Event Reporting", 
-	"description": "Adverse event reporting app", 
+	"name": "Adverse Event Reporting (bg)", 
+	"description": "Adverse event reporting app, running in the background", 
 	"author": "Pascal Pfiffner, Harvard Medical School", 
-	"id": "ae-reporting@apps.chip.org", 
+	"id": "ae-reporting-bg@apps.chip.org", 
 	"mode": "background", 
 	"scope": "record", 
 	"smart_version": "0.6", 
