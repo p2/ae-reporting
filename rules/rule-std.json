@@ -1,0 +1,20 @@
+{
+	"id": "std",
+	"name": "Sexually Transmitted Diseases",
+	"description": "Checks for any sexually transmitted disease (SNOMED 8098009) in the patient's problem list",
+	"scope": "record",
+	"condition": {
+		"system": "snomed",
+		"subject": "<http://smartplatforms.org/terms#Problem>",
+		"predicate": "isa",
+		"object": "<http://purl.bioontology.org/ontology/SNOMEDCT/8098009>"
+	},
+	"actions": [
+		{
+			"name": "Dump XML Report",
+			"template": "iatrogenic.xml",
+			"target": "output"
+		}
+	],
+	"references": []
+}

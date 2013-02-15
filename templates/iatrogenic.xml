@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report>
+	<record>{{ patient.record_id }}</record>
+	<date>{{ date.strftime('%Y-%m-%d') }}</date>
+	{% for problem in patient.matches.snomed %}
+	<problem>
+		<name>{{ problem.name }}</name>
+		<snomed>{{ problem.snomed }}</snomed>
+		<start_date>{{ problem.start_date }}</start_date>
+		<end_date>{{ problem.enddate }}</end_date>
+	</problem>
+	{% endfor %}
+</report>

@@ -1,0 +1,20 @@
+{
+	"id": "iatrogenic",
+	"name": "Any Iatrogenic Disorder",
+	"description": "Checks for any iatrogenic disorder (SNOMED 12456005) in a patient's problem list",
+	"scope": "record",
+	"condition": {
+		"system": "snomed",
+		"subject": "<http://smartplatforms.org/terms#Problem>",
+		"predicate": "isa",
+		"object": "<http://purl.bioontology.org/ontology/SNOMEDCT/12456005>"
+	},
+	"actions": [
+		{
+			"name": "Dump XML Report",
+			"template": "iatrogenic.xml",
+			"target": "output"
+		}
+	],
+	"references": []
+}

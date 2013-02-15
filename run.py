@@ -89,11 +89,12 @@ if __name__ == "__main__":
 	if BG:
 		for record_id in smart.loop_over_records():
 			record = TestRecord(smart)
-			print "->  Record", record
+			print "->  Record", record.record_id
 			for rule in rules:
 				print "-->  Testing against", rule.name
 				if rule.match_against(record):
 					print "==>  Record %s matches rule %s" % (record_id, rule.name)
+					print rule.perform_actions(record)
 		sys.exit(0)
 	
 	
@@ -120,9 +121,10 @@ if __name__ == "__main__":
 		smart.update_token(known_token)
 	
 	# create a patient and test it against our rules
-	patient = TestRecord(smart)
-	print "->  Patient", patient
+	record = TestRecord(smart)
+	print "->  Record", record.record_id
 	for rule in rules:
 		print "-->  Testing against", rule.name
-		if rule.match_against(patient):
-			print rule.perform_actions(patient)
+		if rule.match_against(record):
+			print "==>  Record %s matches rule %s" % (smart.record_id, rule.name)
+			print rule.perform_actions(record)
