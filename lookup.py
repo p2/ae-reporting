@@ -45,7 +45,7 @@ class Lookup(object):
 
 # ============================================================================== RxNorm
 class RxNorm(Lookup):
-	""" Hanling RxNorm lookups.
+	""" Handling RxNorm lookups.
 	"""
 	
 	def __init__(self):
@@ -91,6 +91,19 @@ class SNOMED(Lookup):
 		
 		res = self.sqlite.executeOne(query, (subject_id, object_id, relation))[0]
 		return res > 0
+	
+	
+	def lookup_term(cls, snomed_id):
+		""" Returns the term for the given SNOMED code.
+		"""
+		if snomed_id is not None:
+			sql = 'SELECT term FROM descriptions WHERE concept_id = ?'
+			res = self.sqlite.executeOne(sql, (snomed_id,))
+			if res:
+				return res[0]
+		
+		return ''
+
 		
 		
 

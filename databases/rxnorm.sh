@@ -21,9 +21,20 @@ if [ ! -e rxnorm.db ]; then
 
 	read -s -p "Enter the MySQL root password: " password
 	./mysql2sqlite.sh -u root -p$password rxnorm | sqlite3 rxnorm.db
+	
+	# some RxNorm gems:
+	## create an NDC table
+	# CREATE TABLE NDC SELECT RXCUI, ATV FROM RXNSAT WHERE ATN = 'NDC';
+	# ALTER TABLE NDC CHANGE ATV NDC VARCHAR(14);
+	# ALTER TABLE NDC ADD INDEX(NDC);
+	## export NDC to CSV
+	# SELECT RXCUI, NDC FROM NDC INTO OUTFILE 'ndc.csv' FIELDS TERMINATED BY ',' LINES TERMINATED BY "\n";
+	## export RxNorm-only names with their type (TTY) to CSV
+	# SELECT RXCUI, TTY, STR FROM RXNCONSO WHERE SAB = 'RXNORM' INTO OUTFILE 'names.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY "\n";
 fi
 
 # dump to N-Triples
+exit 0
 sqlite3 rxnorm.db <<SQLITE_COMMAND
 .headers OFF
 .separator ""

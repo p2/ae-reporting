@@ -13,8 +13,10 @@ import os.path
 from sqlite import SQLite
 
 
-class UMLS (object):
-	""" Handling UMLS
+class UMLS(object):
+	""" A class for importing UMLS terminologies into an SQLite database.
+	
+	For now only handles SNOMED CSV import.
 	"""
 	
 	sqlite_handle = None
@@ -22,24 +24,8 @@ class UMLS (object):
 	
 	
 	@classmethod
-	def lookup_snomed(cls, snomed_id):
-		""" Returns the term for the given SNOMED code.
-		"""
-		if not snomed_id:
-			raise Exception('No SNOMED code provided')
-		
-		sql = 'SELECT term FROM descriptions WHERE concept_id = ?'
-		res = cls.sqlite_handle.executeOne(sql, (snomed_id,))
-		if res:
-			return res[0]
-		
-		return ''
-	
-	
-	@classmethod
 	def import_snomed_if_necessary(cls):
-		""" Read SNOMED CT from tab-separated file and create an SQLite database
-		from it.
+		""" Read SNOMED CT from tab-separated file and create an SQLite database.
 		"""
 		
 		cls.setup_tables()
@@ -60,6 +46,7 @@ class UMLS (object):
 				return
 			
 			cls.import_csv_into_table(snomed_file, table)
+	
 	
 	@classmethod
 	def import_csv_into_table(cls, snomed_file, table_name):
@@ -141,6 +128,7 @@ class UMLS (object):
 							(?, ?, ?, ?, ?)'''
 		return None
 	
+	
 	@classmethod
 	def insert_tuple_from_csv_row_for(cls, db_name, table_name, row):
 		if 'snomed' == db_name:
@@ -149,6 +137,7 @@ class UMLS (object):
 			if 'relationships' == table_name:
 				return (int(row[0]), int(row[4]), int(row[5]), int(row[7]), int(row[2]))
 		return None
+	
 	
 	@classmethod
 	def after_import(cls, db_name, table_name):
