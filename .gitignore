@@ -7,3 +7,7 @@ settings_background.py
 # databases
 databases/
 
+# Sublime files
+*.sublime-project
+*.sublime-workspace
+
