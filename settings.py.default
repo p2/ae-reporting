@@ -1,9 +1,10 @@
 # configure servers
 
-ENDPOINTS = {
-	"http://sandbox-rest.smartplatforms.org:7000": {
+ENDPOINTS = [
+	{
+		"url": "http://sandbox-rest.smartplatforms.org:7000",
 		"app_id": "ae-reporting@apps.chip.org",
 		"consumer_key": "ae-reporting@apps.chip.org",
 		"consumer_secret": "xxx"
 	}
-}
+]

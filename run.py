@@ -53,34 +53,34 @@ if __name__ == "__main__":
 	print "->  Did load %d %s" % (len(rules), 'rule' if 1 == len(rules) else 'rules')
 	
 	# multiple endpoints? Ask which one to use
-	ep_url = None
+	ep = None
 	if len(ENDPOINTS) > 1:
 		print "->  These are the available SMART containers:"
 		i = 0
-		for ep_base, dictionary in ENDPOINTS.iteritems():
+		for dictionary in ENDPOINTS:
 			i += 1
-			print '    [%d]  %s (%s)' % (i, dictionary.get('name'), ep_base)
+			print '    [%d]  %s (%s)' % (i, dictionary.get('name'), dictionary.get('url'))
 		
 		# ask for one
-		while ep_url is None:
+		while ep is None:
 			use_ep = raw_input("Which SMART container do you want to use? ")
-			use_ep = int(use_ep) - 1
+			use_ep = max(0, int(use_ep) - 1)
 			try:
-				ep_url = ENDPOINTS.keys()[use_ep]
+				ep = ENDPOINTS[use_ep] if len(ENDPOINTS) > use_ep else None
 			except:
 				pass
 	
 	# only one endpoint, use it
 	elif len(ENDPOINTS) > 0:
-		ep_url = ENDPOINTS.keys()[0]
+		ep = ENDPOINTS[0]
 	
-	if ep_url is None:
+	if ep is None:
 		print "x>  There are no SMART containers configured, stopping here"
 		print forever_alone()
 		sys.exit(1)
 	
 	# init SMART client
-	ep = ENDPOINTS.get(ep_url)
+	ep_url = ep.get('url')
 	smart = SMARTClient(ep.get('app_id'), ep_url, ep)
 	
 	

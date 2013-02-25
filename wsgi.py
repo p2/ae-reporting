@@ -32,7 +32,12 @@ def _smart_client(api_base, record_id=None):
 	""" Returns the SMART client, configured accordingly """
 	global _smart
 	if _smart is None or _smart.api_base != api_base:
-		server = ENDPOINTS.get(api_base)
+		server = None
+		for ep in ENDPOINTS:
+			if ep.get('url') == api_base:
+				server = ep
+				break
+		
 		if server is None:
 			_log_error("There is no server with base URI %s" % api_base)
 			bottle.abort(404)
@@ -172,11 +177,8 @@ def endpoint():
 		callback += '&' if '?' in callback else '?'
 	
 	available = []
-	for api_base, srvr in ENDPOINTS.iteritems():
-		available.append({
-			"name": srvr.get('name', 'Unnamed'),
-			"url": api_base
-		})
+	for srvr in ENDPOINTS:
+		available.append(srvr)
 	
 	# render selections
 	template = _jinja.get_template('endpoint_select.html')
