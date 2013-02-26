@@ -93,29 +93,37 @@ var RuleController = Base.extend({
 	
 	showRules: function() {
 		$('#rules').html('templates/rules.ejs', {rules: this.rules});
+	},
+	
+	runRule: function(sender, rule_name) {
+		var rule = null;
+		for (var i = 0; i < this.rules.length; i++) {
+			if (rule_name == this.rules[i].id) {
+				rule = this.rules[i];
+				break
+			}
+		};
+		
+		// do we have the rule?
+		if (!rule) {
+			alert("We don't have the rule \"" + rule_name + "\"");
+			return;
+		}
+		
+		rule.run(sender);
 	}
 });
 
 
-// let's hack
-function _call(func) {
-	if (func && 'function' == typeof func) {
-		if (undefined === func.id) {
-			func.id = Math.round((new Date()).getTime() * 1000) + '' + Math.round(Math.random() * 1000);
-		}
-		_globals[func.id] = func;
-		return "_doCall(this, '" + func.id + "')";
+/**
+ *  Runs the rule with the given name.
+ */
+function _runRule(sender, rule_name) {
+	if (!_ruleCtrl) {
+		alert("There is no rule controller, cannot run rule!");
+		return;
 	}
-	return '';
-}
-
-function _doCall(sender, call_id) {
-	var func = _globals[call_id];
-	if (func) {
-		func(sender);
-	}
-	else {
-		console.error('No call for id', call_id);
-	}
+	
+	_ruleCtrl.runRule(sender, rule_name);
 }
 

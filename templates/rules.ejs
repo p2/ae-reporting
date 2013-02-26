@@ -2,7 +2,7 @@
 	var rule = rules[i]; %>
 
 <div class="rule">
-	<button onclick="<%= _call(function(btn) { rule.run(btn); }) %>">Check</button>
+	<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
 	<h2><%= rule.name %></h2>
 	<p><%= rule.description %></p>
 	<div class="rule_output"></div>
