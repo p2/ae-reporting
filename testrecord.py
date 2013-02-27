@@ -4,7 +4,10 @@
 #
 
 
+import json
 from rdflib.graph import Graph
+
+from rule import JSONRuleEncoder
 
 
 class TestRecord(object):
@@ -15,10 +18,34 @@ class TestRecord(object):
 		self.matches = {}				# conditions write the matched objects to arrays by system key
 		self._medications = None
 		self._problems = None
+		self._scratchpad_data = None
 	
 	@property
 	def record_id(self):
 		return self.smart.record_id
+	
+	@property
+	def scratchpad_data(self):
+		if self._scratchpad_data is None:
+			self._scratchpad_data = self.get_scratchpad_data()
+		return self._scratchpad_data
+	
+	@property
+	def stored_rule_results(self):
+		storage = self.scratchpad_data
+		if storage is not None:
+			return storage.get('rules')
+		return None
+	
+	@stored_rule_results.setter
+	def stored_rule_results(self, new_rules={}):
+		storage = self.scratchpad_data
+		if new_rules is not None and len(new_rules) > 0:
+			if storage is None:
+				storage = {}
+			storage['rules'] = new_rules
+		
+		self.set_scratchpad_data(storage)
 	
 	
 	# -------------------------------------------------------------------------- Properties
@@ -156,6 +183,29 @@ class TestRecord(object):
 			return None
 		
 		return body
+	
+	
+	# -------------------------------------------------------------------------- App Storage
+	def get_scratchpad_data(self):
+		try:
+			res = self.smart.get_scratchpad_data()
+			# print 'LOADED SCRATCHPAD', res.body
+			return json.loads(res.body)
+		except Exception, e:
+			print e
+		return None
+	
+	def set_scratchpad_data(self, data):
+		try:
+			if data is not None:
+				# print 'STORING SCRATCHPAD', json.dumps(data, cls=JSONRuleEncoder)
+				res = self.smart.put_scratchpad_data(json.dumps(data, cls=JSONRuleEncoder))
+			else:
+				res = self.smart.delete_scratchpad_data()
+			return True
+		except Exception, e:
+			print e
+		return False
 	
 	
 	# -------------------------------------------------------------------------- Utilities

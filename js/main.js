@@ -60,6 +60,10 @@ var Rule = Base.extend({
 						alert("The rule did match");
 					}
 				}
+				
+				// update UI
+				var prev = $('#num_previous_checks');
+				prev.text(prev.text() *1 + 1);
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {
 				var area = btn.parent().find('.rule_output').first();
@@ -86,7 +90,7 @@ var RuleController = Base.extend({
 	
 	fetchRules: function() {
 		var self = this;
-		$.get('rules/', function(json) {
+		$.get('rules/?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
 			if (json) {
 				var rls = [];
 				for (var i = 0; i < json.length; i++) {

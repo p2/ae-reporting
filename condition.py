@@ -5,7 +5,6 @@
 
 
 from matcher import Matcher
-from testrecord import TestRecord
 from lookup import Lookup
 
 

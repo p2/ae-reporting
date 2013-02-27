@@ -167,7 +167,7 @@ def index():
 		
 		launch = smart.launch_url
 		if launch is None:
-			return "Unknown app start URL, cannot launch without a record id"
+			return "Unknown app start URL, cannot launch without an app id"
 		
 		bottle.redirect(launch)
 		return
@@ -221,7 +221,16 @@ def authorize():
 # ------------------------------------------------------------------------------ RESTful paths
 @app.get('/rules/')
 def rules(rule_id=None):
-	return json.dumps(Rule.load_rules(), cls=JSONRuleEncoder)
+	api_base = bottle.request.query.get('api_base')
+	record_id = bottle.request.query.get('record_id')
+	
+	patient = None
+	if record_id is not None:
+		smart_client = _smart_client(api_base, record_id)
+		if smart_client is not None:
+			patient = TestRecord(smart_client)
+	
+	return json.dumps(Rule.load_rules(patient), cls=JSONRuleEncoder)
 
 @app.get('/rules/<rule_id>/run_against/<record_id>')
 def run_rule(rule_id, record_id):
@@ -248,9 +257,7 @@ def run_rule(rule_id, record_id):
 	
 	smart.update_token(token)
 	patient = TestRecord(smart)
-	if rule.match_against(patient):
-		return rule.perform_actions(patient)
-	return 0
+	return rule.run_against(patient)
 
 
 # ------------------------------------------------------------------------------ Static requests
