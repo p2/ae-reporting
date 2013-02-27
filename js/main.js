@@ -62,7 +62,7 @@ var Rule = Base.extend({
 				}
 				
 				// update UI
-				var prev = $('#num_previous_checks');
+				var prev = $('#num_previous_checks_' + self.id);
 				prev.text(prev.text() *1 + 1);
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {

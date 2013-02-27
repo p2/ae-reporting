@@ -7,9 +7,9 @@
 	<p><%= rule.description %></p>
 	
 	<% if (rule.last_results && rule.last_results.length > 0) { %>
-		<p>
+		<p class="previous_checks">
 			<b>Previous checks:</b>
-			<span id="num_previous_checks"><%= rule.last_results.length %></span>
+			<span id="num_previous_checks_<%= rule.id %>"><%= rule.last_results.length %></span>
 		</p>
 	<% } %>
 	
