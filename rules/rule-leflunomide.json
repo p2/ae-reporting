@@ -10,13 +10,13 @@
 				"system": "rxnorm",
 				"subject": "<http://smartplatforms.org/terms#Medication>",
 				"predicate": "has_ingredient",
-				"object": "<http://purl.bioontology.org/ontology/RXNORM/27169>"
+				"object": 27169
 			},
 			{
 				"system": "snomed",
 				"subject": "<http://smartplatforms.org/terms#Problem>",
 				"predicate": "isa",
-				"object": "<http://purl.bioontology.org/ontology/SNOMEDCT/59927004>"
+				"object": 59927004
 			}
 		]
 	},
