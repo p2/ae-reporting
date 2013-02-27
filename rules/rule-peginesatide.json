@@ -1,0 +1,27 @@
+{
+	"id": "peginesatide",
+	"name": "Peginesatide",
+	"description": "Checks for patients presently or previously on Peginesatide (Omontys, RxNorm 1248798)",
+	"scope": "record",
+	"condition": {
+		"type": "all",
+		"conditions": [
+			{
+				"system": "rxnorm",
+				"subject": "<http://smartplatforms.org/terms#Medication>",
+				"predicate": "has_ingredient",
+				"object": "<http://purl.bioontology.org/ontology/RXNORM/1248798>"
+			}
+		]
+	},
+	"actions": [
+		{
+			"name": "Dump XML Report",
+			"template": "leflunomide.xml",
+			"target": "output"
+		}
+	],
+	"references": [
+		"http://www.fda.gov/Safety/MedWatch/SafetyInformation/SafetyAlertsforHumanMedicalProducts/ucm340895.htm"
+	]
+}

@@ -6,6 +6,12 @@
 var _ruleCtrl = null;
 var _globals = {};
 $(document).ready(function() {
+	
+	// hide the patient selector if in an iframe
+	if (window!=window.top) {
+		$('#back_to_patient_select').hide();
+	}
+	
 	_ruleCtrl = new RuleController();
 	_ruleCtrl.fetchRules();
 })
@@ -37,7 +43,7 @@ var Rule = Base.extend({
 				// no match
 				if (0 == response) {
 					if (area.is("*")) {
-						area.empty().html("<i>No match</i>");
+						area.empty().html("<h3 class=\"green\">No match</h3>");
 					}
 					else {
 						alert("The rule did not match");
@@ -47,7 +53,7 @@ var Rule = Base.extend({
 				// match
 				else {
 					if (area.is("*")) {
-						area.empty().append("<h3>The rule did match</h3>").append('<pre/>');
+						area.empty().append("<h3 class=\"red\">The rule did match</h3>").append('<pre/>');
 						area.find('pre').first().text(response);
 					}
 					else {

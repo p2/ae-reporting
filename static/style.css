@@ -13,3 +13,7 @@ html, body { margin: 0; padding: 20px; font: 11pt "Helvetica-Neue", Helvetica, s
 #endpoints a:last-child { border-bottom: none; }
 #endpoints a:hover { color: #08394d; background-color: #d8f1fb; }
 #endpoints a span { display: block; color: #787878; }
+
+.green { color: #090; }
+
+.red { color: #A00; }
