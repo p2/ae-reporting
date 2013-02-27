@@ -8,7 +8,7 @@ var _globals = {};
 $(document).ready(function() {
 	
 	// hide the patient selector if in an iframe
-	if (window!=window.top) {
+	if (window != window.top) {
 		$('#back_to_patient_select').hide();
 	}
 	
@@ -43,7 +43,7 @@ var Rule = Base.extend({
 				// no match
 				if (0 == response) {
 					if (area.is("*")) {
-						area.empty().html("<h3 class=\"green\">No match</h3>");
+						area.empty().html('<h3 class="green">No match</h3>');
 					}
 					else {
 						alert("The rule did not match");
@@ -53,7 +53,7 @@ var Rule = Base.extend({
 				// match
 				else {
 					if (area.is("*")) {
-						area.empty().append("<h3 class=\"red\">The rule did match</h3>").append('<pre/>');
+						area.empty().append('<h3 class="red">The rule did match</h3>').append('<pre/>');
 						area.find('pre').first().text(response);
 					}
 					else {
@@ -62,8 +62,15 @@ var Rule = Base.extend({
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {
-				alert('Failed to run rule ' + self.name + ': ' + errorThrown);
+				var area = btn.parent().find('.rule_output').first();
 				btn.text("Try again").removeAttr('disabled');
+				
+				if (area.is("*")) {
+					area.empty().html('<h3 class="red">Failed to run rule ' + self.name + ': ' + errorThrown + '</h3>');
+				}
+				else {
+					alert('Failed to run rule ' + self.name + ': ' + errorThrown);
+				}
 			}
 		});
 	}
