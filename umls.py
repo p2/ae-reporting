@@ -28,7 +28,7 @@ class UMLS(object):
 		""" Read SNOMED CT from tab-separated file and create an SQLite database.
 		"""
 		
-		cls.setup_tables()
+		cls.setup_snomed_tables()
 		map = {
 			'descriptions': 'snomed_desc.csv',
 			'relationships': 'snomed_rel.csv'
@@ -39,17 +39,17 @@ class UMLS(object):
 			num_query = 'SELECT COUNT(*) FROM %s' % table
 			num_existing = UMLS.sqlite_handle.executeOne(num_query, ())[0]
 			if num_existing > 0:
-				return
+				continue
 			
 			snomed_file = os.path.join('databases', filename)
 			if not os.path.exists(snomed_file):
-				return
+				continue
 			
-			cls.import_csv_into_table(snomed_file, table)
+			cls.import_snomed_csv_into_table(snomed_file, table)
 	
 	
 	@classmethod
-	def import_csv_into_table(cls, snomed_file, table_name):
+	def import_snomed_csv_into_table(cls, snomed_file, table_name):
 		print '..>  Importing SNOMED %s into snomed.db...' % table_name
 		
 		# not yet imported, parse tab-separated file and import
@@ -82,7 +82,7 @@ class UMLS(object):
 
 
 	@classmethod
-	def setup_tables(cls):
+	def setup_snomed_tables(cls):
 		""" Creates the SQLite tables we need, not the tables we deserve.
 		"""
 		if cls.sqlite_handle is None:

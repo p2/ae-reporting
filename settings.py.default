@@ -3,6 +3,7 @@
 ENDPOINTS = [
 	{
 		"url": "http://sandbox-rest.smartplatforms.org:7000",
+		"name": "REST Sandbox",
 		"app_id": "ae-reporting@apps.chip.org",
 		"consumer_key": "ae-reporting@apps.chip.org",
 		"consumer_secret": "xxx"
