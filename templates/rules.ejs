@@ -5,6 +5,13 @@
 	<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
 	<h2><%= rule.name %></h2>
 	<p><%= rule.description %></p>
+	<% if (rule.references && rule.references.length > 0) { %>
+		<p class="references"><b>References:</b><br />
+		<% for (var j = 0; j < rule.references.length; j++) { %>
+			<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
+		<% } %>
+		</p>
+	<% } %>
 	<div class="rule_output"></div>
 </div>
 

@@ -19,9 +19,9 @@ var Rule = Base.extend({
 	description: '',
 	
 	constructor: function(json) {
-		this.id = ('id' in json) ? json.id : '';
-		this.name = ('name' in json) ? json.name : '';
-		this.description = ('description' in json) ? json.description : '';
+		for (var p in json) {
+			this[p] = json[p];
+		}
 	},
 	
 	run: function(sender) {

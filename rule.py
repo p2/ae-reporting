@@ -116,8 +116,10 @@ class JSONRuleEncoder(json.JSONEncoder):
 				"id": rule.id,
 				"name": rule.name,
 				"description": rule.description,
+				"references": rule.references,
 				"scope": rule.scope
 			}
+		
 		return json.JSONEncoder.default(self, rule)
 
 

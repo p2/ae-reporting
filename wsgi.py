@@ -20,6 +20,15 @@ _smart = None
 DEBUG = True
 
 
+def _log_debug(log):
+	if DEBUG:
+		print log
+
+
+def _log_error(err):
+	print err
+
+
 def _serve_static(file, root):
 	""" Serves a static file or a 404 """
 	try:
@@ -45,18 +54,15 @@ def _smart_client(api_base, record_id=None):
 		
 		# instantiate
 		app_id = server.get('app_id')
-		_smart = SMARTClient(app_id, api_base, server)
+		try:
+			_smart = SMARTClient(app_id, api_base, server)
+		except Exception, e:
+			_log_error(e)
+			return None
 	
 	_smart.record_id = record_id
 	return _smart
 
-def _log_debug(log):
-	if DEBUG:
-		print log
-
-def _log_error(err):
-	print err
-		
 
 
 # ------------------------------------------------------------------------------ Token Handling
@@ -64,6 +70,10 @@ def _test_record_token(api_base, record_id, token):
 	""" Tries to fetch demographics with the given token and returns a bool whether thas was successful """
 	
 	smart = _smart_client(api_base, record_id)
+	if smart is None:
+		return False
+	
+	# update tokens
 	smart.update_token(token)
 	try:
 		demo = smart.get_demographics()
@@ -88,6 +98,9 @@ def _request_token_for_record_if_needed(api_base, record_id):
 	# request a token
 	_log_debug("requesting token for record %s on %s" % (record_id, api_base))
 	smart = _smart_client(api_base, record_id)
+	if smart is None:
+		return False, None
+	
 	smart.token = None
 	try:
 		token = smart.fetch_request_token()
@@ -116,6 +129,9 @@ def _exchange_token(req_token, verifier):
 	# exchange the token
 	_log_debug("exchange token: %s" % full_token)
 	smart = _smart_client(api_base, record_id)
+	if smart is None:
+		return None, None
+	
 	smart.update_token(full_token)
 	try:
 		acc_token = smart.exchange_token(verifier)
@@ -142,11 +158,13 @@ def index():
 	# no endpoint, show selector
 	if api_base is None:
 		bottle.redirect('endpoint_select')
-		return
 	
 	# no record id, call launch page
 	if record_id is None:
 		smart = _smart_client(api_base, record_id)
+		if smart is None:
+			return "Cannot connect to SMART sandbox"
+		
 		launch = smart.launch_url
 		if launch is None:
 			return "Unknown app start URL, cannot launch without a record id"
@@ -225,6 +243,9 @@ def run_rule(rule_id, record_id):
 	
 	# create the test record and run the rule!
 	smart = _smart_client(api_base, record_id)
+	if smart is None:
+		bottle.abort(500)
+	
 	smart.update_token(token)
 	patient = TestRecord(smart)
 	if rule.match_against(patient):
