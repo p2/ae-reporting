@@ -7,12 +7,14 @@
 		"type": "all",
 		"conditions": [
 			{
+				"id": "medication",
 				"system": "rxnorm",
 				"subject": "<http://smartplatforms.org/terms#Medication>",
 				"predicate": "has_ingredient",
 				"object": 27169
 			},
 			{
+				"id": "problem",
 				"system": "snomed",
 				"subject": "<http://smartplatforms.org/terms#Problem>",
 				"predicate": "isa",

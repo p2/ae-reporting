@@ -14,6 +14,7 @@ class Condition(Matcher):
 	
 	def __init__(self, from_dict=None):
 		if from_dict is not None:
+			self.id = from_dict.get('id')
 			self.system = from_dict.get('system')
 			self.subject = from_dict.get('subject')
 			self.predicate = from_dict.get('predicate')
@@ -52,8 +53,7 @@ class Condition(Matcher):
 		# test the quality of our items (remember "items" is full of tuples from the sparql query)
 		for item in items:
 			if lookup.has_relation(item[0], self.predicate, self.object):
-				print '===>  Matches', self
-				record.did_match_item(item[1], self.system)
+				record.did_match_item(item[1], self)
 				return True
 		
 		return False

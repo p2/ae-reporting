@@ -18,15 +18,17 @@ from testrecord import TestRecord
 from umls import UMLS
 
 # run in background? -b flag does that
-BG = True if len(sys.argv) > 1 and '-b' == sys.argv[1] else False
+_BG = True if len(sys.argv) > 1 and '-b' in sys.argv else False
+_RUN = True if len(sys.argv) > 1 and '-r' in sys.argv else False
+
 
 # import settings
-settings_file = 'settings_background.py' if BG else 'settings.py'
+settings_file = 'settings_background.py' if _BG else 'settings.py'
 if not os.path.exists(settings_file):
 	print "x>  You haven't created the file '%s'. Look at settings.py.default and copy it to %s." % (settings_file, settings_file)
 	sys.exit(1)
 
-if BG:
+if _BG:
 	from settings_background import ENDPOINTS
 else:
 	from settings import ENDPOINTS
@@ -41,7 +43,7 @@ def forever_alone():
 if __name__ == "__main__":
 	UMLS.import_snomed_if_necessary()
 	
-	if BG:
+	if _BG:
 		print "->  Running as a background app"
 	
 	# load all rules
@@ -69,6 +71,8 @@ if __name__ == "__main__":
 				ep = ENDPOINTS[use_ep] if len(ENDPOINTS) > use_ep else None
 			except:
 				pass
+		
+		print '->  Using "%s"' % ep['name']
 	
 	# only one endpoint, use it
 	elif len(ENDPOINTS) > 0:
@@ -86,7 +90,7 @@ if __name__ == "__main__":
 	
 	# -------------------------------------------------------------------------- Background App
 	# loop over all records and test against our rules
-	if BG:
+	if _BG:
 		for record_id in smart.loop_over_records():
 			record = TestRecord(smart)
 			print "->  Record", record.record_id
@@ -120,11 +124,23 @@ if __name__ == "__main__":
 		print "->  Reusing existing access token"
 		smart.update_token(known_token)
 	
-	# create a patient and test it against our rules
+	# create a patient
 	record = TestRecord(smart)
 	print "->  Record", record.record_id
-	for rule in rules:
-		print "-->  Testing against", rule.name
-		if rule.match_against(record):
-			print "==>  Record %s matches rule %s" % (smart.record_id, rule.name)
-			print rule.perform_actions(record)
+	
+	# run or just retrieve existing results?
+	if not _RUN:
+		do_run = raw_input("Run the rules? ")
+		_RUN = True if len(do_run) > 0 and 'y' == do_run[:1] else False
+	
+	# run the rules
+	if _RUN:
+		for rule in rules:
+			print "-->  Testing against", rule.name
+			if rule.match_against(record):
+				print "==>  Record %s matches rule %s" % (smart.record_id, rule.name)
+				# print rule.perform_actions(record)
+	
+	# show scratchpad
+	print '-->  Scratchpad: ', record.scratchpad_data
+

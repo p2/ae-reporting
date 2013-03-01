@@ -257,7 +257,7 @@ def run_rule(rule_id, record_id):
 	
 	smart.update_token(token)
 	patient = TestRecord(smart)
-	return rule.run_against(patient)
+	return 'match' if rule.match_against(patient) else 'ok'
 
 
 # ------------------------------------------------------------------------------ Static requests

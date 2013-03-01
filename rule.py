@@ -46,14 +46,14 @@ class Rule(Matcher):
 	
 	
 	@classmethod
-	def load_rules(cls, patient=None):
+	def load_rules(cls, record=None):
 		""" Loads all bundled rules """
 		rules = []
 		old_results = None
 		
 		# get old results
-		if patient is not None:
-			old_results = patient.stored_rule_results
+		if record is not None:
+			old_results = record.stored_rule_results
 		
 		# find all files starting with "rule-*.json"
 		mydir = os.path.realpath(os.getcwd())
@@ -66,7 +66,7 @@ class Rule(Matcher):
 			if rule:
 				rules.append(rule)
 				
-				# has it been run against the patient before?
+				# has it been run against the record before?
 				if old_results is not None:
 					rule.last_results = RuleResult.from_json_array(rule, old_results.get(rule.id))
 		
@@ -98,50 +98,33 @@ class Rule(Matcher):
 	
 	
 	# -------------------------------------------------------------------------- Matching and Acting
-	def run_against(self, patient):
-		""" Runs the rule and, if it matches, runs the actions.
-		Also stores the run info on the server. """
+	def match_against(self, record):
+		""" Runs the rule, stores the run info on the server and returns a flag whether the rule did match.
+		"""
+		if record is None:
+			raise Exception("Can not run rule %s without a record" % self.id)
 		
-		flag = self.match_against(patient)
-		results = []
-		if flag:
-			results = self.perform_actions(patient)
+		# run against record
+		record.prepare_rule_run(self)
+		flag = self.condition.match_against(record)
+		results = record.matches_for(self) if flag else None
 		
 		# store this new result
 		new_result = RuleResult(self, None, flag, results)
-		self.store_new_result_for(new_result, patient)
+		record.store_new_result_for_rule(new_result, self)
 		
-		return results if len(results) > 0 else 0
+		return flag
 	
-	def match_against(self, patient):
-		return self.condition.match_against(patient)
-	
-	def perform_actions(self, patient):
+	def perform_actions(self, record):
 		""" Returns an array of result actions """
 		
 		results = []
 		for action in self.actions:
-			result = action.execute_for(patient)
+			result = action.execute_for(record)
 			if result is not None:
 				results.append(result)
 		
 		return results
-	
-	
-	# -------------------------------------------------------------------------- Storing
-	def store_new_result_for(self, result, patient):
-		""" Stores the given result to SMART scratchpad data """
-		
-		if result is not None and patient is not None:
-			stored = patient.stored_rule_results
-			if stored is None:
-				stored = {}
-			
-			mine = stored.get(self.id, [])
-			mine.append(result)
-			stored[self.id] = mine
-			
-			patient.stored_rule_results = stored
 	
 	
 	# -------------------------------------------------------------------------- Utilities

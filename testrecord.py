@@ -20,35 +20,12 @@ class TestRecord(object):
 		self._problems = None
 		self._scratchpad_data = None
 	
+	
+	# -------------------------------------------------------------------------- Properties
 	@property
 	def record_id(self):
 		return self.smart.record_id
 	
-	@property
-	def scratchpad_data(self):
-		if self._scratchpad_data is None:
-			self._scratchpad_data = self.get_scratchpad_data()
-		return self._scratchpad_data
-	
-	@property
-	def stored_rule_results(self):
-		storage = self.scratchpad_data
-		if storage is not None:
-			return storage.get('rules')
-		return None
-	
-	@stored_rule_results.setter
-	def stored_rule_results(self, new_rules={}):
-		storage = self.scratchpad_data
-		if new_rules is not None and len(new_rules) > 0:
-			if storage is None:
-				storage = {}
-			storage['rules'] = new_rules
-		
-		self.set_scratchpad_data(storage)
-	
-	
-	# -------------------------------------------------------------------------- Properties
 	@property
 	def medications(self):
 		if self._medications is None:
@@ -71,7 +48,23 @@ class TestRecord(object):
 		return self._problems
 	
 	
-	# -------------------------------------------------------------------------- Matching data models to properties
+	# -------------------------------------------------------------------------- Running Rules
+	def prepare_rule_run(self, rule):
+		self.matches = {}
+	
+	def matches_for(self, rule):
+		return self.matches
+	
+	def did_match_item(self, item, condition):
+		""" The conditions should call this so the instance can properly fill an ivar for the given item
+		"""
+		if item is not None and condition.id is not None:
+			matches = self.matches.get(condition.id, [])
+			matches.append(item)
+			self.matches[condition.id] = matches
+	
+	
+	# -------------------------------------------------------------------------- Object Extraction
 	def graph_for(self, data_type):
 		""" calls the appropriate property getter for the given data type """
 		
@@ -81,17 +74,6 @@ class TestRecord(object):
 			return self.problems.graph
 		return None
 	
-	def did_match_item(self, item, item_system):
-		""" The conditions should call this so the instance can properly fill an ivar for the given item
-		"""
-		to_store = self.get_object_for(item, item_system)
-		if to_store is not None:
-			matches = self.matches.get(item_system, [])
-			matches.append(to_store)
-			self.matches[item_system] = matches
-	
-	
-	# -------------------------------------------------------------------------- Object Extraction
 	def get_object_for(self, item, item_system):
 		""" Get the interesting parts for an item, depending on its system
 		"""
@@ -185,11 +167,57 @@ class TestRecord(object):
 		return body
 	
 	
-	# -------------------------------------------------------------------------- App Storage
+	# -------------------------------------------------------------------------- App Storage	
+	@property
+	def scratchpad_data(self):
+		if self._scratchpad_data is None:
+			self._scratchpad_data = self.get_scratchpad_data()
+		return self._scratchpad_data
+	
+	@scratchpad_data.setter
+	def scratchpad_data(self, new_data):
+		if self.set_scratchpad_data(new_data):
+			self._scratchpad_data = new_data
+	
+	
+	@property
+	def stored_rule_results(self):
+		storage = self.scratchpad_data
+		if storage is not None:
+			return storage.get('rules')
+		return None
+	
+	@stored_rule_results.setter
+	def stored_rule_results(self, new_rules={}):
+		storage = self.scratchpad_data
+		if new_rules is None or len(new_rules) > 0:
+			if storage is None:
+				storage = {}
+			storage['rules'] = new_rules
+		
+		self.scratchpad_data = storage
+	
+	
+	def store_new_result_for_rule(self, result, rule):
+		""" Stores the given result to SMART scratchpad data """
+		
+		if result is not None and rule is not None:
+			stored = self.stored_rule_results
+			if stored is None:
+				stored = {}
+			
+			mine = stored.get(rule.id, [])
+			mine.append(result)
+			stored[rule.id] = mine
+			
+			self.stored_rule_results = stored
+	
 	def get_scratchpad_data(self):
 		try:
 			res = self.smart.get_scratchpad_data()
 			# print 'LOADED SCRATCHPAD', res.body
+			if res.body is None or len(res.body) < 1:
+				return None
 			return json.loads(res.body)
 		except Exception, e:
 			print e
@@ -198,10 +226,14 @@ class TestRecord(object):
 	def set_scratchpad_data(self, data):
 		try:
 			if data is not None:
-				# print 'STORING SCRATCHPAD', json.dumps(data, cls=JSONRuleEncoder)
-				res = self.smart.put_scratchpad_data(json.dumps(data, cls=JSONRuleEncoder))
+				encoded = json.dumps(data, cls=JSONRuleEncoder)
+				# print 'STORING SCRATCHPAD', encoded
+				res = self.smart.put_scratchpad_data(encoded)
+				print res.response
 			else:
+				# print 'DELETING SCRATCHPAD'
 				res = self.smart.delete_scratchpad_data()
+				print res.response
 			return True
 		except Exception, e:
 			print e
