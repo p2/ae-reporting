@@ -9,3 +9,11 @@
 	-o-border-radius: $radius $radius $radius $radius;
 	border-radius: $radius $radius $radius $radius;
 }
+
+@mixin border-radius($tl: 5px, $tr: 5px, $br: 5px, $bl: 5px) {
+	-webkit-border-radius: $tl $tr $br $bl;
+	-moz-border-radius: $tl $tr $br $bl;
+	-ms-border-radius: $tl $tr $br $bl;
+	-o-border-radius: $tl $tr $br $bl;
+	border-radius: $tl $tr $br $bl;
+}

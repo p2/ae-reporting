@@ -1,26 +1,56 @@
+<h2 id="rule_inbox_header" style="display:<%= inbox.length > 0 ? 'block' : 'none' %>">Detected</h2>
+<div id="rule_inbox">
+
+<% for (var i = 0; i < inbox.length; i++) {
+	var rule = inbox[i]; %>
+	
+	<div class="rule">
+		<button onclick="_runRule(this, '<%= rule.id %>')">Recheck</button>
+		<button onclick="_reportRule(this, '<%= rule.id %>')">Evaluate...</button>
+		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
+		<div id="details_<%= rule.id %>" style="display:none;">
+			<p><%= rule.description %></p>
+			
+			<% if (rule.references && rule.references.length > 0) { %>
+				<p class="references"><b>References:</b><br />
+				<% for (var j = 0; j < rule.references.length; j++) { %>
+					<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
+				<% } %>
+				</p>
+			<% } %>
+		</div>
+	</div>
+<% } %>
+</div>
+
+<h2>Rules</h2>
+<div id="rule_box">
+
 <% for (var i = 0; i < rules.length; i++) {
 	var rule = rules[i]; %>
 
-<div class="rule">
-	<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
-	<h2><%= rule.name %></h2>
-	<p><%= rule.description %></p>
-	
-	<% if (rule.last_results && rule.last_results.length > 0) { %>
-		<p class="previous_checks">
+	<div class="rule">
+		<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
+		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
+		<div id="details_<%= rule.id %>" style="display:none;">
+			<p><%= rule.description %></p>
+			
+			<% if (rule.references && rule.references.length > 0) { %>
+				<p class="references"><b>References:</b><br />
+				<% for (var j = 0; j < rule.references.length; j++) { %>
+					<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
+				<% } %>
+				</p>
+			<% } %>
+		</div>
+		
+		<div class="previous_checks">
+		<% if (rule.last_results && rule.last_results.length > 0) { %>
 			<b>Previous checks:</b>
-			<span id="num_previous_checks_<%= rule.id %>"><%= rule.last_results.length %></span>
-		</p>
-	<% } %>
-	
-	<% if (rule.references && rule.references.length > 0) { %>
-		<p class="references"><b>References:</b><br />
-		<% for (var j = 0; j < rule.references.length; j++) { %>
-			<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
+				<span id="num_previous_checks_<%= rule.id %>"><%= rule.last_results.length %></span>
 		<% } %>
-		</p>
-	<% } %>
-	<div class="rule_output"></div>
-</div>
+		</div>
+	</div>
 
 <% } %>
+</div>

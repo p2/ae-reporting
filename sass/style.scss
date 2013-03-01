@@ -4,6 +4,8 @@
 
 
 @import "mixins";
+$col-title:			rgb(30,30,30);
+$col-linkglow:		rgb(0,64,128);
 $col-border:		rgb(120,120,120);
 $col-blue:			rgb(100,200,240);
 
@@ -17,22 +19,43 @@ html, body {
 	max-width: 800px;
 }
 
-.rule {
-	margin-top: 2em; padding: 0.5em 0.75em;
+#rule_inbox, #rule_box {
 	border: 1px solid $col-border; @include border-radius-all();
+}
+
+.rule {
+	margin-top: 0; padding: 0.5em 0.75em;
+	border-bottom: 1px solid $col-border;
 	background-color: white;
 	
 	&:first-child {
-		margin-top: none;
+		@include border-radius(4px, 4px, 0, 0);
+	}
+	&:last-child {
+		border-bottom: none;
+		@include border-radius(0, 0, 4px, 4px);
+		&:first-child {
+			@include border-radius-all(4px);
+		}
 	}
 	
 	h2 {
-		margin-top: 0.5em;
+		margin: 0.5em 0;
 		font-size: 1.4em;
+		
+		a {
+			color: $col-title;
+			text-decoration: none;
+			&:hover {
+				color: $col-linkglow;
+			}
+		}
 	}
+	
 	button {
 		float: right;
 	}
+	
 	pre {
 		white-space: pre-wrap;
 	}
