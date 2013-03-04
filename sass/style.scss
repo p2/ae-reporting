@@ -39,9 +39,8 @@ html, body {
 		}
 	}
 	
-	h2 {
-		margin: 0.5em 0;
-		font-size: 1.4em;
+	h3 {
+		margin: 0.3em 0;
 		
 		a {
 			color: $col-title;
@@ -65,6 +64,34 @@ html, body {
 	}
 }
 
+#processing {
+	& > div {
+		margin-top: 1em;
+		border: 1px solid $col-border; @include border-radius-all();
+		
+		&:first-child {
+			margin-top: 0;
+		}
+	}
+	
+	.proc_header {
+		padding: 0.5em;
+	}
+	.proc_body {
+		display: none;
+		padding: 0.5em;
+		border-top: 1px solid $col-border;
+	}
+}
+
+form > table {
+	th {
+		text-align: left;
+	}
+}
+
+
+// SMART container selection
 #endpoints {
 	overflow: hidden;
 	background-color: white;

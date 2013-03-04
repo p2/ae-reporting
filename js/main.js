@@ -23,6 +23,7 @@ $(document).ready(function() {
 var Rule = Base.extend({
 	name: '',
 	description: '',
+	reportCtrl: null,
 	
 	constructor: function(json) {
 		for (var p in json) {
@@ -31,7 +32,7 @@ var Rule = Base.extend({
 	},
 	
 	hasPendingResults: function() {
-		console.log(this.last_results);
+		console.log('hasPendingResults', this.last_results);
 		if (this.last_results && this.last_results.length > 0) {
 			for (var i = 0; i < this.last_results.length; i++) {
 				if (this.last_results[i].flag) {
@@ -92,8 +93,24 @@ var Rule = Base.extend({
 	},
 	
 	report: function(sender) {
-		var self = this;
-		btn.text("Running...").attr('disabled', true);
+		if (this.reportCtrl) {
+			// do something
+		}
+		
+		this.reportCtrl = new ProcessController(this);
+		this.reportCtrl.init(['demographics', 'adverse_event', 'medications', 'reporter']);
+		
+		// TODO: this should probably go to another controller
+		$('#rules').hide();
+		$('#processing').show();
+	},
+	
+	reportDidAbort: function() {
+		// TODO: this seems also wrong here
+		$('#rules').show();
+		$('#processing').hide();
+		
+		this.reportCtrl = null;
 	}
 });
 
@@ -194,4 +211,81 @@ function _reportRule(sender, rule_name) {
 	}
 	_ruleCtrl.reportRule(sender, rule_name);
 }
+
+
+/**
+ *  Controls the processing flow.
+ */
+var ProcessController = Base.extend({
+	for_rule: null,
+	sections: [],
+	all: ['demographics', 'adverse_event', 'medications', 'labs', 'reporter'],
+	names: ["Demographics", "Adverse Event", "Medications", "Labs", "Reporter"],
+	elem: null,
+	
+	constructor: function(rule) {
+		this.for_rule = rule;
+	},
+	
+	init: function(sections) {
+		if (!sections || sections.length < 1) {
+			alert("No sections to process, giving up");
+			return;
+		}
+		
+		this.elem = $('#processing');
+		this.elem.empty();
+		this.sections = sections;
+		
+		// abort header
+		var but = $('<button/>').text('Abort');
+		var self = this;
+		but.click(function() { self.abort(); });
+		this.elem.append(but);
+		
+		// setup all
+		for (var i = 0; i < this.all.length; i++) {
+			this._initSection(this.all[i], this.names[i]);
+		};
+		
+		// start the first section
+		this._startSection(sections[0]);
+	},
+	
+	_initSection: function(section_id, section_name) {
+		if (!section_id || !this.elem) {
+			console.error('_initSection(), section_id', section_id, 'elem', this.elem);
+			return;
+		}
+		
+		var div = $('<div/>').attr('id', 'proc_' + section_id);
+		div.html('<div class="proc_header">' + (section_name ? section_name : 'Unknown Section') + '</div>');
+		this.elem.append(div);
+		
+		// load the content
+		var bod = $('<div/>').addClass('proc_body');
+		bod.html('templates/process_' + section_id + '.ejs', {});
+		div.append(bod);
+	},
+	
+	_startSection: function(section_id) {
+		if (!section_id || !this.elem) {
+			console.error('_startSection(), section_id', section_id, 'elem', this.elem);
+			return;
+		}
+		
+		var div = $('#proc_' + section_id);
+		var bod = div.find('.proc_body');
+		if (!bod.is('*')) {
+			console.error("No body!", section_id, bod, div);
+			return;
+		}
+		
+		bod.show();
+	},
+	
+	abort: function(sender) {
+		this.for_rule.reportDidAbort();
+	}
+});
 

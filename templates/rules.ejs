@@ -7,7 +7,7 @@
 	<div class="rule">
 		<button onclick="_runRule(this, '<%= rule.id %>')">Recheck</button>
 		<button onclick="_reportRule(this, '<%= rule.id %>')">Evaluate...</button>
-		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
+		<h3><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h3>
 		<div id="details_<%= rule.id %>" style="display:none;">
 			<p><%= rule.description %></p>
 			
@@ -31,7 +31,7 @@
 
 	<div class="rule">
 		<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
-		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
+		<h3><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h3>
 		<div id="details_<%= rule.id %>" style="display:none;">
 			<p><%= rule.description %></p>
 			
