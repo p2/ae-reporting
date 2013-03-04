@@ -1,3 +1,6 @@
 [submodule "smart_client_python"]
 	path = smart_client_python
 	url = git@github.com:chb/smart_client_python.git
+[submodule "rdflib-jsonld"]
+	path = rdflib-jsonld
+	url = git://github.com/RDFLib/rdflib-jsonld.git

@@ -6,6 +6,7 @@
 @import "mixins";
 $col-title:			rgb(30,30,30);
 $col-linkglow:		rgb(0,64,128);
+$col-faded:			rgb(80,80,80);
 $col-border:		rgb(120,120,120);
 $col-blue:			rgb(100,200,240);
 
@@ -95,15 +96,32 @@ h2 {
 		}
 	}
 	.proc_body {
-		display: none;
 		padding: 0.5em;
 		border-top: 1px solid $col-border;
 	}
 }
 
-form > table {
-	th {
-		text-align: left;
+.process_form {
+	& > table {
+		th {
+			text-align: left;
+		}
+		
+		td {
+			padding: 0.3em 0.5em; line-height: 1.5;
+			
+			&:first-child {
+				padding-left: 0;
+			}
+			&:last-child {
+				padding-right: 0;
+			}
+			
+			input[type="text"] {
+				margin: 0;
+				font-size: 1.1em;
+			}
+		}
 	}
 }
 
@@ -142,5 +160,13 @@ form > table {
 
 .red {
 	color: #A00;
+}
+
+.faded {
+	color: $col-faded;
+}
+
+.small {
+	font-size: 0.85em;
 }
 

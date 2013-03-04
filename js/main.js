@@ -267,11 +267,6 @@ var ProcessController = Base.extend({
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
 		div.html('<div class="proc_header"><h4>' + (section_name ? section_name : 'Unknown Section') + '</h4></div>');
 		this.elem.append(div);
-		
-		// load the content
-		var bod = $('<div/>').addClass('proc_body');
-		bod.html('templates/process_' + section_id + '.ejs', {});
-		div.append(bod);
 	},
 	
 	_startSection: function(section_id) {
@@ -280,16 +275,34 @@ var ProcessController = Base.extend({
 			return;
 		}
 		
+		// Add the body
 		var div = $('#proc_' + section_id);
-		var bod = div.find('.proc_body');
-		if (!bod.is('*')) {
-			console.error("No body!", section_id, bod, div);
-			return;
-		}
+		var bod = $('<div/>').addClass('proc_body');
+		bod.text('Loading...');
+		div.append(bod);
 		
-		bod.show();
+		// load data
+		this.loadDataForSection(section_id, bod);
 	},
 	
+	/**
+	 *  Retrieves the data that is necessary to prefill the given section.
+	 */
+	loadDataForSection: function(section_id, target) {
+		$.get('prefill/' + section_id + '?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
+			if (json) {
+				target.html('templates/process_' + section_id + '.ejs', {'data': json});
+			}
+			else {
+				alert('Invalid response for "prefill/' + section_id + '"');
+				console.warn('rules', json);
+			}
+		}, 'json');
+	},
+	
+	/**
+	 *  Abort the reporting process.
+	 */
 	abort: function(sender) {
 		this.for_rule.reportDidAbort();
 	}

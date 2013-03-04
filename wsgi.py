@@ -147,6 +147,27 @@ def _exchange_token(req_token, verifier):
 	return api_base, record_id
 
 
+def _patient_from_request(request, record_id=None):
+	""" Returns a "TestRecord" instance from the GET parameters in the request.
+	
+	record_id can be used to override the value in the parameters (e.g. if it was supplied in the method path)
+	"""
+	if request is None:
+		return None
+	
+	api_base = request.query.get('api_base')
+	if record_id is None:
+		record_id = request.query.get('record_id')
+	
+	record = None
+	if record_id is not None:
+		smart_client = _smart_client(api_base, record_id)
+		if smart_client is not None:
+			record = TestRecord(smart_client)
+	
+	return record
+
+
 # ------------------------------------------------------------------------------ Index
 @app.get('/')
 @app.get('/index.html')
@@ -221,16 +242,9 @@ def authorize():
 # ------------------------------------------------------------------------------ RESTful paths
 @app.get('/rules/')
 def rules(rule_id=None):
-	api_base = bottle.request.query.get('api_base')
-	record_id = bottle.request.query.get('record_id')
-	
-	patient = None
-	if record_id is not None:
-		smart_client = _smart_client(api_base, record_id)
-		if smart_client is not None:
-			patient = TestRecord(smart_client)
-	
-	return json.dumps(Rule.load_rules(patient), cls=JSONRuleEncoder)
+	""" Returns all available rules """
+	record = _patient_from_request(bottle.request)
+	return json.dumps(Rule.load_rules(record), cls=JSONRuleEncoder)
 
 @app.get('/rules/<rule_id>/run_against/<record_id>')
 def run_rule(rule_id, record_id):
@@ -239,25 +253,24 @@ def run_rule(rule_id, record_id):
 	if rule is None:
 		bottle.abort(404)
 	
-	# we need to know the endpoint
-	api_base = bottle.request.query.get('api_base')
-	if api_base is None:
+	patient = _patient_from_request(bottle.request, record_id)
+	if patient is None:
 		bottle.abort(400)
 	
-	# make sure we have the tokens
-	ts = TokenStore()
-	token = ts.tokenForRecord(api_base, record_id)
-	if token is None:
-		bottle.abort(403)
-	
-	# create the test record and run the rule!
-	smart = _smart_client(api_base, record_id)
-	if smart is None:
-		bottle.abort(500)
-	
-	smart.update_token(token)
-	patient = TestRecord(smart)
 	return 'match' if rule.match_against(patient) else 'ok'
+
+@app.get('/prefill/<section_id>')
+def prefill(section_id):
+	""" Returns the data used to prefill a given processing section, JSON encoded. """
+	patient = _patient_from_request(bottle.request)
+	if patient is None:
+		bottle.abort(400)
+	
+	# JSON-encode the response
+	data = patient.prefill_data_for(section_id)
+	if data is not None:
+		data = json.dumps(data)
+	return data
 
 
 # ------------------------------------------------------------------------------ Static requests

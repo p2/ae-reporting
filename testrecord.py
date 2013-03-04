@@ -16,8 +16,10 @@ class TestRecord(object):
 	def __init__(self, smart_client):
 		self.smart = smart_client
 		self.matches = {}				# conditions write the matched objects to arrays by system key
+		self._demographics = None
 		self._medications = None
 		self._problems = None
+		self._vitals = None
 		self._scratchpad_data = None
 	
 	
@@ -27,25 +29,51 @@ class TestRecord(object):
 		return self.smart.record_id
 	
 	@property
+	def demographics(self):
+		if self._demographics is None:
+			ret = self.smart.get_demographics()
+			status = ret.response.get('status')
+			if '200' != status:
+				raise Exception("Failed to get demographics: %s" % status)
+			self._demographics = ret.graph
+		
+		return self._demographics
+	
+	@property
 	def medications(self):
 		if self._medications is None:
-			self._medications = self.smart.get_medications()
-			status = self._medications.response.get('status')
+			ret = self.smart.get_medications()
+			status = ret.response.get('status')
 			if '200' != status:
 				raise Exception("Failed to get medications: %s" % status)
-			#self._medications.graph.serialize(destination="medications-%s.rdf" % self.record_id)
+			#self._medications.serialize(destination="medications-%s.rdf" % self.record_id)
+			self._medications = ret.graph
+		
 		return self._medications
-	
 	
 	@property
 	def problems(self):
 		if self._problems is None:
-			self._problems = self.smart.get_problems()
-			status = self._problems.response.get('status')
+			ret = self.smart.get_problems()
+			status = ret.response.get('status')
 			if '200' != status:
 				raise Exception("Failed to get problems: %s" % status)
-			#self._problems.graph.serialize(destination="problems-%s.rdf" % self.record_id)
+			#self._problems.serialize(destination="problems-%s.rdf" % self.record_id)
+			self._problems = ret.graph
+		
 		return self._problems
+	
+	@property
+	def vitals(self):
+		if self._vitals is None:
+			ret = self.smart.get_vital_sign_sets()
+			status = ret.response.get('status')
+			if '200' != status:
+				raise Exception("Failed to get vitals: %s" % status)
+			#self._vitals.serialize(destination="vitals-%s.rdf" % self.record_id)
+			self._vitals = ret.graph
+		
+		return self._vitals
 	
 	
 	# -------------------------------------------------------------------------- Running Rules
@@ -69,9 +97,9 @@ class TestRecord(object):
 		""" calls the appropriate property getter for the given data type """
 		
 		if '<http://smartplatforms.org/terms#Medication>' == data_type:
-			return self.medications.graph
+			return self.medications
 		if '<http://smartplatforms.org/terms#Problem>' == data_type:
-			return self.problems.graph
+			return self.problems
 		return None
 	
 	def get_object_for(self, item, item_system):
@@ -86,10 +114,14 @@ class TestRecord(object):
 		graph = Graph()
 		graph.parse(data=body, publicID=item)
 		
+		return self.data_from_graph(graph, item_system)
+	
+	def data_from_graph(self, graph, item_system):
+		""" Creates (JSON-encodable) data from a given graph representing a given item
+		"""
+		
 		# a medication
 		if 'rxnorm' == item_system:
-			
-			# extract interesting properties
 			sparql = """
 				PREFIX sp: <http://smartplatforms.org/terms#>
 				PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -119,8 +151,6 @@ class TestRecord(object):
 		
 		# SNOMED problems
 		if 'snomed' == item_system:
-			
-			# extract interesting properties
 			sparql = """
 				PREFIX sp: <http://smartplatforms.org/terms#>
 				PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -165,6 +195,57 @@ class TestRecord(object):
 			return None
 		
 		return body
+	
+	
+	# -------------------------------------------------------------------------- Rule Prefill
+	def prefill_data_for(self, section_id):
+		""" Fetches the SMART data associated with the given section id
+		"""
+		
+		# demographics additionally wants vitals, so we return both
+		if 'demographics' == section_id:
+			demo_graph = self._prefill_graph_for('demographics')
+			demo_ld = json.loads(demo_graph.serialize(format='json-ld'))
+			demo = {}
+			for gr in demo_ld.get("@graph", []):
+				if "sp:Demographics" == gr.get("@type"):
+					demo = gr
+					break
+			
+			# vitals
+			vitals_graph = self._prefill_graph_for('vitals')
+			vitals_ld = json.loads(vitals_graph.serialize(format='json-ld'))
+			vitals = []
+			for vset in vitals_ld.get("@graph", []):
+				if "sp:VitalSignSet" == vset.get("@type"):
+					vitals.append(vset)
+			
+			# sort latest first
+			demo['vitals'] = sorted(vitals, key=lambda k: k['dcterms:date'], reverse=True)
+			
+			print demo
+			
+			return demo
+		
+		# non-special linear graphs
+		graph = self._prefill_graph_for(section_id)
+		if graph is None:
+			return None
+		
+		return self.data_from_graph(graph, section_id)
+	
+	def _prefill_graph_for(self, section_id):
+		""" Fetches the SMART RDF graph associated with the given section id
+		"""
+		
+		# demographics also needs vitals
+		if 'demographics' == section_id:
+			return self.demographics
+		if 'vitals' == section_id:
+			return self.vitals
+		
+		print "I don't know what graph to return for section", section_id
+		return None
 	
 	
 	# -------------------------------------------------------------------------- App Storage	

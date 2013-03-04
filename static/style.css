@@ -1,6 +1,10 @@
 html, body { margin: 0; padding: 20px; font: 11pt "Helvetica-Neue", Helvetica, sans-serif; background-color: #f6f6f6; }
 
+h2 { margin-bottom: 0.3em; }
+
 #container { max-width: 800px; }
+
+#rule_inbox_header { color: #900; }
 
 #rule_inbox, #rule_box { border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; }
 
@@ -15,12 +19,18 @@ html, body { margin: 0; padding: 20px; font: 11pt "Helvetica-Neue", Helvetica, s
 .rule pre { white-space: pre-wrap; }
 .rule .previous_checks, .rule .references { font-size: 0.85em; }
 
-#processing > div { margin-top: 1em; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; }
+#processing > div { margin-top: 1em; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; background-color: white; }
 #processing > div:first-child { margin-top: 0; }
+#processing .rule_info { padding: 0.5em; }
 #processing .proc_header { padding: 0.5em; }
-#processing .proc_body { display: none; padding: 0.5em; border-top: 1px solid #787878; }
+#processing .proc_header h4 { margin: 0; padding: 0; }
+#processing .proc_body { padding: 0.5em; border-top: 1px solid #787878; }
 
-form > table th { text-align: left; }
+.process_form > table th { text-align: left; }
+.process_form > table td { padding: 0.3em 0.5em; line-height: 1.5; }
+.process_form > table td:first-child { padding-left: 0; }
+.process_form > table td:last-child { padding-right: 0; }
+.process_form > table td input[type="text"] { margin: 0; font-size: 1.1em; }
 
 #endpoints { overflow: hidden; background-color: white; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; }
 #endpoints a { display: block; padding: 0.5em 1em; text-decoration: none; color: black; border-bottom: 1px solid #787878; }
@@ -31,3 +41,7 @@ form > table th { text-align: left; }
 .green { color: #090; }
 
 .red { color: #A00; }
+
+.faded { color: #505050; }
+
+.small { font-size: 0.85em; }
