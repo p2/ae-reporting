@@ -243,6 +243,12 @@ var ProcessController = Base.extend({
 		but.click(function() { self.abort(); });
 		this.elem.append(but);
 		
+		// rule info
+		var info = $('<div/>').addClass('rule_info');
+		info.append('<h3>' + this.for_rule.name + '</h3>');
+		info.append('<p>' + this.for_rule.description + '</p>');
+		this.elem.append(info);
+		
 		// setup all
 		for (var i = 0; i < this.all.length; i++) {
 			this._initSection(this.all[i], this.names[i]);
@@ -259,7 +265,7 @@ var ProcessController = Base.extend({
 		}
 		
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
-		div.html('<div class="proc_header">' + (section_name ? section_name : 'Unknown Section') + '</div>');
+		div.html('<div class="proc_header"><h4>' + (section_name ? section_name : 'Unknown Section') + '</h4></div>');
 		this.elem.append(div);
 		
 		// load the content

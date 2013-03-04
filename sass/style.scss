@@ -15,8 +15,16 @@ html, body {
 	background-color: rgb(246,246,246);
 }
 
+h2 {
+	margin-bottom: 0.3em;
+}
+
 #container {
 	max-width: 800px;
+}
+
+#rule_inbox_header {
+	color: #900;
 }
 
 #rule_inbox, #rule_box {
@@ -68,14 +76,23 @@ html, body {
 	& > div {
 		margin-top: 1em;
 		border: 1px solid $col-border; @include border-radius-all();
+		background-color: white;
 		
 		&:first-child {
 			margin-top: 0;
 		}
 	}
 	
+	.rule_info {
+		padding: 0.5em;
+	}
+	
 	.proc_header {
 		padding: 0.5em;
+		
+		h4 {
+			margin: 0; padding: 0;
+		}
 	}
 	.proc_body {
 		display: none;
