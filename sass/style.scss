@@ -96,33 +96,49 @@ h2 {
 		}
 	}
 	.proc_body {
+		display: none;
 		padding: 0.5em;
 		border-top: 1px solid $col-border;
+		
+		.process_form {
+			& > table {
+				th {
+					text-align: left;
+				}
+				
+				td {
+					padding: 0.3em 0.5em; line-height: 1.5;
+					
+					&:first-child {
+						padding-left: 0;
+					}
+					&:last-child {
+						padding-right: 0;
+					}
+					
+					input[type="text"] {
+						margin: 0;
+						font-size: 1.1em;
+					}
+					
+					h4 {
+						margin: 0.5em 0;
+						font-size: 1.1em;
+					}
+				}
+			}
+		}
+	}
+	
+	.active {
+		.proc_body {
+			display: block;
+		}
 	}
 }
 
-.process_form {
-	& > table {
-		th {
-			text-align: left;
-		}
-		
-		td {
-			padding: 0.3em 0.5em; line-height: 1.5;
-			
-			&:first-child {
-				padding-left: 0;
-			}
-			&:last-child {
-				padding-right: 0;
-			}
-			
-			input[type="text"] {
-				margin: 0;
-				font-size: 1.1em;
-			}
-		}
-	}
+.process_next {
+	margin-top: 1em;
 }
 
 

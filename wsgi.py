@@ -270,6 +270,7 @@ def prefill(section_id):
 	data = patient.prefill_data_for(section_id)
 	if data is not None:
 		data = json.dumps(data)
+	
 	return data
 
 

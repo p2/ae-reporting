@@ -4,6 +4,7 @@
 
 
 var _ruleCtrl = null;
+var _reportCtrl = null;
 var _globals = {};
 $(document).ready(function() {
 	
@@ -23,7 +24,6 @@ $(document).ready(function() {
 var Rule = Base.extend({
 	name: '',
 	description: '',
-	reportCtrl: null,
 	
 	constructor: function(json) {
 		for (var p in json) {
@@ -93,12 +93,12 @@ var Rule = Base.extend({
 	},
 	
 	report: function(sender) {
-		if (this.reportCtrl) {
+		if (_reportCtrl) {
 			// do something
 		}
 		
-		this.reportCtrl = new ProcessController(this);
-		this.reportCtrl.init(['demographics', 'adverse_event', 'medications', 'reporter']);
+		_reportCtrl = new ProcessController(this);
+		_reportCtrl.init(['demographics', 'adverse_event', 'medications', 'reporter']);
 		
 		// TODO: this should probably go to another controller
 		$('#rules').hide();
@@ -110,7 +110,7 @@ var Rule = Base.extend({
 		$('#rules').show();
 		$('#processing').hide();
 		
-		this.reportCtrl = null;
+		_reportCtrl = null;
 	}
 });
 
@@ -269,14 +269,20 @@ var ProcessController = Base.extend({
 		this.elem.append(div);
 	},
 	
+	_hideSection: function(section_id) {
+		$('#proc_' + section_id).removeClass('active');
+	},
+	
 	_startSection: function(section_id) {
 		if (!section_id || !this.elem) {
 			console.error('_startSection(), section_id', section_id, 'elem', this.elem);
 			return;
 		}
 		
-		// Add the body
+		// add the body
 		var div = $('#proc_' + section_id);
+		div.addClass('active');
+		
 		var bod = $('<div/>').addClass('proc_body');
 		bod.text('Loading...');
 		div.append(bod);
@@ -289,15 +295,54 @@ var ProcessController = Base.extend({
 	 *  Retrieves the data that is necessary to prefill the given section.
 	 */
 	loadDataForSection: function(section_id, target) {
+		var self = this;
 		$.get('prefill/' + section_id + '?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
 			if (json) {
 				target.html('templates/process_' + section_id + '.ejs', {'data': json});
+				var cont = $('<button/>').text('Proceed').click({ current_id: section_id }, _processNextSection);
+				var div = $('<div/>').addClass('process_next');
+				div.append(cont);
+				target.append(div);
 			}
 			else {
-				alert('Invalid response for "prefill/' + section_id + '"');
+				target.text('Invalid response for "prefill/' + section_id + '"');
 				console.warn('rules', json);
 			}
 		}, 'json');
+	},
+	
+	/**
+	 *  Starts the next section.
+	 */
+	startNextSection: function(sender, current_id) {
+		var next = null;
+		for (var i = 0; i < this.sections.length; i++) {
+			if (current_id == this.sections[i]) {
+				
+				// got a next section
+				if (this.sections.length > i+1) {
+					next = this.sections[i+1];
+				}
+				
+				// at the end
+				else {
+					this.finish();
+				}
+				break;
+			}
+		}
+		
+		if (next) {
+			this._hideSection(current_id);
+			this._startSection(next);
+		}
+	},
+	
+	/**
+	 *  Finish the reporting.
+	 */
+	finish: function(sender) {
+		alert("I don't know how to finish yet");
 	},
 	
 	/**
@@ -307,4 +352,17 @@ var ProcessController = Base.extend({
 		this.for_rule.reportDidAbort();
 	}
 });
+
+
+/**
+ *  Jumps to next section.
+ */
+ function _processNextSection(event) {
+ 	if (!_reportCtrl) {
+ 		alert("There is no process controller in place, cannot proceed");
+ 		return;
+ 	}
+ 	
+ 	_reportCtrl.startNextSection($(event.target), event.data.current_id);
+ }
 

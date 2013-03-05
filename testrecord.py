@@ -223,14 +223,12 @@ class TestRecord(object):
 			# sort latest first
 			demo['vitals'] = sorted(vitals, key=lambda k: k['dcterms:date'], reverse=True)
 			
-			print demo
-			
 			return demo
 		
 		# non-special linear graphs
 		graph = self._prefill_graph_for(section_id)
 		if graph is None:
-			return None
+			return {}
 		
 		return self.data_from_graph(graph, section_id)
 	
