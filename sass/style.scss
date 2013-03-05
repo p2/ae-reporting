@@ -90,6 +90,7 @@ h2 {
 	
 	.proc_header {
 		padding: 0.5em;
+		cursor: pointer;
 		
 		h4 {
 			margin: 0; padding: 0;
@@ -97,26 +98,21 @@ h2 {
 	}
 	.proc_body {
 		display: none;
-		padding: 0.5em;
 		border-top: 1px solid $col-border;
 		
 		.process_form {
 			& > table {
+				width: 100%;
+				border-collapse: collapse;
+				
 				th {
 					text-align: left;
 				}
 				
-				td {
+				th, td {
 					padding: 0.3em 0.5em; line-height: 1.5;
 					
-					&:first-child {
-						padding-left: 0;
-					}
-					&:last-child {
-						padding-right: 0;
-					}
-					
-					input[type="text"] {
+					input[type="text"], select {
 						margin: 0;
 						font-size: 1.1em;
 					}
@@ -126,7 +122,19 @@ h2 {
 						font-size: 1.1em;
 					}
 				}
+				
+				.row_section_begin {
+					padding-top: 0.7em;
+				}
+				.row_section_end {
+					padding-bottom: 0.7em;
+					border-bottom: 1px solid $col-border;
+				}
 			}
+		}
+		
+		p {
+			padding: 1em 0.5em;
 		}
 	}
 	

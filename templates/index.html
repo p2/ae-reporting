@@ -3,6 +3,7 @@
 <head>
 	<title>Adverse Event Reporting</title>
 	<link rel="stylesheet" type="text/css" href="static/style.css" />
+	<link rel="stylesheet" type="text/css" href="static/kalendae.css" />
 </head>
 <body>
 	<div id="container">
@@ -22,9 +23,12 @@
 var _api_base = "{{ api_base }}";
 var _record_id = "{{ record_id }}";
 </script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="static/jquery.view.ejs.min.js"></script>
-<script src="static/moment.min.js"></script>
+<script src="static/kalendae.min.js"></script>
+<script>
+	window.moment = Kalendae.moment;
+</script>
 <script src="static/Base.min.js"></script>
 <script src="static/main.min.js"></script>
 </html>

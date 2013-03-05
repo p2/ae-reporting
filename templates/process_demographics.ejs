@@ -9,32 +9,58 @@
 			%>
 			<tr><th>Patient:</th><td><h4><%= full_name %></h4></td></tr>
 			<tr>
-				<th>Patient Identifier:</th>
-				<td>
+				<th class="row_section_end">Patient Identifier:</th>
+				<td class="row_section_end">
 					<input type="text" placeholder="Kept confidential" size="30" /><br />
 					<span class="small faded">We will use this identifier should we need to follow up with you</span>
 				</td>
 			</tr>
 			
-			<% var bday = '';
+			<% var bday = null;
 			var age = '';
+			var deathdate = null;
 			var gender = ('foaf:gender' in data) ? data['foaf:gender'] : null;
 			if ('vcard:bday' in data) {
-				var bday = moment(data['vcard:bday']);
+				bday = moment(data['vcard:bday']);
 				if (bday) {
 					age = moment().diff(bday, 'years');
 				}
+			} 
+			if ('vcard:deathdate' in data) {
+				deathdate = moment(data['vcard:deathdate']);
 			} %>
-			<tr><th>Date of Birth:</th><td><input type="text" name="bday" placeholder="MM/DD/YYYY" value="<%= bday.format('MM/DD/YYYY') %>" /></td></tr>
-			<tr><th>Age at Time of Event:</th><td><input type="text" name="age" value="<%= age %>" size="4" /> <label>years</label></td></tr>
-			<tr><th>Gender:</th>
-				<td>
+			<tr>
+				<th class="row_section_begin">Date of Birth:</th>
+				<td class="row_section_begin">
+					<input class="auto-kal" type="text" name="bday" placeholder="MM/DD/YYYY" data-kal="format: 'MM/DD/YYYY'" value="<%= bday ? bday.format('MM/DD/YYYY') : '' %>" />
+				</td>
+			</tr>
+			<tr><th></th><td><b>or</b></td></tr>
+			<tr>
+				<th class="row_section_end">Age:</th>
+				<td class="row_section_end">
+					<input type="text" name="age" placeholder="<%= age %>" size="4" /> <label>years</label>
+					<span class="small faded">(at time of event)</span>
+				</td>
+			</tr>
+			
+			<tr>
+				<th class="row_section_begin row_section_end">Date of Death:</th>
+				<td class="row_section_begin row_section_end">
+					<input class="auto-kal" type="text" name="deathdate" placeholder="MM/DD/YYYY" data-kal="format: 'MM/DD/YYYY'" value="<%= deathdate ? deathdate.format('MM/DD/YYYY') : '' %>" />
+				</td>
+			</tr>
+			
+			<tr>
+				<th class="row_section_begin">Gender:</th>
+				<td class="row_section_begin">
 					<input id="gender_female" type="radio" name="gender" value="w" <%= ('female' == gender) ? 'checked="checked"' : '' %> />
 					<label for="gender_female">Female</label>
 					<input id="gender_male" type="radio" name="gender" value="m" <%= ('male' == gender) ? 'checked="checked"' : '' %> />
 					<label for="gender_male">Male</label>
 				</td>
 			</tr>
+			<tr><th>Ethnicity:</th><td><input type="text" name="ethnicity" value="<%= ('sp:ethnicity' in data) ? data['sp:ethnicity'] : '' %>" /></td></tr>
 			
 			<% var weight = '';
 			var measured = null;

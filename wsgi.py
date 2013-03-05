@@ -52,12 +52,12 @@ def _smart_client(api_base, record_id=None):
 			bottle.abort(404)
 			return None
 		
-		# instantiate
+		# instantiate; when this fails, most likely the server is down
 		app_id = server.get('app_id')
 		try:
 			_smart = SMARTClient(app_id, api_base, server)
 		except Exception, e:
-			_log_error(e)
+			bottle.abort(503)
 			return None
 	
 	_smart.record_id = record_id

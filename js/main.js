@@ -32,7 +32,6 @@ var Rule = Base.extend({
 	},
 	
 	hasPendingResults: function() {
-		console.log('hasPendingResults', this.last_results);
 		if (this.last_results && this.last_results.length > 0) {
 			for (var i = 0; i < this.last_results.length; i++) {
 				if (this.last_results[i].flag) {
@@ -249,66 +248,75 @@ var ProcessController = Base.extend({
 		info.append('<p>' + this.for_rule.description + '</p>');
 		this.elem.append(info);
 		
-		// setup all
-		for (var i = 0; i < this.all.length; i++) {
-			this._initSection(this.all[i], this.names[i]);
+		// setup our sections
+		for (var i = 0; i < this.sections.length; i++) {
+			this._initSection(this.sections[i], this.names[i], 0 == i);
 		};
-		
-		// start the first section
-		this._startSection(sections[0]);
 	},
 	
-	_initSection: function(section_id, section_name) {
+	_initSection: function(section_id, section_name, do_start) {
 		if (!section_id || !this.elem) {
 			console.error('_initSection(), section_id', section_id, 'elem', this.elem);
 			return;
 		}
 		
+		// header
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
-		div.html('<div class="proc_header"><h4>' + (section_name ? section_name : 'Unknown Section') + '</h4></div>');
+		var head = $('<div/>').addClass('proc_header');
+		var section_title = $('<h4/>').text(section_name ? section_name : "Unknown Section");
+		head.click({ section_id: section_id }, _processSection);
+		head.append(section_title);
+		div.append(head);
 		this.elem.append(div);
-	},
-	
-	_hideSection: function(section_id) {
-		$('#proc_' + section_id).removeClass('active');
-	},
-	
-	_startSection: function(section_id) {
-		if (!section_id || !this.elem) {
-			console.error('_startSection(), section_id', section_id, 'elem', this.elem);
-			return;
-		}
 		
 		// add the body
-		var div = $('#proc_' + section_id);
-		div.addClass('active');
-		
 		var bod = $('<div/>').addClass('proc_body');
-		bod.text('Loading...');
+		bod.html("<p>Loading...</p>");
 		div.append(bod);
 		
 		// load data
-		this.loadDataForSection(section_id, bod);
+		this._loadDataForSection(section_id, bod, do_start);
 	},
 	
 	/**
 	 *  Retrieves the data that is necessary to prefill the given section.
 	 */
-	loadDataForSection: function(section_id, target) {
+	_loadDataForSection: function(section_id, target, do_start) {
 		var self = this;
 		$.get('prefill/' + section_id + '?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
 			if (json) {
 				target.html('templates/process_' + section_id + '.ejs', {'data': json});
-				var cont = $('<button/>').text('Proceed').click({ current_id: section_id }, _processNextSection);
+				var cont = $('<button/>').text('Proceed').click({ section_id: section_id }, _processNextSection);
 				var div = $('<div/>').addClass('process_next');
-				div.append(cont);
+				div.append($('<p/>').append(cont));
 				target.append(div);
 			}
 			else {
 				target.text('Invalid response for "prefill/' + section_id + '"');
 				console.warn('rules', json);
 			}
+			
+			// start this section?
+			if (do_start) {
+				self.startSection(null, section_id);
+			}
 		}, 'json');
+	},
+	
+	startSection: function(sender, section_id) {
+		if (!section_id || !this.elem) {
+			console.error('startSection(), section_id', section_id, 'elem', this.elem);
+			return;
+		}
+		
+		// show the section
+		var div = $('#proc_' + section_id);
+		div.addClass('active');
+		
+		// load date pickers (must do manually, the auto-trigger doesn't work for EJS)
+		div.find('.auto-kal').each(function(i, elem) {
+			$(elem).kalendae({'format': 'MM/DD/YYYY'});
+		});
 	},
 	
 	/**
@@ -334,8 +342,12 @@ var ProcessController = Base.extend({
 		
 		if (next) {
 			this._hideSection(current_id);
-			this._startSection(next);
+			this.startSection(sender, next);
 		}
+	},
+	
+	_hideSection: function(section_id) {
+		$('#proc_' + section_id).removeClass('active');
 	},
 	
 	/**
@@ -355,6 +367,18 @@ var ProcessController = Base.extend({
 
 
 /**
+ *  Starts section.
+ */
+ function _processSection(event) {
+ 	if (!_reportCtrl) {
+ 		alert("There is no process controller in place, cannot proceed");
+ 		return;
+ 	}
+ 	
+ 	_reportCtrl.startSection($(event.target), event.data.section_id);
+ }
+ 
+ /**
  *  Jumps to next section.
  */
  function _processNextSection(event) {
@@ -363,6 +387,6 @@ var ProcessController = Base.extend({
  		return;
  	}
  	
- 	_reportCtrl.startNextSection($(event.target), event.data.current_id);
+ 	_reportCtrl.startNextSection($(event.target), event.data.section_id);
  }
 

@@ -1,0 +1,23 @@
+<form class="process_form" id="form_adverse_event">
+	<table>
+		<tbody>
+			<tr>
+				<th>Date of Event:</th>
+				<td><input class="auto-kal" type="text" name="event_date" placeholder="MM/DD/YYYY" data-kal="format: 'MM/DD/YYYY'" value="<%= moment().format('MM/DD/YYYY') %>" /></td>
+			</tr>
+			<tr>
+				<th>Outcome:</th>
+				<td>
+					<select name="outcome">
+						<option value="life-threatening">Life-threatening</option>
+						<option value="death">Death</option>
+						<option value="hospitalization">Hospitalization - initial or prolonged</option>
+						<option value="disability">Disability or Permanent Damage</option>
+						<option value="birth-defect">Congenital Anomaly / Birth Defect</option>
+						<option value="other">Other Serious</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
