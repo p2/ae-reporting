@@ -17,6 +17,8 @@ app = bottle.Bottle()
 application = app				# needed for AppFog			
 _jinja = Environment(loader=PackageLoader('wsgi', 'templates'), trim_blocks=True)
 _smart = None
+_cookie_name = 'wookie'
+
 DEBUG = True
 
 
@@ -85,17 +87,23 @@ def _test_record_token(api_base, record_id, token):
 	return False
 
 
-def _request_token_for_record_if_needed(api_base, record_id):
-	""" Requests a request token for record id, if needed """
+def _request_token_if_needed(request, record_id, api_base):
+	""" Requests a request token for record id, if needed.
+	"""
 	ts = TokenStore()
-	token = ts.tokenForRecord(api_base, record_id)
+	cookie = request.get_cookie(_cookie_name)
+	token, ex_api_base, ex_record_id = ts.tokenServerRecordForCookie(cookie)
 	
 	# we already got a token, test if it still works
-	if token is not None and _test_record_token(api_base, record_id, token):
+	if token is not None \
+		and (record_id is None or int(ex_record_id) == int(record_id)) \
+		and (api_base is None or unicode(ex_api_base) == unicode(api_base)) \
+		and _test_record_token(api_base, record_id, token):
 		_log_debug("reusing existing token")
 		return False, None
 	
-	# request a token
+	# request a fresh token
+	bottle.response.delete_cookie(_cookie_name)
 	_log_debug("requesting token for record %s on %s" % (record_id, api_base))
 	smart = _smart_client(api_base, record_id)
 	if smart is None:
@@ -119,50 +127,56 @@ def _request_token_for_record_if_needed(api_base, record_id):
 
 def _exchange_token(req_token, verifier):
 	""" Takes the request token and the verifier, obtained in our authorize callback, and exchanges it for an access
-	token. Stores the access token and returns api_base and record_id as tuple. """
+	token.
+	Stores the access token and returns a tuple with the cookie key, api_base and record_id.
+	"""
 	ts = TokenStore()
 	full_token, api_base, record_id = ts.tokenServerRecordForToken(req_token)
 	if record_id is None:
 		_log_error("Unknown token, cannot exchange %s" % req_token)
-		return None, None
+		return None, None, None
 	
 	# exchange the token
 	_log_debug("exchange token: %s" % full_token)
 	smart = _smart_client(api_base, record_id)
 	if smart is None:
-		return None, None
+		return None, None, None
 	
 	smart.update_token(full_token)
 	try:
 		acc_token = smart.exchange_token(verifier)
 	except Exception, e:
 		_log_error("token exchange failed: %s" % e)
-		return api_base, None
+		return None, api_base, None
 	
 	# success, store it
 	_log_debug("did exchange token: %s" % acc_token)
-	ts.storeTokenForRecord(api_base, record_id, acc_token)
+	cookie = ts.storeTokenForRecord(api_base, record_id, acc_token)
 	smart.update_token(acc_token)
 	
-	return api_base, record_id
+	return cookie, api_base, record_id
 
 
-def _patient_from_request(request, record_id=None):
-	""" Returns a "TestRecord" instance from the GET parameters in the request.
-	
-	record_id can be used to override the value in the parameters (e.g. if it was supplied in the method path)
+def _testrecord_from_request(request):
+	""" Returns a "TestRecord" instance from the cookie in the request.
 	"""
 	if request is None:
 		return None
 	
-	api_base = request.query.get('api_base')
-	if record_id is None:
-		record_id = request.query.get('record_id')
+	# read the cookie
+	cookie = request.get_cookie(_cookie_name)
+	if cookie is None:
+		return None
+	
+	# get the token
+	ts = TokenStore()
+	token, api_base, record_id = ts.tokenServerRecordForCookie(cookie)
 	
 	record = None
 	if record_id is not None:
 		smart_client = _smart_client(api_base, record_id)
 		if smart_client is not None:
+			smart_client.update_token(token)
 			record = TestRecord(smart_client)
 	
 	return record
@@ -178,6 +192,7 @@ def index():
 	
 	# no endpoint, show selector
 	if api_base is None:
+		_log_debug('redirecting to endpoint selection')
 		bottle.redirect('endpoint_select')
 	
 	# no record id, call launch page
@@ -190,11 +205,12 @@ def index():
 		if launch is None:
 			return "Unknown app start URL, cannot launch without an app id"
 		
+		_log_debug('redirecting to app launch page')
 		bottle.redirect(launch)
 		return
 	
 	# do we have a token?
-	did_fetch, error_msg = _request_token_for_record_if_needed(api_base, record_id)
+	did_fetch, error_msg = _request_token_if_needed(bottle.request, record_id, api_base)
 	if did_fetch:
 		return		# the call above will redirect if true anyway, but let's be sure to exit here
 	if error_msg:
@@ -231,8 +247,10 @@ def authorize():
 	""" Extract the oauth_verifier and exchange it for an access token """
 	req_token = {'oauth_token': bottle.request.query.get('oauth_token')}
 	verifier = bottle.request.query.get('oauth_verifier')
-	api_base, record_id = _exchange_token(req_token, verifier)
-	if record_id is not None:
+	cookie, api_base, record_id = _exchange_token(req_token, verifier)
+	if cookie is not None:
+		_log_debug('setting cookie')
+		bottle.response.set_cookie(_cookie_name, cookie, path='/', max_age=24*3600)
 		bottle.redirect('/index.html?api_base=%s&record_id=%s' % (api_base, record_id))
 	
 	# just default to showing the authorize page if we're still here
@@ -243,41 +261,42 @@ def authorize():
 @app.get('/rules/')
 def rules(rule_id=None):
 	""" Returns all available rules """
-	record = _patient_from_request(bottle.request)
+	record = _testrecord_from_request(bottle.request)
 	return json.dumps(Rule.load_rules(record), cls=JSONRuleEncoder)
 
-@app.get('/rules/<rule_id>/run_against/<record_id>')
-def run_rule(rule_id, record_id):
-	""" This runs the given rule against the given record """
+@app.get('/rules/<rule_id>/run')
+def run_rule(rule_id):
+	""" This runs the given rule against the currently active record """
 	rule = Rule.rule_named(rule_id)
 	if rule is None:
 		bottle.abort(404)
 	
-	patient = _patient_from_request(bottle.request, record_id)
-	if patient is None:
+	record = _testrecord_from_request(bottle.request)
+	if record is None:
 		bottle.abort(400)
 	
-	return 'match' if rule.match_against(patient) else 'ok'
+	return 'match' if rule.match_against(record) else 'ok'
 
 @app.get('/prefill/<section_ids>')
 def prefill(section_ids):
 	""" Returns the data used to prefill a given processing section, JSON encoded.
 	"section_ids" are chained using "+"
 	"""
-	patient = _patient_from_request(bottle.request)
-	if patient is None or section_ids is None:
+	record = _testrecord_from_request(bottle.request)
+	if record is None or section_ids is None:
 		bottle.abort(400)
 	
 	# collect all needed section data
 	sections = section_ids.split('+')
-	data = {}
+	data = {'matches': record.stored_rule_results}			# adds the previous rule matches
 	if len(sections) > 0:
 		for section_id in sections:
-			sect = patient.prefill_data_for(section_id)
+			sect = record.prefill_data_for(section_id)
 			if sect is not None:
 				data.update(sect)
 	
 	# JSON-encode the response
+	print data
 	data = json.dumps(data)
 	
 	return data

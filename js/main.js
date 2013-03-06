@@ -47,7 +47,7 @@ var Rule = Base.extend({
 		var btn = $(sender);
 		btn.text("Running...").attr('disabled', true);
 		
-		$.ajax('rules/' + self.id + '/run_against/' + _record_id + '?api_base=' + _api_base, {
+		$.ajax('rules/' + self.id + '/run', {
 			success: function(response) {
 				var area = btn.parent().find('.rule_output').first();
 				btn.text("Check").removeAttr('disabled');
@@ -123,7 +123,7 @@ var RuleController = Base.extend({
 	
 	fetchRules: function() {
 		var self = this;
-		$.get('rules/?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
+		$.get('rules/', function(json) {
 			if (json) {
 				var rls = [];
 				for (var i = 0; i < json.length; i++) {
@@ -234,7 +234,6 @@ var ProcessController = Base.extend({
 			return;
 		}
 		
-		console.log('sections', sections);
 		this.elem = $('#processing');
 		this.elem.empty();
 		this.sections = sections;
@@ -298,7 +297,7 @@ var ProcessController = Base.extend({
 		var self = this;
 		var sections = this.sections.join('+');
 		$.ajax({
-			'url': 'prefill/' + sections + '?api_base=' + _api_base + '&record_id=' + _record_id,
+			'url': 'prefill_rule/' + self.for_rule.name + '/' + sections,
 			'dataType': 'json'
 		})
 		.always(function(obj1, status, obj2) {
@@ -307,7 +306,6 @@ var ProcessController = Base.extend({
 				self.data = json;
 			}
 			else {
-				target.text('Invalid response for "prefill/' + section_id + '"');
 				console.warn('no good response for sections', sections, obj1, obj2);
 			}
 			self._startSection(null, self.first);
