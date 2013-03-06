@@ -35,12 +35,14 @@ p:last-child { margin-bottom: 0; }
 #processing .proc_body .process_form h4 { margin: 0.5em 15px; font-size: 1.1em; }
 #processing .proc_body .process_form h5 { margin: 0.5em 0 0.25em; font-size: 1em; }
 #processing .proc_body .process_form h5:first-child { margin-top: 0; }
-#processing .proc_body .process_form .patient_portrait { float: left; width: 128px; margin: 10px 15px; text-align: center; }
+#processing .proc_body .process_form .patient_portrait { float: left; width: 128px; margin: 10px 20px 10px 15px; text-align: center; }
 #processing .proc_body .process_form .patient_portrait img { width: 120px; height: 160px; border: 4px solid rgba(0, 0, 0, 0.2); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); }
-#processing .proc_body .process_form .process_block { margin: 15px 15px 0 158px; }
-#processing .proc_body .process_form .process_block table td { vertical-align: top; }
-#processing .proc_body .process_form .process_row { clear: left; margin: 15px 15px 0; }
-#processing .proc_body .process_form .process_row h5 { float: left; width: 128px; margin-right: 15px; }
+#processing .proc_body .process_form .process_block { margin: 15px 15px 0 163px; }
+#processing .proc_body .process_form .process_block table { border-spacing: 0; }
+#processing .proc_body .process_form .process_block table td { padding: 0; vertical-align: top; }
+#processing .proc_body .process_form .process_row { clear: left; margin: 15px 20px 0 15px; }
+#processing .proc_body .process_form .process_row h5 { float: left; width: 128px; margin-right: 20px; }
+#processing .proc_body .process_form .process_list { margin: 15px 15px 0 15px; }
 #processing .proc_body .process_form input[type="text"], #processing .proc_body .process_form select { margin: 0; font-size: 1.1em; }
 #processing .proc_body .process_form textarea { width: 99%; }
 #processing .proc_body p { padding: 0.5em 15px; }

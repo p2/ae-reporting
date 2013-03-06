@@ -1,3 +1,14 @@
-<form class="process_form" id="form_adverse_event">
-	Hi :)
+<form class="process_form" id="form_medications">
+	<ul class="process_list">
+	<% 
+	var meds = ('medications' in data) ? data['medications'] : [];
+	if (meds.length > 0) { %>
+	<% for (var i = 0; i < meds.length; i++) {
+		var med = meds[i];
+		if ('sp:Medication' == med['@type']) { %>
+			<li><%= med['sp:drugName']['dcterms:title'] %></li>
+		<% }
+		}
+	} %>
+	</ul>
 </form>

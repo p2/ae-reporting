@@ -218,6 +218,8 @@ function _reportRule(sender, rule_name) {
 var ProcessController = Base.extend({
 	for_rule: null,
 	sections: [],
+	first: null,
+	data: null,
 	all: ['demographics', 'adverse_event', 'medications', 'labs', 'reporter'],
 	names: ["Demographics & Vitals", "Adverse Event", "Medications", "Labs", "Reporter"],
 	elem: null,
@@ -232,6 +234,7 @@ var ProcessController = Base.extend({
 			return;
 		}
 		
+		console.log('sections', sections);
 		this.elem = $('#processing');
 		this.elem.empty();
 		this.sections = sections;
@@ -249,9 +252,18 @@ var ProcessController = Base.extend({
 		this.elem.append(info);
 		
 		// setup our sections
-		for (var i = 0; i < this.sections.length; i++) {
-			this._initSection(this.sections[i], this.names[i], 0 == i);
-		};
+		this.first = null;
+		for (var i = 0; i < this.all.length; i++) {
+			if ($.inArray(this.all[i], sections) >= 0) {
+				this._initSection(this.all[i], this.names[i], !this.first);
+				if (!this.first) {
+					this.first = this.all[i];
+				}
+			}
+		}
+		
+		// load data
+		this._loadData();
 	},
 	
 	_initSection: function(section_id, section_name, do_start) {
@@ -259,6 +271,7 @@ var ProcessController = Base.extend({
 			console.error('_initSection(), section_id', section_id, 'elem', this.elem);
 			return;
 		}
+		var self = this;
 		
 		// header
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
@@ -270,41 +283,35 @@ var ProcessController = Base.extend({
 		this.elem.append(div);
 		
 		// add the body
-		var bod = $('<div/>').addClass('proc_body');
-		bod.html("<p>Loading...</p>");
-		div.append(bod);
+		var body = $('<div/>').addClass('proc_body');
+		body.html("<p>Loading...</p>");
+		div.append(body);
 		if (do_start) {
 			div.addClass('active');
 		}
-		
-		// load data
-		this._loadDataForSection(section_id, bod, do_start);
 	},
 	
 	/**
 	 *  Retrieves the data that is necessary to prefill the given section.
 	 */
-	_loadDataForSection: function(section_id, target, do_start) {
+	_loadData: function() {
 		var self = this;
-		$.get('prefill/' + section_id + '?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
+		var sections = this.sections.join('+');
+		$.ajax({
+			'url': 'prefill/' + sections + '?api_base=' + _api_base + '&record_id=' + _record_id,
+			'dataType': 'json'
+		})
+		.always(function(obj1, status, obj2) {
+			var json = ('success' == status) ? obj1 : (('parsererror' == status) ? {} : null);		// empty JSON generates "parsererror"
 			if (json) {
-				target.html('templates/process_' + section_id + '.ejs', {'data': json});
-				var isLast = false;
-				var cont = $('<button/>').text('Proceed').click({ section_id: section_id }, _processNextSection);
-				var div = $('<div/>').addClass('process_next');
-				div.append($('<p/>').append(cont));
-				target.append(div);
+				self.data = json;
 			}
 			else {
 				target.text('Invalid response for "prefill/' + section_id + '"');
-				console.warn('rules', json);
+				console.warn('no good response for sections', sections, obj1, obj2);
 			}
-			
-			// start this section?
-			if (do_start) {
-				self._startSection(null, section_id);
-			}
-		}, 'json');
+			self._startSection(null, self.first);
+		});
 	},
 	
 	_startSection: function(sender, section_id) {
@@ -314,8 +321,16 @@ var ProcessController = Base.extend({
 		}
 		
 		// show the section
-		var div = $('#proc_' + section_id);
-		div.addClass('active');
+		var parent = $('#proc_' + section_id);
+		parent.addClass('active');
+		var div = parent.find('.proc_body').first();
+		div.html('templates/process_' + section_id + '.ejs', {'data': this.data});
+		
+		// add proceed button
+		var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, _processNextSection);
+		var cont_parent = $('<p/>').addClass('process_next');
+		cont_parent.append(cont);
+		div.append(cont_parent);
 		
 		// load date pickers (must do manually, the auto-trigger doesn't work for EJS)
 		div.find('.auto-kal').each(function(i, elem) {

@@ -259,17 +259,26 @@ def run_rule(rule_id, record_id):
 	
 	return 'match' if rule.match_against(patient) else 'ok'
 
-@app.get('/prefill/<section_id>')
-def prefill(section_id):
-	""" Returns the data used to prefill a given processing section, JSON encoded. """
+@app.get('/prefill/<section_ids>')
+def prefill(section_ids):
+	""" Returns the data used to prefill a given processing section, JSON encoded.
+	"section_ids" are chained using "+"
+	"""
 	patient = _patient_from_request(bottle.request)
-	if patient is None:
+	if patient is None or section_ids is None:
 		bottle.abort(400)
 	
+	# collect all needed section data
+	sections = section_ids.split('+')
+	data = {}
+	if len(sections) > 0:
+		for section_id in sections:
+			sect = patient.prefill_data_for(section_id)
+			if sect is not None:
+				data.update(sect)
+	
 	# JSON-encode the response
-	data = patient.prefill_data_for(section_id)
-	if data is not None:
-		data = json.dumps(data)
+	data = json.dumps(data)
 	
 	return data
 

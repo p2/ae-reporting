@@ -102,20 +102,6 @@ class TestRecord(object):
 			return self.problems
 		return None
 	
-	def get_object_for(self, item, item_system):
-		""" Get the interesting parts for an item, depending on its system
-		"""
-		
-		# fetch the item
-		body = self.fetch_item(item)		# maybe use self.medications or self.problems?
-		if body is None:
-			return None
-		
-		graph = Graph()
-		graph.parse(data=body, publicID=item)
-		
-		return self.data_from_graph(graph, item_system)
-	
 	def data_from_graph(self, graph, item_system):
 		""" Creates (JSON-encodable) data from a given graph representing a given item
 		"""
@@ -137,7 +123,7 @@ class TestRecord(object):
 			
 			results = graph.query(sparql)
 			if len(results) < 1:
-				print "xxx>  get_object_for() SPARQL query for %s didn't match" % item_system
+				print "xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system
 				return None
 			
 			res = list(results)[0]		# can't believe SPARQLQueryResult doesn't reply to "next()"...
@@ -166,7 +152,7 @@ class TestRecord(object):
 			
 			results = graph.query(sparql)
 			if len(results) < 1:
-				print "xxx>  get_object_for() SPARQL query for %s didn't match" % item_system
+				print "xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system
 				return None
 			
 			res = list(results)[0]
@@ -177,6 +163,8 @@ class TestRecord(object):
 				"start_date": res[2],
 				"end_date": res[3]
 			}
+		
+		# not yet returned, simply use JSON-LD
 		
 		return None
 	
@@ -199,48 +187,50 @@ class TestRecord(object):
 	
 	# -------------------------------------------------------------------------- Rule Prefill
 	def prefill_data_for(self, section_id):
-		""" Fetches the SMART data associated with the given section id
+		""" Fetches the SMART data associated with the given section id.
+		Returns a dictionary with the section_id and maybe some additional keys.
 		"""
 		
 		# demographics additionally wants vitals, so we return both
 		if 'demographics' == section_id:
-			demo_graph = self._prefill_graph_for('demographics')
+			d = {}
+			demo_graph = self.demographics
 			demo_ld = json.loads(demo_graph.serialize(format='json-ld'))
-			demo = {}
 			for gr in demo_ld.get("@graph", []):
 				if "sp:Demographics" == gr.get("@type"):
-					demo = gr
+					d['demographics'] = gr
 					break
 			
 			# vitals
-			vitals_graph = self._prefill_graph_for('vitals')
+			vitals_graph = self.vitals
 			vitals_ld = json.loads(vitals_graph.serialize(format='json-ld'))
 			vitals = []
 			for vset in vitals_ld.get("@graph", []):
 				if "sp:VitalSignSet" == vset.get("@type"):
 					vitals.append(vset)
 			
-			# sort latest first
-			demo['vitals'] = sorted(vitals, key=lambda k: k['dcterms:date'], reverse=True)
+			# sort latest vitals first
+			d['vitals'] = sorted(vitals, key=lambda k: k['dcterms:date'], reverse=True)
 			
-			return demo
+			return d
 		
-		# non-special linear graphs
+		# non-special linear graphs; we don't filter them
 		graph = self._prefill_graph_for(section_id)
 		if graph is None:
-			return {}
+			return None
 		
-		return self.data_from_graph(graph, section_id)
+		graph_ld = json.loads(graph.serialize(format='json-ld'))
+		if '@graph' in graph_ld:
+			graph_ld = graph_ld['@graph']
+		
+		return {section_id: graph_ld}
 	
 	def _prefill_graph_for(self, section_id):
 		""" Fetches the SMART RDF graph associated with the given section id
 		"""
 		
-		# demographics also needs vitals
-		if 'demographics' == section_id:
-			return self.demographics
-		if 'vitals' == section_id:
-			return self.vitals
+		if 'medications' == section_id:
+			return self.medications
 		
 		print "I don't know what graph to return for section", section_id
 		return None
