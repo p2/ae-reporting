@@ -219,7 +219,7 @@ var ProcessController = Base.extend({
 	for_rule: null,
 	sections: [],
 	all: ['demographics', 'adverse_event', 'medications', 'labs', 'reporter'],
-	names: ["Demographics", "Adverse Event", "Medications", "Labs", "Reporter"],
+	names: ["Demographics & Vitals", "Adverse Event", "Medications", "Labs", "Reporter"],
 	elem: null,
 	
 	constructor: function(rule) {
@@ -264,7 +264,7 @@ var ProcessController = Base.extend({
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
 		var head = $('<div/>').addClass('proc_header');
 		var section_title = $('<h4/>').text(section_name ? section_name : "Unknown Section");
-		head.click({ section_id: section_id }, _processSection);
+		head.click({ section_id: section_id }, _toggleSection);
 		head.append(section_title);
 		div.append(head);
 		this.elem.append(div);
@@ -273,6 +273,9 @@ var ProcessController = Base.extend({
 		var bod = $('<div/>').addClass('proc_body');
 		bod.html("<p>Loading...</p>");
 		div.append(bod);
+		if (do_start) {
+			div.addClass('active');
+		}
 		
 		// load data
 		this._loadDataForSection(section_id, bod, do_start);
@@ -286,6 +289,7 @@ var ProcessController = Base.extend({
 		$.get('prefill/' + section_id + '?api_base=' + _api_base + '&record_id=' + _record_id, function(json) {
 			if (json) {
 				target.html('templates/process_' + section_id + '.ejs', {'data': json});
+				var isLast = false;
 				var cont = $('<button/>').text('Proceed').click({ section_id: section_id }, _processNextSection);
 				var div = $('<div/>').addClass('process_next');
 				div.append($('<p/>').append(cont));
@@ -298,14 +302,14 @@ var ProcessController = Base.extend({
 			
 			// start this section?
 			if (do_start) {
-				self.startSection(null, section_id);
+				self._startSection(null, section_id);
 			}
 		}, 'json');
 	},
 	
-	startSection: function(sender, section_id) {
+	_startSection: function(sender, section_id) {
 		if (!section_id || !this.elem) {
-			console.error('startSection(), section_id', section_id, 'elem', this.elem);
+			console.error('_startSection(), section_id', section_id, 'elem', this.elem);
 			return;
 		}
 		
@@ -341,12 +345,22 @@ var ProcessController = Base.extend({
 		}
 		
 		if (next) {
-			this._hideSection(current_id);
-			this.startSection(sender, next);
+			this._hideSection(sender, current_id);
+			this._startSection(sender, next);
 		}
 	},
 	
-	_hideSection: function(section_id) {
+	toggleSection: function(sender, section_id) {
+		var div = $('#proc_' + section_id);
+		if (div.hasClass('active')) {
+			this._hideSection(sender, section_id);
+		}
+		else {
+			this._startSection(sender, section_id);
+		}
+	},
+	
+	_hideSection: function(sender, section_id) {
 		$('#proc_' + section_id).removeClass('active');
 	},
 	
@@ -362,20 +376,25 @@ var ProcessController = Base.extend({
 	 */
 	abort: function(sender) {
 		this.for_rule.reportDidAbort();
-	}
+	},
+	
+	
+	/**
+	 *  Utilities
+	 */
 });
 
 
 /**
  *  Starts section.
  */
- function _processSection(event) {
+ function _toggleSection(event) {
  	if (!_reportCtrl) {
  		alert("There is no process controller in place, cannot proceed");
  		return;
  	}
  	
- 	_reportCtrl.startSection($(event.target), event.data.section_id);
+ 	_reportCtrl.toggleSection($(event.target), event.data.section_id);
  }
  
  /**

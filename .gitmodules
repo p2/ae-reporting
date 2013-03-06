@@ -4,3 +4,6 @@
 [submodule "rdflib-jsonld"]
 	path = rdflib-jsonld
 	url = git://github.com/RDFLib/rdflib-jsonld.git
+[submodule "Kalendae"]
+	path = Kalendae
+	url = git://github.com/ChiperSoft/Kalendae.git

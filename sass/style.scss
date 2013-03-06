@@ -8,16 +8,29 @@ $col-title:			rgb(30,30,30);
 $col-linkglow:		rgb(0,64,128);
 $col-faded:			rgb(80,80,80);
 $col-border:		rgb(120,120,120);
+$col-border-glow:	rgb(5,150,190);
 $col-blue:			rgb(100,200,240);
+
+$mar-general:		15px;
 
 html, body {
 	margin: 0; padding: 20px;
-	font: 11pt "Helvetica-Neue", Helvetica, sans-serif;
+	font: 11pt "Helvetica-Neue", Helvetica, sans-serif; line-height: 1.3;
 	background-color: rgb(246,246,246);
 }
 
 h2 {
 	margin-bottom: 0.3em;
+}
+
+h3 {
+	&:first-child { margin-top: 0.3em; }
+}
+
+p {
+	padding: 0.5em 0;
+	&:first-child { margin-top: 0; }
+	&:last-child { margin-bottom: 0; }
 }
 
 #container {
@@ -75,7 +88,7 @@ h2 {
 
 #processing {
 	& > div {
-		margin-top: 1em;
+		margin-top: 1.5em;
 		border: 1px solid $col-border; @include border-radius-all();
 		background-color: white;
 		
@@ -85,11 +98,11 @@ h2 {
 	}
 	
 	.rule_info {
-		padding: 0.5em;
+		padding: 0.5em $mar-general;
 	}
 	
 	.proc_header {
-		padding: 0.5em;
+		padding: 0.5em $mar-general;
 		cursor: pointer;
 		
 		h4 {
@@ -101,44 +114,69 @@ h2 {
 		border-top: 1px solid $col-border;
 		
 		.process_form {
-			& > table {
-				width: 100%;
-				border-collapse: collapse;
+			line-height: 1.6;
+			
+			h4 {
+				margin: 0.5em $mar-general;
+				font-size: 1.1em;
+			}
+			
+			h5 {
+				margin: 0.5em 0 0.25em;
+				font-size: 1em;
 				
-				th {
-					text-align: left;
-				}
+				&:first-child { margin-top: 0; }
+			}
+			
+			.patient_portrait {
+				float: left;
+				width: 128px;
+				margin: 10px $mar-general;
+				text-align: center;
 				
-				th, td {
-					padding: 0.3em 0.5em; line-height: 1.5;
-					
-					input[type="text"], select {
-						margin: 0;
-						font-size: 1.1em;
-					}
-					
-					h4 {
-						margin: 0.5em 0;
-						font-size: 1.1em;
-					}
-				}
-				
-				.row_section_begin {
-					padding-top: 0.7em;
-				}
-				.row_section_end {
-					padding-bottom: 0.7em;
-					border-bottom: 1px solid $col-border;
+				img {
+					width: 120px; height: 160px;
+					border: 4px solid rgba(0,0,0,0.2);
+					box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 				}
 			}
+			
+			.process_block {
+				margin: $mar-general $mar-general 0 (128px + $mar-general + $mar-general);
+				
+				table td {
+					vertical-align: top;
+				}
+			}
+			
+			.process_row {
+				clear: left;
+				margin: $mar-general $mar-general 0;
+				
+				h5 {
+					float: left;
+					width: 128px;
+					margin-right: $mar-general;
+				}
+			}
+			
+			input[type="text"], select {
+				margin: 0;
+				font-size: 1.1em;
+			}
+			
+			textarea { width: 99%; }
 		}
 		
 		p {
-			padding: 1em 0.5em;
+			padding: 0.5em $mar-general;
 		}
 	}
 	
 	.active {
+		border-color: $col-border-glow;
+		box-shadow: 0 0 8px $col-border-glow;
+		
 		.proc_body {
 			display: block;
 		}

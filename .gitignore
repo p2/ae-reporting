@@ -12,3 +12,7 @@ databases/*
 *.sublime-project
 *.sublime-workspace
 
+# Sass
+.sass-cache
+
+
