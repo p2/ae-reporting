@@ -297,7 +297,7 @@ var ProcessController = Base.extend({
 		var self = this;
 		var sections = this.sections.join('+');
 		$.ajax({
-			'url': 'prefill_rule/' + self.for_rule.name + '/' + sections,
+			'url': 'prefill/' + sections,
 			'dataType': 'json'
 		})
 		.always(function(obj1, status, obj2) {

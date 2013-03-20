@@ -14,6 +14,11 @@ Required Python modules:
 * rdfextras
 * jinja2
 
+### JSON-LD Serializer
+
+    cd rdflib-jsonld
+    sudo python setup.py install
+
 
 AppFog
 ------
