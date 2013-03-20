@@ -18,7 +18,7 @@
 	</div>
 	
 	<div class="process_block">
-		<h5>Patient Identifier:</h5>
+		<h5>Patient Identifier</h5>
 		<input type="text" placeholder="Kept confidential" size="30" /><br />
 		<span class="small faded">We will use this identifier for follow up</span>
 	</div>
@@ -39,12 +39,12 @@
 		<table>
 			<tr>
 				<td>
-					<h5>Date of Birth:</h5>
+					<h5>Date of Birth</h5>
 					<input class="auto-kal" type="text" name="bday" placeholder="MM/DD/YYYY" data-kal="format: 'MM/DD/YYYY'" value="<%= bday ? bday.format('MM/DD/YYYY') : '' %>" />
 				</td>
 				<td style="vertical-align:middle; padding:1em 2em;">or</td>
 				<td>
-					<h5>Age <span class="small faded">at time of event</span> :</h5>
+					<h5>Age <span class="small faded">at time of event</span></h5>
 					<input type="text" name="age" placeholder="<%= age %>" size="4" /> <label>years</label><br />
 					
 				</td>
@@ -53,12 +53,12 @@
 	</div>
 	
 	<div class="process_block">
-		<h5>Date of Death:</h5>
+		<h5>Date of Death</h5>
 		<input class="auto-kal" type="text" name="deathdate" placeholder="MM/DD/YYYY" data-kal="format: 'MM/DD/YYYY'" value="<%= deathdate ? deathdate.format('MM/DD/YYYY') : '' %>" />
 	</div>
 		
 	<div class="process_row">
-		<h5>Ethnicity:</h5>
+		<h5>Ethnicity</h5>
 		<input type="text" name="ethnicity" value="<%= ('sp:ethnicity' in demo) ? demo['sp:ethnicity'] : '' %>" />
 	</div>
 	
@@ -78,7 +78,7 @@
 				break;
 			}
 		} %>
-		<h5>Weight:</h5>
+		<h5>Weight</h5>
 		<input type="text" name="weight" value="<%= weight %>" size="10" />
 		<span class="small faded"><%= measured ? 'Measured: ' + measured.format('ll') : '' %></span>
 	</div>

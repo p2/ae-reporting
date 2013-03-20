@@ -1,12 +1,23 @@
 <form class="process_form" id="form_medications">
+	<p>Check the medications that you want to include in the report.</p>
 	<ul class="process_list">
 	<% 
 	var meds = ('medications' in data) ? data['medications'] : [];
-	if (meds.length > 0) { %>
-	<% for (var i = 0; i < meds.length; i++) {
+	if (meds.length > 0) {
+	var check_ids = [];
+	var latest = rule.latestPendingResult();
+	if (latest) {
+		if ('results' in latest && latest.results && 'medication' in latest.results && latest.results.medication.length > 0) {
+			check_ids = latest.results.medication;
+		}
+	}
+	
+	for (var i = 0; i < meds.length; i++) {
 		var med = meds[i];
+		var html_id = med['@id'] ? med['@id'].replace(/[^\w\d]+/g, '') : 'xxx';
 		if ('sp:Medication' == med['@type']) { %>
-			<li><%= med['sp:drugName']['dcterms:title'] %></li>
+			<li><input type="checkbox" id="<%= html_id %>" name="drug" value="<%= med['@id'] %>" <% if ($.inArray(med['@id'], check_ids) >= 0) { %>checked="checked"<% } %> />
+				<label for="<%= html_id %>"><%= med['sp:drugName']['dcterms:title'] %></label></li>
 		<% }
 		}
 	} %>

@@ -168,6 +168,9 @@ p {
 			.process_list {
 				margin: $mar-general $mar-general 0 $mar-general;
 				
+				li {
+					list-style: none;
+				}
 			}
 			
 			input[type="text"], select {

@@ -42,6 +42,26 @@ var Rule = Base.extend({
 		return false;
 	},
 	
+	latestPendingResult: function() {
+		var hit_results = [];
+		if (this.last_results && this.last_results.length > 0) {
+			for (var i = 0; i < this.last_results.length; i++) {
+				if (this.last_results[i].flag) {
+					hit_results.push(this.last_results[i]);
+				}
+			};
+		}
+		
+		// do we have positive hits at all?
+		if (hit_results.length < 1) {
+			return null;
+		}
+		
+		// yes, return the latest
+		hit_results.sort(compareByDateDESC);
+		return hit_results[0];
+	},
+	
 	run: function(sender) {
 		var self = this;
 		var btn = $(sender);
@@ -94,6 +114,7 @@ var Rule = Base.extend({
 	report: function(sender) {
 		if (_reportCtrl) {
 			// do something
+			console.warn("report controller is already present");
 		}
 		
 		_reportCtrl = new ProcessController(this);
@@ -322,7 +343,7 @@ var ProcessController = Base.extend({
 		var parent = $('#proc_' + section_id);
 		parent.addClass('active');
 		var div = parent.find('.proc_body').first();
-		div.html('templates/process_' + section_id + '.ejs', {'data': this.data});
+		div.html('templates/process_' + section_id + '.ejs', {'data': this.data, 'rule': this.for_rule});
 		
 		// add proceed button
 		var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, _processNextSection);
@@ -421,4 +442,24 @@ var ProcessController = Base.extend({
  	
  	_reportCtrl.startNextSection($(event.target), event.data.section_id);
  }
+ 
+ /**
+  *  Sorts objects based on their "date" attribute, descending.
+  */
+function compareByDateDESC(a, b) {
+	if (!('date' in a)) {
+		return 1;
+	}
+	if (!('date' in b)) {
+		return -1;
+	}
+	
+	if (parseInt(a.date) < parseInt(b.date)) {
+		return 1;
+	}
+	if (parseInt(a.date) > parseInt(b.date)) {
+		return -1;
+	}
+	return 0;
+}
 
