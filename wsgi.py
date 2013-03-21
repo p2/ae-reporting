@@ -296,7 +296,7 @@ def prefill(section_ids):
 				data.update(sect)
 	
 	# JSON-encode the response
-	print data
+	# print data
 	data = json.dumps(data)
 	
 	return data

@@ -297,7 +297,7 @@ var ProcessController = Base.extend({
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
 		var head = $('<div/>').addClass('proc_header');
 		var section_title = $('<h4/>').text(section_name ? section_name : "Unknown Section");
-		head.click({ section_id: section_id }, _toggleSection);
+		head.click({ section_id: section_id }, toggleSection);
 		head.append(section_title);
 		div.append(head);
 		this.elem.append(div);
@@ -346,7 +346,7 @@ var ProcessController = Base.extend({
 		div.html('templates/process_' + section_id + '.ejs', {'data': this.data, 'rule': this.for_rule});
 		
 		// add proceed button
-		var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, _processNextSection);
+		var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, processNextSection);
 		var cont_parent = $('<p/>').addClass('process_next');
 		cont_parent.append(cont);
 		div.append(cont_parent);
@@ -422,26 +422,47 @@ var ProcessController = Base.extend({
 /**
  *  Starts section.
  */
- function _toggleSection(event) {
+function toggleSection(event) {
  	if (!_reportCtrl) {
  		alert("There is no process controller in place, cannot proceed");
  		return;
  	}
  	
  	_reportCtrl.toggleSection($(event.target), event.data.section_id);
- }
+}
  
  /**
  *  Jumps to next section.
  */
- function _processNextSection(event) {
+function processNextSection(event) {
  	if (!_reportCtrl) {
  		alert("There is no process controller in place, cannot proceed");
  		return;
  	}
  	
  	_reportCtrl.startNextSection($(event.target), event.data.section_id);
- }
+}
+ 
+ /**
+  *  Add another empty checkable list item.
+  */
+function addCheckableListItem(li_item, item_name) {
+	if (!li_item || !item_name) {
+		console.log("addCheckableListItem(): I need a list item and an item name");
+		return;
+	}
+	
+	var html_id = item_name + (new Date().getTime());
+	var html = '<input type="checkbox" name="' + item_name + '" value="" checked="checked" />';
+	html += '<input type="text" id="' + html_id + '" name="' + html_id + '" />';
+	html += '<a href="javascript:void(0);" class="small" onclick="$(this).parent().fadeOut(\'fast\', function(){$(this).remove();})">Remove</a>';
+	
+	var li = $('<li/>').addClass('additional_item').html(html);
+	$(li_item).before(li);
+	
+	$('#' + html_id).focus();
+}
+ 
  
  /**
   *  Sorts objects based on their "date" attribute, descending.

@@ -44,6 +44,8 @@ p:last-child { margin-bottom: 0; }
 #processing .proc_body .process_form .process_row h5 { float: left; width: 128px; margin-right: 20px; }
 #processing .proc_body .process_form .process_list { margin: 15px 15px 0 15px; }
 #processing .proc_body .process_form .process_list li { list-style: none; }
+#processing .proc_body .process_form .process_list li.additional_item input[type="text"] { width: 80%; margin: 0.2em 1em 0.2em 0.2em; }
+#processing .proc_body .process_form .process_list li#add_more { margin-top: 1em; font-size: 0.9em; }
 #processing .proc_body .process_form input[type="text"], #processing .proc_body .process_form select { margin: 0; font-size: 1.1em; }
 #processing .proc_body .process_form textarea { width: 99%; }
 #processing .proc_body p { padding: 0.5em 15px; }

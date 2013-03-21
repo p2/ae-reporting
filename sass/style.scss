@@ -170,6 +170,18 @@ p {
 				
 				li {
 					list-style: none;
+					
+					&.additional_item {
+						input[type="text"] {
+							width: 80%;
+							margin: 0.2em 1em 0.2em 0.2em;
+						}
+					}
+					
+					&#add_more {
+						margin-top: 1em;
+						font-size: 0.9em;
+					}
 				}
 			}
 			
