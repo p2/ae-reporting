@@ -212,6 +212,11 @@ p {
 	margin-top: 1em;
 }
 
+#death_date_hint {
+	display: none;
+	font-size: 0.9em; color: $col-faded;
+}
+
 
 // SMART container selection
 #endpoints {

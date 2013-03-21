@@ -6,7 +6,7 @@
 	
 	<div class="process_row">
 		<h5>Outcome:</h5>
-		<select name="outcome">
+		<select name="outcome" onchange="showHideDeathHint(this.options[this.selectedIndex].value=='death');">
 			<option value="life-threatening">Life-threatening</option>
 			<option value="death">Death</option>
 			<option value="hospitalization">Hospitalization - initial or prolonged</option>
@@ -14,6 +14,7 @@
 			<option value="birth-defect">Congenital Anomaly / Birth Defect</option>
 			<option value="other">Other Serious</option>
 		</select>
+		<span id="death_date_hint">Please add the death date to the patient's vitals</span>
 	</div>
 	
 	<div class="process_row">

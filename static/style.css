@@ -54,6 +54,8 @@ p:last-child { margin-bottom: 0; }
 
 .process_next { margin-top: 1em; }
 
+#death_date_hint { display: none; font-size: 0.9em; color: #505050; }
+
 #endpoints { overflow: hidden; background-color: white; border: 1px solid #787878; -webkit-border-radius: 5px 5px 5px 5px; -moz-border-radius: 5px 5px 5px 5px; -ms-border-radius: 5px 5px 5px 5px; -o-border-radius: 5px 5px 5px 5px; border-radius: 5px 5px 5px 5px; }
 #endpoints a { display: block; padding: 0.5em 1em; text-decoration: none; color: black; border-bottom: 1px solid #787878; }
 #endpoints a:last-child { border-bottom: none; }

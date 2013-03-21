@@ -443,9 +443,9 @@ function processNextSection(event) {
  	_reportCtrl.startNextSection($(event.target), event.data.section_id);
 }
  
- /**
-  *  Add another empty checkable list item.
-  */
+/**
+ *  Add another empty checkable list item.
+ */
 function addCheckableListItem(li_item, item_name) {
 	if (!li_item || !item_name) {
 		console.log("addCheckableListItem(): I need a list item and an item name");
@@ -462,11 +462,22 @@ function addCheckableListItem(li_item, item_name) {
 	
 	$('#' + html_id).focus();
 }
- 
- 
- /**
-  *  Sorts objects based on their "date" attribute, descending.
-  */
+
+/**
+ *  Shows the death date hint IF it is not set.
+ */
+function showHideDeathHint(show) {
+	if (show && !$('#death_date').val()) {
+		$('#death_date_hint').show();
+	}
+	else {
+		$('#death_date_hint').hide();
+	}
+}
+
+/**
+ *  Sorts objects based on their "date" attribute, descending.
+ */
 function compareByDateDESC(a, b) {
 	if (!('date' in a)) {
 		return 1;
