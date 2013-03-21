@@ -456,6 +456,8 @@ function addCheckableListItem(li_item, item_name) {
 	var html = '<input type="checkbox" name="' + item_name + '" value="" checked="checked" />';
 	html += '<input type="text" id="' + html_id + '" name="' + html_id + '" />';
 	html += '<a href="javascript:void(0);" class="small" onclick="$(this).parent().fadeOut(\'fast\', function(){$(this).remove();})">Remove</a>';
+	html += '<br />';
+	html += '<input type="text" class="small" id="supplement_' + html_id + '" name="supplement_' + html_id + '" placeholder="date range" style="margin-left:1.2em;" />';
 	
 	var li = $('<li/>').addClass('additional_item').html(html);
 	$(li_item).before(li);

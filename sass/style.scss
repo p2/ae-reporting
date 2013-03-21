@@ -170,6 +170,7 @@ p {
 				
 				li {
 					list-style: none;
+					margin-top: 0.75em;
 					
 					&.additional_item {
 						input[type="text"] {
@@ -181,6 +182,11 @@ p {
 					&#add_more {
 						margin-top: 1em;
 						font-size: 0.9em;
+					}
+					
+					.supplement {
+						margin-left: 1.6em;
+						font-size: 0.9em; color: $col-faded;
 					}
 				}
 			}

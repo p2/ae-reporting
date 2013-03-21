@@ -17,10 +17,27 @@
 		var html_id = med['@id'] ? med['@id'].replace(/[^\w\d]+/g, '') : 'xxx';
 		if ('sp:Medication' == med['@type']) { %>
 			<li><input type="checkbox" id="<%= html_id %>" name="drug" value="<%= med['@id'] %>" <% if ($.inArray(med['@id'], check_ids) >= 0) { %>checked="checked"<% } %> />
-				<label for="<%= html_id %>"><%= med['sp:drugName']['dcterms:title'] %></label></li>
+				<label for="<%= html_id %>"><%= med['sp:drugName']['dcterms:title'] %>
+				
+				<% if ('sp:startDate' in med || 'sp:endDate' in med) {
+					var period = '';
+					if ('sp:startDate' in med) {
+						period = ('sp:endDate' in med) ? 'from ' : 'since ';
+						period += '<b>' + moment(med['sp:startDate']).format('ll') + '</b>';
+					}
+					if ('sp:endDate' in med) {
+						if (period.length > 0) {
+							period += ' until ';
+						}
+						period += '<b>' + moment(med['sp:endDate']).format('ll') + '</b>';
+					} %>
+				<div class="supplement"><%== period %></div>
+				<% } %>
+				</label>
+			</li>
 		<% }
 		}
 	} %>
-		<li id="add_more"><a href="javascript:void(0);" onclick="addCheckableListItem($(this).parent(), 'drug')">Add</a></li>
+		<li id="add_more"><a href="javascript:void(0);" onclick="addCheckableListItem($(this).parent(), 'drug')">Add another</a></li>
 	</ul>
 </form>
