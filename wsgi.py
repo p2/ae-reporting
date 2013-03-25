@@ -277,6 +277,21 @@ def run_rule(rule_id):
 	
 	return 'match' if rule.match_against(record) else 'ok'
 
+@app.get('/demographics')
+def demographics():
+	""" Returns the current patient's demographics as JSON-LD """
+	record = _testrecord_from_request(bottle.request)
+	
+	# turn demographics (they come as RDF graph) into JSON-LD
+	d = {}
+	demo_graph = record.demographics
+	demo_ld = json.loads(demo_graph.serialize(format='json-ld'))
+	for gr in demo_ld.get("@graph", []):
+		if "sp:Demographics" == gr.get("@type"):
+			d = gr
+			break
+	return d
+
 @app.get('/prefill/<section_ids>')
 def prefill(section_ids):
 	""" Returns the data used to prefill a given processing section, JSON encoded.

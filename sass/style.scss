@@ -11,7 +11,13 @@ $col-border:		rgb(120,120,120);
 $col-border-glow:	rgb(5,150,190);
 $col-blue:			rgb(100,200,240);
 
+$col-boxbg:			rgb(200,200,200);
+$col-redbg:			rgb(200,30,20);
+$col-greenbg:		rgb(160,255,110);
+
 $mar-general:		15px;
+
+$w-column:			380px;
 
 html, body {
 	margin: 0; padding: 20px;
@@ -37,31 +43,58 @@ p {
 	max-width: 800px;
 }
 
+
+.patient_portrait {
+	float: left;
+	width: 68px;
+	margin: 0 20px 10px 0;
+	text-align: center;
+	
+	img {
+		width: 60px; height: 80px;
+		border: 4px solid rgba(0,0,0,0.2);
+		box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+	}
+}
+
+.demographics {
+	h1 {
+		font-size: 1.6em;
+	}
+}
+
+
+#rules {
+	clear: left;
+	padding-top: 2em;
+}
+
 #rule_inbox_header {
 	color: #900;
 }
 
 #rule_inbox, #rule_box {
-	border: 1px solid $col-border; @include border-radius-all();
+	display: inline-block;
+	width: $w-column;
+}
+
+#rule_inbox {
+	float: left;
+	color: white;
+}
+
+#rule_box {
+	// margin-left: $w-column;
 }
 
 .rule {
 	margin-top: 0; padding: 0.5em 0.75em;
-	border-bottom: 1px solid $col-border;
-	background-color: white;
 	
-	&:first-child {
-		@include border-radius(4px, 4px, 0, 0);
-	}
-	&:last-child {
-		border-bottom: none;
-		@include border-radius(0, 0, 4px, 4px);
-		&:first-child {
-			@include border-radius-all(4px);
-		}
-	}
+	border-top: 1px solid lighten($col-boxbg, 10%);
+	border-bottom: 1px solid darken($col-boxbg, 10%);
+	background-color: $col-boxbg;
 	
-	h3 {
+	h2 {
 		margin: 0.3em 0;
 		
 		a {
@@ -73,15 +106,45 @@ p {
 		}
 	}
 	
-	button {
-		float: right;
+	#rule_inbox & {
+		border-top: 1px solid lighten($col-redbg, 10%);
+		border-bottom: 1px solid darken($col-redbg, 10%);
+		background-color: $col-redbg;
+		
+		h2 {
+			a {
+				color: white;
+				&:hover {
+					color: white;
+				}
+			}
+		}
+	}
+
+	&.all_good {
+		border-top: 1px solid lighten($col-greenbg, 10%);
+		border-bottom: 1px solid darken($col-greenbg, 15%);
+		background-color: $col-greenbg;
 	}
 	
+	.exclamation {
+		float: left; width: 50px; height: 50px;
+		margin: 5px 1em 1em 3px;
+	}
+	.buttons {
+		margin-top: 1em;
+		text-align: right;
+	}
+	
+	p {
+		margin: 0.3em 0 0; padding: 0;
+	}
 	pre {
 		white-space: pre-wrap;
 	}
 	
-	.previous_checks, .references {
+	.references {
+		float: left;
 		font-size: 0.85em;
 	}
 }
@@ -129,15 +192,9 @@ p {
 			}
 			
 			.patient_portrait {
-				float: left;
 				width: 128px;
-				margin: 10px 20px 10px $mar-general;
-				text-align: center;
-				
-				img {
+				img: {
 					width: 120px; height: 160px;
-					border: 4px solid rgba(0,0,0,0.2);
-					box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 				}
 			}
 			

@@ -1,6 +1,6 @@
 {
 	"id": "std",
-	"name": "Sexually Transmitted Diseases",
+	"name": "Sexually Transmitted Disease",
 	"description": "Checks for any sexually transmitted disease (SNOMED 8098009) in the patient's problem list",
 	"scope": "record",
 	"condition": {

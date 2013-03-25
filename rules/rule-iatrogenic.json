@@ -1,6 +1,6 @@
 {
 	"id": "iatrogenic",
-	"name": "Any Iatrogenic Disorder",
+	"name": "Iatrogenic Disorder",
 	"description": "Checks for any iatrogenic disorder (SNOMED 12456005) in a patient's problem list",
 	"scope": "record",
 	"condition": {

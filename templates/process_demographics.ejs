@@ -30,6 +30,9 @@
 		bday = moment(demo['vcard:bday']);
 		if (bday) {
 			age = moment().diff(bday, 'years');
+			if (age < 3) {
+				age = moment().diff(bday, 'months');
+			}
 		}
 	} 
 	if ('vcard:deathdate' in demo) {

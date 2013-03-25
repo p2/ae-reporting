@@ -1,37 +1,13 @@
-<h2 id="rule_inbox_header" style="display:<%= inbox.length > 0 ? 'block' : 'none' %>">Detected</h2>
 <div id="rule_inbox" style="display:<%= inbox.length > 0 ? 'block' : 'none' %>">
 
 <% for (var i = 0; i < inbox.length; i++) {
-	var rule = inbox[i]; %>
+	var rule = inbox[i];
+	var latest = rule.latestPendingResult();
+	%>
 	
 	<div class="rule">
-		<button onclick="_runRule(this, '<%= rule.id %>')">Recheck</button>
-		<button onclick="_reportRule(this, '<%= rule.id %>')">Evaluate...</button>
-		<h3><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h3>
-		<div id="details_<%= rule.id %>" style="display:none;">
-			<p><%= rule.description %></p>
-			
-			<% if (rule.references && rule.references.length > 0) { %>
-				<p class="references"><b>References:</b><br />
-				<% for (var j = 0; j < rule.references.length; j++) { %>
-					<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
-				<% } %>
-				</p>
-			<% } %>
-		</div>
-	</div>
-<% } %>
-</div>
-
-<h2>Available Rules</h2>
-<div id="rule_box">
-
-<% for (var i = 0; i < rules.length; i++) {
-	var rule = rules[i]; %>
-
-	<div class="rule">
-		<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
-		<h3><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h3>
+		<img class="exclamation" src="static/exclamation.png" alt="" />
+		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
 		<div id="details_<%= rule.id %>" style="display:none;">
 			<p><%= rule.description %></p>
 			
@@ -44,11 +20,45 @@
 			<% } %>
 		</div>
 		
-		<div class="previous_checks">
-		<% if (rule.last_results && rule.last_results.length > 0) { %>
-			<b>Previous checks:</b>
-				<span id="num_previous_checks_<%= rule.id %>"><%= rule.last_results.length %></span>
+		<% if (latest) { %>
+			<p>Triggered <b><%= moment(parseInt(latest['date']) * 1000).format('ll') %></b></p>
 		<% } %>
+		
+		<div class="buttons">
+			<button onclick="_runRule(this, '<%= rule.id %>')">Recheck</button>
+			<button onclick="_reportRule(this, '<%= rule.id %>')">Evaluate...</button>
+		</div>
+	</div>
+<% } %>
+</div>
+
+
+<div id="rule_box">
+
+<% for (var i = 0; i < rules.length; i++) {
+	var rule = rules[i];
+	var latest = rule.latestResult();
+	%>
+	<div class="rule <%= (rule.allChecksNegative() ? 'all_good' : '') %>">
+		<h2><a href="javascript:void(0);" onclick="$('#details_<%= rule.id %>').toggle()"><%= rule.name %></a></h2>
+		<div id="details_<%= rule.id %>" style="display:none;">
+			<p><%= rule.description %></p>
+			
+			<% if (rule.references && rule.references.length > 0) { %>
+				<p class="references"><b>References:</b><br />
+				<% for (var j = 0; j < rule.references.length; j++) { %>
+					<a href="<%= rule.references[j] %>" target="_blank"><%= rule.references[j] %></a></br >
+				<% } %>
+				</p>
+			<% } %>
+		</div>
+		
+		<% if (latest) { %>
+			<p>Last check <b><%= moment(parseInt(latest['date']) * 1000).format('ll') %></b></p>
+		<% } %>
+		
+		<div class="buttons">
+			<button onclick="_runRule(this, '<%= rule.id %>')">Check</button>
 		</div>
 	</div>
 

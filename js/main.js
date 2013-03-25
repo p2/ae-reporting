@@ -8,9 +8,28 @@ var _reportCtrl = null;
 var _globals = {};
 $(document).ready(function() {
 	
-	// hide the patient selector if in an iframe
+	// hide the patient selector if in an iframe or load patient details
 	if (window != window.top) {
+		$('#patient_overview').hide();
 		$('#back_to_patient_select').hide();
+	}
+	else {
+		$.ajax({
+			'url': 'demographics',
+			'dataType': 'json'
+		})
+		.always(function(obj1, status, obj2) {
+			var json = ('success' == status) ? obj1 : (('parsererror' == status) ? {} : null);		// empty JSON generates "parsererror"
+			var demo = {};
+			if (json) {
+				demo = json;
+			}
+			else {
+				console.warn('no good response for demographics', obj1, obj2);
+			}
+			console.log('demo', demo);
+			$('#patient_overview').html('templates/demographics.ejs', {'demo': demo});
+		});
 	}
 	
 	_ruleCtrl = new RuleController();
@@ -29,6 +48,36 @@ var Rule = Base.extend({
 		for (var p in json) {
 			this[p] = json[p];
 		}
+	},
+	
+	allChecksNegative: function() {
+		if (this.last_results && this.last_results.length > 0) {
+			for (var i = 0; i < this.last_results.length; i++) {
+				if (this.last_results[i].flag) {
+					return false;
+				}
+			};
+			return true;
+		}
+		return false;
+	},
+	
+	latestResult: function() {
+		var results = [];
+		if (this.last_results && this.last_results.length > 0) {
+			for (var i = 0; i < this.last_results.length; i++) {
+				results.push(this.last_results[i]);
+			};
+		}
+		
+		// do we have positive hits at all?
+		if (results.length < 1) {
+			return null;
+		}
+		
+		// yes, return the latest
+		results.sort(compareByDateDESC);
+		return results[0];
 	},
 	
 	hasPendingResults: function() {
