@@ -185,12 +185,13 @@ class JSONRuleEncoder(json.JSONEncoder):
 		# a Rule
 		if isinstance(item, Rule):
 			return {
-				"id": item.id,
-				"name": item.name,
-				"description": item.description,
-				"references": item.references,
-				"scope": item.scope,
-				"last_results": item.last_results
+				'id': item.id,
+				'name': item.name,
+				'description': item.description,
+				'references': item.references,
+				'scope': item.scope,
+				'last_results': item.last_results,
+				'actions': item.actions
 			}
 		
 		# a RuleResult
@@ -199,6 +200,13 @@ class JSONRuleEncoder(json.JSONEncoder):
 				'date': item.run_date.strftime('%s'),
 				'flag': item.run_result_flag,
 				'results': item.run_results
+			}
+		
+		# a rule Action
+		if isinstance(item, Action):
+			return {
+				'name': item.name,
+				'form': item.form
 			}
 		
 		# fall back

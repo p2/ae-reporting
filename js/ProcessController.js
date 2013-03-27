@@ -167,7 +167,29 @@ var ProcessController = Base.extend({
 	 *  Finish the reporting.
 	 */
 	finish: function(sender) {
-		alert("I don't know how to finish yet");
+		if (!this.for_rule || !('actions' in this.for_rule)) {
+			alert("No action is associated with this rule, cannot finish processing");
+			return;
+		}
+		
+		// grab all data
+		var data = {};
+		for (var i = 0; i < this.sections.length; i++) {
+			var form = $('#form_' + this.sections[i]);
+			if (!form.is('*')) {
+				console.warn("Form for section", this.sections[i], "is missing", this.sections);
+			}
+			else {
+				data[this.sections[i]] = form.serializeArray();
+			}
+		}
+		console.log('Form data:', data);
+		
+		// start actions
+		for (var i = 0; i < this.for_rule.actions.length; i++) {
+			var action = this.for_rule.actions[i];
+			console.log('Action:', action);
+		}
 	},
 	
 	/**
@@ -176,11 +198,6 @@ var ProcessController = Base.extend({
 	abort: function(sender) {
 		this.for_rule.reportDidAbort();
 	},
-	
-	
-	/**
-	 *  Utilities
-	 */
 });
 
 

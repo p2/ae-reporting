@@ -24,9 +24,8 @@
 	},
 	"actions": [
 		{
-			"name": "Dump XML Report",
-			"template": "leflunomide.xml",
-			"target": "output"
+			"name": "FDA 3500 (508)",
+			"form": "FDA_3500_508_ae.html"
 		}
 	],
 	"references": [

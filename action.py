@@ -9,7 +9,7 @@ import datetime
 
 from jinja2 import Template
 from jinja2 import Environment, PackageLoader
-env = Environment(loader=PackageLoader('action', 'templates'), trim_blocks=True)
+_action_env = Environment(loader=PackageLoader('action', 'forms'), trim_blocks=True)
 
 
 class Action(object):
@@ -29,22 +29,22 @@ class Action(object):
 	
 	def __init__(self, from_json=None):
 		self.name = None
-		self.template = None
-		self.target = None
+		self.form = None
+		self.target = 'output'
 		
 		if from_json is not None:
 			self.name = from_json.get('name')
-			self.template = from_json.get('template')
+			self.form = from_json.get('form')
 			self.target = from_json.get('target')
 		
 	
 	# -------------------------------------------------------------------------- Executing
 	def execute_for(self, patient):
 		""" Perform the action on the given patient """
-		if self.template is None or self.target is None:
+		if self.form is None or self.target is None:
 			raise Exception("I need a template and a target in order to execute")
 		
-		# load the template
-		template = env.get_template(self.template)
-		return template.render(patient=patient, date=datetime.datetime.utcnow())
+		# load the form
+		form = _action_env.get_template(self.form)
+		return form.render(patient=patient, date=datetime.datetime.utcnow())
 		
