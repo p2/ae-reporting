@@ -322,6 +322,10 @@ def prefill(section_ids):
 def static(filename):
 	return _serve_static(filename, 'static')
 
+@app.get('/forms/<filename>')
+def get_form(filename):
+	return _serve_static(filename, 'forms')
+
 @app.get('/templates/<ejs_name>.ejs')
 def ejs(ejs_name):
 	return _serve_static('%s.ejs' % ejs_name, 'templates')
