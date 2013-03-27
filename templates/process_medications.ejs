@@ -4,6 +4,7 @@
 	<% 
 	var meds = (data && 'medications' in data) ? data['medications'] : [];
 	if (meds.length > 0) {
+	meds.sort(compareMedByNameASC);
 	var check_ids = [];
 	var latest = rule.latestPendingResult();
 	if (latest) {

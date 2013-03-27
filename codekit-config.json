@@ -2,16 +2,133 @@
   "CodeKitInfo" : "This is a CodeKit project configuration file. It is designed to sync project settings across multiple machines. Modifying the contents of this file can be a poor life decision if you don't know what you're doing. This file is not useful unless accompanied by the project that created it in CodeKit. For more information, see: http:\/\/incident57.com\/codekit",
   "creatorBuild" : "8248",
   "files" : {
-    "\/static\/Base.min.js" : {
+    "\/static\/moment.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/moment.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/moment.min.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/src\/main.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/main.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/main.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/src\/jq.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/jq.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/jq.min.js",
+      "fileType" : 64
+    },
+    "\/static\/jquery-1.9.1.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.min.js",
+      "fileType" : 64
+    },
+    "\/static\/style.css" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/Base.min.js",
+      "inputAbbreviatedPath" : "\/static\/style.css",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 16
+    },
+    "\/Kalendae\/build\/close.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/close.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/close.png",
+      "initialSize" : 1442,
+      "fileType" : 8192
+    },
+    "\/Kalendae\/src\/moment.ext.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.js",
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/Base.min.min.js",
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.min.js",
       "fileType" : 64
+    },
+    "\/static\/kalendae.css" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/kalendae.css",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 16
+    },
+    "\/static\/portrait_default.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/portrait_default.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/static\/portrait_default.png",
+      "initialSize" : 5401,
+      "fileType" : 8192
+    },
+    "\/Kalendae\/build\/kalendae.standalone.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.standalone.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.standalone.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/src\/header.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/header.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/header.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/build\/arrows.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/arrows.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/arrows.png",
+      "initialSize" : 1017,
+      "fileType" : 8192
     },
     "\/js\/Base.js" : {
       "ignoreWasSetByUser" : 0,
@@ -35,6 +152,60 @@
       "outputAbbreviatedPath" : "\/static\/main.min.js",
       "fileType" : 64
     },
+    "\/sass\/style.scss" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/sass\/style.scss",
+      "outputStyle" : 2,
+      "shouldRunBless" : 0,
+      "outputAbbreviatedPath" : "\/static\/style.css",
+      "fileType" : 4,
+      "debugStyle" : 0
+    },
+    "\/Kalendae\/build\/kalendae.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.min.js",
+      "fileType" : 64
+    },
+    "\/static\/exclamation.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/exclamation.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/static\/exclamation.png",
+      "initialSize" : 931,
+      "fileType" : 8192
+    },
+    "\/static\/jquery.view.ejs.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.min.js",
+      "fileType" : 64
+    },
+    "\/templates\/index.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/templates\/index.html",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
+    },
     "\/static\/authorize.html" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -44,14 +215,133 @@
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
-    "\/static\/style.css" : {
+    "\/Kalendae\/src\/input.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/input.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/input.min.js",
+      "fileType" : 64
+    },
+    "\/templates\/endpoint_select.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/templates\/endpoint_select.html",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
+    },
+    "\/static\/arrows.png" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/arrows.png",
+      "processed" : 0,
+      "outputAbbreviatedPath" : "\/static\/arrows.png",
+      "initialSize" : 1017,
+      "fileType" : 8192
+    },
+    "\/js\/Rule.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/style.css",
+      "inputAbbreviatedPath" : "\/js\/Rule.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/Rule.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/src\/MinPubSub.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/MinPubSub.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/MinPubSub.min.js",
+      "fileType" : 64
+    },
+    "\/static\/main.min.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/main.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/main.min.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/index.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/index.html",
       "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 16
+      "fileType" : 2048
+    },
+    "\/js\/ProcessController.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/js\/ProcessController.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/ProcessController.min.js",
+      "fileType" : 64
+    },
+    "\/static\/kalendae.standalone.min.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/kalendae.standalone.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/kalendae.standalone.min.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/src\/util.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/util.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/util.min.js",
+      "fileType" : 64
+    },
+    "\/Kalendae\/build\/kalendae.min.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.min.min.js",
+      "fileType" : 64
+    },
+    "\/js\/RuleController.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/js\/RuleController.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/RuleController.min.js",
+      "fileType" : 64
     },
     "\/sass\/_mixins.scss" : {
       "ignoreWasSetByUser" : 0,
@@ -65,61 +355,82 @@
       "fileType" : 4,
       "debugStyle" : 0
     },
-    "\/sass\/style.scss" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/sass\/style.scss",
-      "outputStyle" : 2,
-      "shouldRunBless" : 0,
-      "outputAbbreviatedPath" : "\/static\/style.css",
-      "fileType" : 4,
-      "debugStyle" : 0
-    },
-    "\/static\/main.min.js" : {
+    "\/static\/Base.min.js" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/main.min.js",
+      "inputAbbreviatedPath" : "\/static\/Base.min.js",
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/main.min.min.js",
+      "outputAbbreviatedPath" : "\/static\/Base.min.min.js",
       "fileType" : 64
     },
-    "\/static\/jquery.view.ejs.min.js" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
+    "\/Kalendae\/src\/moment.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.js",
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/moment.js",
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.min.js",
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/moment.min.js",
       "fileType" : 64
     },
-    "\/templates\/endpoint_select.html" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
+    "\/Kalendae\/src\/auto.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/templates\/endpoint_select.html",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/auto.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/auto.min.js",
+      "fileType" : 64
     },
-    "\/templates\/index.html" : {
+    "\/Kalendae\/build\/kalendae.css" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/templates\/index.html",
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.css",
       "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
+      "fileType" : 16
+    },
+    "\/Kalendae\/build\/kalendae.standalone.min.js" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.standalone.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.standalone.min.min.js",
+      "fileType" : 64
     }
   },
   "manualImportLinks" : [
-
+    {
+      "type" : 1,
+      "position" : 0,
+      "linkedFileAbbreviatedPath" : "\/js\/Rule.js",
+      "baseFileAbbreviatedPath" : "\/js\/main.js",
+      "followForSyntaxChecking" : 1
+    },
+    {
+      "type" : 1,
+      "position" : 1,
+      "linkedFileAbbreviatedPath" : "\/js\/RuleController.js",
+      "baseFileAbbreviatedPath" : "\/js\/main.js",
+      "followForSyntaxChecking" : 1
+    },
+    {
+      "type" : 1,
+      "position" : 2,
+      "linkedFileAbbreviatedPath" : "\/js\/ProcessController.js",
+      "baseFileAbbreviatedPath" : "\/js\/main.js",
+      "followForSyntaxChecking" : 1
+    }
   ],
   "projectSettings" : {
     "hamlNoEscapeInAttributes" : 0,
@@ -176,7 +487,7 @@
     "javascriptAutoOutputPathReplace1" : "js",
     "stylusOutputStyle" : 0,
     "javascriptAutoOutputPathReplace2" : "static",
-    "sassAutoOutputPathRelativePath" : "..\/css",
+    "sassAutoOutputPathRelativePath" : "..\/static",
     "coffeeAutoOutputPathReplace1" : "",
     "hamlUseDoubleQuotes" : 0,
     "coffeeAutoOutputPathReplace2" : "",
@@ -294,7 +605,7 @@
     "slimRailsCompatible" : 0,
     "kitAutoOutputPathReplace2" : "",
     "lessDebugStyle" : 0,
-    "javascriptAutoOutputPathRelativePath" : "..\/js\/",
+    "javascriptAutoOutputPathRelativePath" : "",
     "slimAutoOutputPathStyle" : 0
   },
   "projectAttributes" : {
