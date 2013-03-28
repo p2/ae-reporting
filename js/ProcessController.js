@@ -217,11 +217,36 @@ var ProcessController = Base.extend({
 				console.warn("Form for section", this.sections[i], "is missing", this.sections);
 			}
 			else {
-				data[this.sections[i]] = form.serializeArray();
+				var realm = form.serializeArray();
+				var cleaned = {};
+				
+				// clean up POST data (it's all quite verbose)
+				for (var j = 0; j < realm.length; j++) {
+					var input = realm[j];
+					var name = input['name'];
+					var value = input['value'];
+					
+					if (name in cleaned) {
+						var arr = cleaned[name];
+						if ('object' != typeof arr) {
+							arr = [arr];
+						} 
+						arr.push(value);
+						cleaned[name] = arr;
+					}
+					else {
+						cleaned[name] = value;
+					}
+				}
+				
+				data[this.sections[i]] = cleaned;
 			}
 		}
 		
+		data['now'] = moment().format('MM/DD/YYYY');
+		
 		// JSON-ify
+		// console.log(data);
 		return JSON.stringify(data);
 	},
 	
