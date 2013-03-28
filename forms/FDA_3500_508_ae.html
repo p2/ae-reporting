@@ -121,35 +121,35 @@
 					<b>Outcomes Attributed to Adverse Event</b><br /><i>(Check all that apply)</i><br />
 					
 					<div class="inline" style="width:162px; height:27px; margin-top:2px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('death' in adverse_event.outcome) %}X{% endif %}</span>
 						Death:
 						<span style="position:relative; display:inline-block; width:105px; height:14px; border-bottom:1px solid black;">
 							<ins contenteditable="true">{{ demographics.deathdate }}</ins>
 							<i style="position:absolute; top:14px; left:0; right:0; display:inline-block; height:14px; text-align:center;">(mm/dd/yyyy)</i>
 						</span>
 					</div><div class="inline" style="width:188px; height:27px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('disability' in adverse_event.outcome) %}X{% endif %}</span>
 						Disability or Permanent Damage
 					</div>
 					
 					<div class="inline" style="width:162px; height:18px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('life-threatening' in adverse_event.outcome) %}X{% endif %}</span>
 						Life-threatening
 					</div><div class="inline" style="width:188px; height:18px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('birth-defect' in adverse_event.outcome) %}X{% endif %}</span>
 						Congenital Anomaly/Birth Defect
 					</div>
 					
 					<div class="inline" style="width:162px; height:16px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('hospitalization' in adverse_event.outcome) %}X{% endif %}</span>
 						Hospitalization - initial or prolonged
 					</div><div class="inline" style="width:188px; height:16px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('other' in adverse_event.outcome) %}X{% endif %}</span>
 						Other Serious (Important Medical Events)
 					</div>
 					
 					<div class="inline" style="width:350px; height:16px; line-height:1.7;">
-						<span class="checkbox"></span>
+						<span class="checkbox">{% if ('intervention' in adverse_event.outcome) %}X{% endif %}</span>
 						Required Intervention to Prevent Permanent Impairment/Damage (Devices)
 					</div>
 				</div>
@@ -391,6 +391,7 @@
 			</div>
 			<div style="height:46px; border-top:1px solid black;">
 				<h5>9. If Yes to Item No. 8, Enter Name and Address of Reprocessor</h5>
+				<p contenteditable="true" style="min-height:24px;"></p>
 			</div>
 			
 			<h4>F. Other (concomitant) medical products</h4>
@@ -403,7 +404,7 @@
 			<div style="height:78px;">
 				<h5>1. Name and Address</h5>
 				<div class="inline" style="width:351px; height:14px; margin-left:14px;">Name: <ins contenteditable="true">{{ reporter.name }}</ins></div>
-				<div class="inline" style="width:351px; height:34px; margin-left:14px;">Address: <ins contenteditable="true">{{ reporter.address }}</ins></div>
+				<div class="inline" style="width:351px; height:34px; margin-left:14px;">Address: <ins contenteditable="true">{{ reporter.address|replace("\n", "<br />") }}</ins></div>
 				<div class="inline" style="width:186px; height:14px; margin-left:14px;">
 					City: <ins contenteditable="true">{{ reporter.city }}</ins>
 				</div><div class="inline" style="width:54px; height:14px;">

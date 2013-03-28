@@ -8,6 +8,8 @@ p { padding: 0.5em 0; }
 p:first-child { margin-top: 0; }
 p:last-child { margin-bottom: 0; }
 
+table { border-collapse: collapse; }
+
 td:first-child { padding-left: 0; }
 td:last-child { padding-right: 0; }
 
@@ -62,7 +64,7 @@ td:last-child { padding-right: 0; }
 #processing .proc_body .process_form .process_list li.additional_item input[type="text"] { width: 80%; margin: 0.2em 1em 0.2em 0.2em; }
 #processing .proc_body .process_form .process_list li#add_more { margin-top: 1em; font-size: 0.9em; }
 #processing .proc_body .process_form .process_list li .supplement { margin-left: 1.6em; font-size: 0.9em; color: #505050; }
-#processing .proc_body .process_form input[type="text"], #processing .proc_body .process_form select { margin: 0; font-size: 1.1em; }
+#processing .proc_body .process_form input[type="text"], #processing .proc_body .process_form select, #processing .proc_body .process_form textarea { margin: 0; font-size: 1.1em; }
 #processing .proc_body .process_form textarea { width: 99%; }
 #processing .proc_body p { padding: 0.5em 15px; }
 #processing .active { border-color: #0596be; box-shadow: 0 0 8px #0596be; }

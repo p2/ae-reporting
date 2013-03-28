@@ -65,9 +65,12 @@ var ProcessController = Base.extend({
 					var form = $('<form/>').attr('method', 'post').attr('action', 'forms/' + action.form).attr('target', '_blank');
 					form.addClass('process_form');
 					form.submit(function() {
-						var input = $('<input/>').attr('type', 'hidden').attr('name', 'json');
+						var input = form.find('input[name="json"]');
+						if (!input.is('*')) {
+							input = $('<input/>').attr('type', 'hidden').attr('name', 'json');
+							form.prepend(input);
+						}
 						input.val(self.finish());
-						form.append(input);
 						
 						return true;
 					});

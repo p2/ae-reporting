@@ -39,6 +39,9 @@ p {
 	&:last-child { margin-bottom: 0; }
 }
 
+table {
+	border-collapse: collapse;
+}
 td {
 	&:first-child { padding-left: 0; }
 	&:last-child { padding-right: 0; }
@@ -255,7 +258,7 @@ td {
 				}
 			}
 			
-			input[type="text"], select {
+			input[type="text"], select, textarea {
 				margin: 0;
 				font-size: 1.1em;
 			}

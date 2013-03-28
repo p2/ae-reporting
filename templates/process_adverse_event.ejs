@@ -6,19 +6,51 @@
 	
 	<div class="process_row">
 		<h5>Outcome:</h5>
-		<select name="outcome" onchange="showHideDeathHint(this.options[this.selectedIndex].value=='death');">
-			<option value="life-threatening">Life-threatening</option>
-			<option value="death">Death</option>
-			<option value="hospitalization">Hospitalization - initial or prolonged</option>
-			<option value="disability">Disability or Permanent Damage</option>
-			<option value="birth-defect">Congenital Anomaly / Birth Defect</option>
-			<option value="other">Other Serious</option>
-		</select>
-		<span id="death_date_hint">Please add the death date to the patient's vitals</span>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+						<input type="checkbox" name="outcome" id="out-life-threatening" value="life-threatening" />
+						<label for="out-life-threatening">Life-threatening</label>
+					</td>
+					<td>
+						<input type="checkbox" name="outcome" id="out-death" value="death" onchange="showHideDeathHint(this.checked);" />
+						<label for="out-death">Death</label><br />
+						<span id="death_date_hint">Please add the death date to the patient's vitals</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" name="outcome" id="out-hospitalization" value="hospitalization" />
+						<label for="out-hospitalization">Hospitalization - initial or prolonged</label>
+					</td>
+					<td>
+						<input type="checkbox" name="outcome" id="out-disability" value="disability" />
+						<label for="out-disability">Disability or Permanent Damage</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="checkbox" name="outcome" id="out-birth-defect" value="birth-defect" />
+						<label for="out-birth-defect">Congenital Anomaly / Birth Defect</label>
+					</td>
+					<td>
+						<input type="checkbox" name="outcome" id="out-other" value="other" />
+						<label for="out-other">Other Serious</label>
+					</td>
+				</tr>
+				<!--tr>
+					<td colspan="2">
+						<input type="checkbox" name="outcome" id="out-intervention" value="intervention" />
+						<label for="out-intervention">Required intervention to Prevent Permanent Impairment/Damage</label>
+					</td>
+				</tr-->
+			</tbody>
+		</table>
 	</div>
 	
 	<div class="process_row">
 		<h5>Description:</h5>
-		<textarea name="ae_description" rows="20" cols="70"></textarea>
+		<textarea name="ae_description" rows="15" cols="70"></textarea>
 	</div>
 </form>

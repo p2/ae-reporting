@@ -1,34 +1,37 @@
 <form class="process_form" id="form_reporter">
 	<div class="process_row">
 		<h5>Name</h5>
-		<input type="text" name="name" size="40" />
+		<input type="text" name="name" size="40" value="Pascal Pfiffner" />
 	</div>
 	<div class="process_row">
 		<h5>Address</h5>
-		<textarea name="address" rows="3" cols="80" style="width:auto; margin:0;"></textarea>
+		<textarea name="address" rows="3" cols="30" style="width:auto;">
+AU 542
+One Autumn Street
+		</textarea>
 	</div>
 	<div class="process_row">
 		<h5></h5>
-		<input type="text" name="city" placeholder="City" />,
-		<input type="text" name="state" placeholder="State" size="5" />
-		<input type="text" name="zip" placeholder="ZIP" size="6" />
+		<input type="text" name="city" placeholder="City" value="Boston" />,
+		<input type="text" name="state" placeholder="State" size="4" value="MA" />
+		<input type="text" name="zip" placeholder="ZIP" size="6" value="02215" />
 	</div>
 	
 	<div class="process_row">
 		<h5>Phone</h5>
-		<input type="text" name="phone" />
+		<input type="text" name="phone" value="617 123 4567" />
 	</div>
 	<div class="process_row">
 		<h5>Email</h5>
-		<input type="text" name="email" size="40" />
+		<input type="text" name="email" size="40" value="pp@bch.org" />
 	</div>
 	<div class="process_row">
 		<h5>Occupation</h5>
-		<input type="text" name="occupation" />
+		<input type="text" name="occupation" value="Research Fellow" />
 	</div>
 	<div class="process_row">
 		<h5></h5>
-		<input type="checkbox" id="professional" name="professional" value="y" />
+		<input type="checkbox" id="professional" name="professional" value="y" checked="checked" />
 		<label for="professional">Health Professional</label>
 	</div>
 </form>
