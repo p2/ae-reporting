@@ -1,6 +1,6 @@
 {
   "CodeKitInfo" : "This is a CodeKit project configuration file. It is designed to sync project settings across multiple machines. Modifying the contents of this file can be a poor life decision if you don't know what you're doing. This file is not useful unless accompanied by the project that created it in CodeKit. For more information, see: http:\/\/incident57.com\/codekit",
-  "creatorBuild" : "8248",
+  "creatorBuild" : "8283",
   "files" : {
     "\/static\/moment.min.js" : {
       "ignoreWasSetByUser" : 1,
@@ -35,15 +35,15 @@
       "outputAbbreviatedPath" : "\/Kalendae\/src\/jq.min.js",
       "fileType" : 64
     },
-    "\/static\/jquery-1.9.1.min.js" : {
+    "\/Kalendae\/src\/moment.ext.js" : {
       "ignoreWasSetByUser" : 1,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.js",
+      "inputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.js",
       "outputStyle" : 1,
       "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.min.js",
+      "outputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.min.js",
       "fileType" : 64
     },
     "\/static\/style.css" : {
@@ -66,17 +66,6 @@
       "initialSize" : 1442,
       "fileType" : 8192
     },
-    "\/Kalendae\/src\/moment.ext.js" : {
-      "ignoreWasSetByUser" : 1,
-      "ignore" : 1,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/Kalendae\/src\/moment.ext.min.js",
-      "fileType" : 64
-    },
     "\/static\/kalendae.css" : {
       "ignoreWasSetByUser" : 0,
       "ignore" : 0,
@@ -85,6 +74,17 @@
       "inputAbbreviatedPath" : "\/static\/kalendae.css",
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 16
+    },
+    "\/static\/jquery-1.9.1.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/jquery-1.9.1.min.min.js",
+      "fileType" : 64
     },
     "\/static\/portrait_default.png" : {
       "ignoreWasSetByUser" : 0,
@@ -129,6 +129,15 @@
       "outputAbbreviatedPath" : "\/Kalendae\/build\/arrows.png",
       "initialSize" : 1017,
       "fileType" : 8192
+    },
+    "\/forms\/FDA_3500_508_ae.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/forms\/FDA_3500_508_ae.html",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/js\/Base.js" : {
       "ignoreWasSetByUser" : 0,
@@ -186,16 +195,14 @@
       "initialSize" : 931,
       "fileType" : 8192
     },
-    "\/static\/jquery.view.ejs.min.js" : {
-      "ignoreWasSetByUser" : 1,
-      "ignore" : 1,
+    "\/static\/authorize.html" : {
+      "ignoreWasSetByUser" : 0,
+      "ignore" : 0,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.js",
-      "outputStyle" : 1,
-      "syntaxCheckerStyle" : 0,
-      "outputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.min.js",
-      "fileType" : 64
+      "inputAbbreviatedPath" : "\/static\/authorize.html",
+      "outputAbbreviatedPath" : "No Output Path",
+      "fileType" : 2048
     },
     "\/templates\/index.html" : {
       "ignoreWasSetByUser" : 0,
@@ -203,15 +210,6 @@
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
       "inputAbbreviatedPath" : "\/templates\/index.html",
-      "outputAbbreviatedPath" : "No Output Path",
-      "fileType" : 2048
-    },
-    "\/static\/authorize.html" : {
-      "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
-      "outputPathIsSetByUser" : 0,
-      "inputAbbreviatedPath" : "\/static\/authorize.html",
       "outputAbbreviatedPath" : "No Output Path",
       "fileType" : 2048
     },
@@ -245,6 +243,17 @@
       "outputAbbreviatedPath" : "\/static\/arrows.png",
       "initialSize" : 1017,
       "fileType" : 8192
+    },
+    "\/static\/jquery.view.ejs.min.js" : {
+      "ignoreWasSetByUser" : 1,
+      "ignore" : 1,
+      "hidden" : 0,
+      "outputPathIsSetByUser" : 0,
+      "inputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.js",
+      "outputStyle" : 1,
+      "syntaxCheckerStyle" : 0,
+      "outputAbbreviatedPath" : "\/static\/jquery.view.ejs.min.min.js",
+      "fileType" : 64
     },
     "\/js\/Rule.js" : {
       "ignoreWasSetByUser" : 0,
@@ -300,7 +309,7 @@
       "fileType" : 64
     },
     "\/static\/kalendae.standalone.min.js" : {
-      "ignoreWasSetByUser" : 0,
+      "ignoreWasSetByUser" : 1,
       "ignore" : 1,
       "hidden" : 0,
       "outputPathIsSetByUser" : 0,
@@ -390,8 +399,8 @@
     },
     "\/Kalendae\/build\/kalendae.css" : {
       "ignoreWasSetByUser" : 0,
-      "ignore" : 0,
-      "hidden" : 0,
+      "ignore" : 1,
+      "hidden" : 1,
       "outputPathIsSetByUser" : 0,
       "inputAbbreviatedPath" : "\/Kalendae\/build\/kalendae.css",
       "outputAbbreviatedPath" : "No Output Path",
@@ -420,14 +429,14 @@
     {
       "type" : 1,
       "position" : 1,
-      "linkedFileAbbreviatedPath" : "\/js\/RuleController.js",
+      "linkedFileAbbreviatedPath" : "\/js\/ProcessController.js",
       "baseFileAbbreviatedPath" : "\/js\/main.js",
       "followForSyntaxChecking" : 1
     },
     {
       "type" : 1,
       "position" : 2,
-      "linkedFileAbbreviatedPath" : "\/js\/ProcessController.js",
+      "linkedFileAbbreviatedPath" : "\/js\/RuleController.js",
       "baseFileAbbreviatedPath" : "\/js\/main.js",
       "followForSyntaxChecking" : 1
     }
@@ -452,7 +461,7 @@
     "javascriptOutputSuffix" : ".min",
     "jadeOutputStyle" : 0,
     "coffeeAutoOutputPathStyle" : 0,
-    "autoSyncProjectSettingsFile" : 1,
+    "autoSyncProjectSettingsFile" : 0,
     "lessAutoOutputPathReplace1" : "less",
     "jadeAutoOutputPathReplace1" : "",
     "lessAutoOutputPathRelativePath" : "..\/css",

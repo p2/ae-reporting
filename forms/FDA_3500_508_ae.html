@@ -4,7 +4,9 @@
 	<title>FDA 3500 508</title>
 	<style>
 		body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; font-size: 7pt; }
-		#instructions { height: 50px; text-align: right; border-bottom: 1px solid #333; background-color: #EEE; }
+		#instructions { text-align: right; border-bottom: 1px solid #333; background-color: #EEE; }
+		#instructions > div { width: 8.5in; padding: 10px; }
+		#instructions button { font-weight: bold; }
 		.page { width: 8.5in; height: 11in; margin: 10px;; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
 		.inner { padding: 25px 35px 25px 40px; }
 		@media print {
@@ -39,7 +41,9 @@
 </head>
 <body>
 	<div id="instructions">
-		<button>Print</button>
+		<div>
+			<button onclick="window.print()">Print</button>
+		</div>
 	</div>
 	<div class="page"><div class="inner">
 		<div>

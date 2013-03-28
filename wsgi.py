@@ -15,7 +15,8 @@ from settings import ENDPOINTS
 # bottle and Jinja setup
 app = bottle.Bottle()
 application = app				# needed for AppFog			
-_jinja = Environment(loader=PackageLoader('wsgi', 'templates'), trim_blocks=True)
+_jinja_templates = Environment(loader=PackageLoader('wsgi', 'templates'), trim_blocks=True)
+_jinja_forms = Environment(loader=PackageLoader('wsgi', 'forms'), trim_blocks=True)
 _smart = None
 _cookie_name = 'wookie'
 
@@ -217,7 +218,7 @@ def index():
 		return error_msg
 	
 	# render index
-	template = _jinja.get_template('index.html')
+	template = _jinja_templates.get_template('index.html')
 	return template.render(api_base=api_base, record_id=record_id)
 
 
@@ -236,7 +237,7 @@ def endpoint():
 		available.append(srvr)
 	
 	# render selections
-	template = _jinja.get_template('endpoint_select.html')
+	template = _jinja_templates.get_template('endpoint_select.html')
 	return template.render(endpoints=available, callback=callback)
 	
 
@@ -325,6 +326,17 @@ def static(filename):
 @app.get('/forms/<filename>')
 def get_form(filename):
 	return _serve_static(filename, 'forms')
+
+@app.post('/forms/<filename>')
+def post_form(filename):
+	if bottle.request.forms is None or 'json' not in bottle.request.forms:
+		bottle.abort(400)
+	
+	json_str = bottle.request.forms['json']
+	data = json.loads(json_str)
+	
+	template = _jinja_forms.get_template(filename)
+	return template.render(data)
 
 @app.get('/templates/<ejs_name>.ejs')
 def ejs(ejs_name):

@@ -47,6 +47,46 @@ var ProcessController = Base.extend({
 			}
 		}
 		
+		// setup actions
+		if ('actions' in this.for_rule) {
+			var div = $('<div/>').attr('id', 'proc_actions');
+			var head = $('<div/>').addClass('proc_header');
+			var section_title = $('<h4/>').text("Review and Report");
+			head.click({ section_id: 'actions' }, toggleSection);
+			head.append(section_title);
+			div.append(head);
+			
+			var body = $('<div/>').addClass('proc_body');
+			
+			// add actions
+			for (var i = 0; i < this.for_rule.actions.length; i++) {
+				var action = this.for_rule.actions[i];
+				if ('form' in action) {
+					var form = $('<form/>').attr('method', 'post').attr('action', 'forms/' + action.form).attr('target', '_blank');
+					form.addClass('process_form');
+					form.submit(function() {
+						var input = $('<input/>').attr('type', 'hidden').attr('name', 'json');
+						input.val(self.finish());
+						form.append(input);
+						
+						return true;
+					});
+					form.append('<h4>' + action.name + '</h4>');
+					
+					var buttons = $('<p/>');
+					buttons.append('<button type="submit">Preview...</button>');
+					form.append(buttons);
+					body.append(form);
+				}
+				else {
+					console.warn('This action does not have a form to submit: ', action);
+				}
+			}
+			
+			div.append(body);
+			this.elem.append(div);
+		}
+		
 		// load data
 		this._loadData();
 	},
@@ -56,7 +96,6 @@ var ProcessController = Base.extend({
 			console.error('_initSection(), section_id', section_id, 'elem', this.elem);
 			return;
 		}
-		var self = this;
 		
 		// header
 		var div = $('<div/>').attr('id', 'proc_' + section_id);
@@ -108,18 +147,20 @@ var ProcessController = Base.extend({
 		var parent = $('#proc_' + section_id);
 		parent.addClass('active');
 		var div = parent.find('.proc_body').first();
-		div.html('templates/process_' + section_id + '.ejs', {'data': this.data, 'rule': this.for_rule});
-		
-		// add proceed button
-		var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, processNextSection);
-		var cont_parent = $('<p/>').addClass('process_next');
-		cont_parent.append(cont);
-		div.append(cont_parent);
-		
-		// load date pickers (must do manually, the auto-trigger doesn't work for EJS)
-		div.find('.auto-kal').each(function(i, elem) {
-			$(elem).kalendae({'format': 'MM/DD/YYYY'});
-		});
+		if (div.is(':empty') || 'Loading...' == div.text()) {
+			div.html('templates/process_' + section_id + '.ejs', {'data': this.data, 'rule': this.for_rule});
+			
+			// add proceed button
+			var cont = $('<button/>').text('Proceed').click({ 'section_id': section_id }, processNextSection);
+			var cont_parent = $('<p/>').addClass('process_next');
+			cont_parent.append(cont);
+			div.append(cont_parent);
+			
+			// load date pickers (must do manually, the auto-trigger doesn't work for EJS)
+			div.find('.auto-kal').each(function(i, elem) {
+				$(elem).kalendae({'format': 'MM/DD/YYYY'});
+			});
+		}
 	},
 	
 	/**
@@ -137,7 +178,7 @@ var ProcessController = Base.extend({
 				
 				// at the end
 				else {
-					this.finish();
+					next = 'actions';
 				}
 				break;
 			}
@@ -164,13 +205,9 @@ var ProcessController = Base.extend({
 	},
 	
 	/**
-	 *  Finish the reporting.
+	 *  Collects all data and returns it JSON-ifiyed.
 	 */
 	finish: function(sender) {
-		if (!this.for_rule || !('actions' in this.for_rule)) {
-			alert("No action is associated with this rule, cannot finish processing");
-			return;
-		}
 		
 		// grab all data
 		var data = {};
@@ -183,13 +220,9 @@ var ProcessController = Base.extend({
 				data[this.sections[i]] = form.serializeArray();
 			}
 		}
-		console.log('Form data:', data);
 		
-		// start actions
-		for (var i = 0; i < this.for_rule.actions.length; i++) {
-			var action = this.for_rule.actions[i];
-			console.log('Action:', action);
-		}
+		// JSON-ify
+		return JSON.stringify(data);
 	},
 	
 	/**
@@ -230,7 +263,7 @@ function processNextSection(event) {
  */
 function addCheckableListItem(li_item, item_name) {
 	if (!li_item || !item_name) {
-		console.log("addCheckableListItem(): I need a list item and an item name");
+		console.warn("addCheckableListItem(): I need a list item and an item name");
 		return;
 	}
 	
