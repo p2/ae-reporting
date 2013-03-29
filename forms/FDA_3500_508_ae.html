@@ -199,7 +199,7 @@
 				<div class="inline" style="width:16px; height:42px; padding-left:2px; line-height:1.5;">
 					#1
 				</div><div class="inline" style="width:337px; height:42px; line-height:1.5;">
-					Name: <ins contenteditable="true">{{ medications.meds[0]['rx:name'] }}</ins><br/>
+					Name: <ins contenteditable="true">{{ medications.meds[0]['rx:name'] or medications.meds[0].name }}</ins><br/>
 					Strength: <ins contenteditable="true">{{ medications.meds[0]['rx:strength'] }}</ins><br />
 					Manufacturer: <ins contenteditable="true">{{ medications.meds[0]['rx:manufacturer'] }}</ins>
 				</div>
@@ -208,7 +208,7 @@
 				<div class="inline" style="width:16px; height:42px; padding-left:2px; line-height:1.5;">
 					#2
 				</div><div class="inline" style="width:337px; height:42px; line-height:1.5;">
-					Name: <ins contenteditable="true">{{ medications.meds[1]['rx:name'] }}</ins><br/>
+					Name: <ins contenteditable="true">{{ medications.meds[1]['rx:name'] or medications.meds[1].name }}</ins><br/>
 					Strength: <ins contenteditable="true">{{ medications.meds[1]['rx:strength'] }}</ins><br />
 					Manufacturer: <ins contenteditable="true">{{ medications.meds[1]['rx:manufacturer'] }}</ins>
 				</div>

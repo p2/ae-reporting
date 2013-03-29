@@ -4,6 +4,7 @@
 #
 
 
+import logging
 import os.path
 from os import makedirs
 from uuid import uuid4
@@ -92,7 +93,7 @@ class TokenStore(object):
 				try:
 					os.makedirs(os.path.dirname(DB_FILE))
 				except Exception, e:
-					print "Failed to create %s: %s" % (os.path.dirname(DB_FILE), e)
+					logging.error("Failed to create %s: %s" % (os.path.dirname(DB_FILE), e))
 					return
 			
 			# database init

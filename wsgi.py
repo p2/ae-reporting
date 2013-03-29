@@ -1,5 +1,6 @@
 # good morning!
 
+import logging
 import bottle
 import json
 from jinja2 import Template, Environment, PackageLoader
@@ -23,15 +24,6 @@ _cookie_name = 'wookie'
 DEBUG = True
 
 
-def _log_debug(log):
-	if DEBUG:
-		print log
-
-
-def _log_error(err):
-	print err
-
-
 def _serve_static(file, root):
 	""" Serves a static file or a 404 """
 	try:
@@ -51,7 +43,7 @@ def _smart_client(api_base, record_id=None):
 				break
 		
 		if server is None:
-			_log_error("There is no server with base URI %s" % api_base)
+			logging.error("There is no server with base URI %s" % api_base)
 			bottle.abort(404)
 			return None
 		
@@ -100,12 +92,12 @@ def _request_token_if_needed(request, record_id, api_base):
 		and (record_id is None or int(ex_record_id) == int(record_id)) \
 		and (api_base is None or unicode(ex_api_base) == unicode(api_base)) \
 		and _test_record_token(api_base, record_id, token):
-		_log_debug("reusing existing token")
+		logging.debug("reusing existing token")
 		return False, None
 	
 	# request a fresh token
 	bottle.response.delete_cookie(_cookie_name)
-	_log_debug("requesting token for record %s on %s" % (record_id, api_base))
+	logging.debug("requesting token for record %s on %s" % (record_id, api_base))
 	smart = _smart_client(api_base, record_id)
 	if smart is None:
 		return False, None
@@ -121,7 +113,7 @@ def _request_token_if_needed(request, record_id, api_base):
 		return False, "Failed to store request token"
 	
 	# now go and authorize the token
-	_log_debug("redirecting to authorize token")
+	logging.debug("redirecting to authorize token")
 	bottle.redirect(smart.auth_redirect_url)
 	return True, None
 
@@ -134,11 +126,11 @@ def _exchange_token(req_token, verifier):
 	ts = TokenStore()
 	full_token, api_base, record_id = ts.tokenServerRecordForToken(req_token)
 	if record_id is None:
-		_log_error("Unknown token, cannot exchange %s" % req_token)
+		logging.error("Unknown token, cannot exchange %s" % req_token)
 		return None, None, None
 	
 	# exchange the token
-	_log_debug("exchange token: %s" % full_token)
+	logging.debug("exchange token: %s" % full_token)
 	smart = _smart_client(api_base, record_id)
 	if smart is None:
 		return None, None, None
@@ -147,11 +139,11 @@ def _exchange_token(req_token, verifier):
 	try:
 		acc_token = smart.exchange_token(verifier)
 	except Exception, e:
-		_log_error("token exchange failed: %s" % e)
+		logging.error("token exchange failed: %s" % e)
 		return None, api_base, None
 	
 	# success, store it
-	_log_debug("did exchange token: %s" % acc_token)
+	logging.debug("did exchange token: %s" % acc_token)
 	cookie = ts.storeTokenForRecord(api_base, record_id, acc_token)
 	smart.update_token(acc_token)
 	
@@ -193,7 +185,7 @@ def index():
 	
 	# no endpoint, show selector
 	if api_base is None:
-		_log_debug('redirecting to endpoint selection')
+		logging.debug('redirecting to endpoint selection')
 		bottle.redirect('endpoint_select')
 	
 	# no record id, call launch page
@@ -206,7 +198,7 @@ def index():
 		if launch is None:
 			return "Unknown app start URL, cannot launch without an app id"
 		
-		_log_debug('redirecting to app launch page')
+		logging.debug('redirecting to app launch page')
 		bottle.redirect(launch)
 		return
 	
@@ -250,7 +242,7 @@ def authorize():
 	verifier = bottle.request.query.get('oauth_verifier')
 	cookie, api_base, record_id = _exchange_token(req_token, verifier)
 	if cookie is not None:
-		_log_debug('setting cookie')
+		logging.debug('setting cookie')
 		bottle.response.set_cookie(_cookie_name, cookie, path='/', max_age=24*3600)
 		bottle.redirect('/index.html?api_base=%s&record_id=%s' % (api_base, record_id))
 	
@@ -312,10 +304,7 @@ def prefill(section_ids):
 				data.update(sect)
 	
 	# JSON-encode the response
-	# print data
-	data = json.dumps(data)
-	
-	return data
+	return json.dumps(data)
 
 
 # ------------------------------------------------------------------------------ Static requests
@@ -343,3 +332,11 @@ def post_form(filename):
 @app.get('/templates/<ejs_name>.ejs')
 def ejs(ejs_name):
 	return _serve_static('%s.ejs' % ejs_name, 'templates')
+
+
+
+if __name__ == '__main__':
+	if DEBUG:
+		logging.basicConfig(level=logging.DEBUG)
+	else:
+		logging.basicConfig(level=logging.WARNING)

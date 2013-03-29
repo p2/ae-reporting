@@ -5,6 +5,7 @@
 #
 
 
+import logging
 import json
 import os.path
 from rdflib.graph import Graph
@@ -136,7 +137,7 @@ class TestRecord(object):
 			
 			results = graph.query(sparql)
 			if len(results) < 1:
-				print "xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system
+				logging.info("xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system)
 				return None
 			
 			res = list(results)[0]		# can't believe SPARQLQueryResult doesn't reply to "next()"...
@@ -167,7 +168,7 @@ class TestRecord(object):
 			
 			results = graph.query(sparql)
 			if len(results) < 1:
-				print "xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system
+				logging.info("xxx>  data_from_graph() SPARQL query for %s didn't match" % item_system)
 				return None
 			
 			res = list(results)[0]
@@ -221,10 +222,10 @@ class TestRecord(object):
 		try:
 			head, body = self.smart.get(item_url)
 			if head.get('status') != '200':
-				print 'Failed to GET "%s": %s' % (item_url, head.get('status'))
+				logging.error('Failed to GET "%s": %s' % (item_url, head.get('status')))
 				return None
 		except Exception, e:
-			print 'Failed to GET "%s": %s' % (item_url, e)
+			logging.error('Failed to GET "%s": %s' % (item_url, e))
 			return None
 		
 		return body
@@ -277,7 +278,7 @@ class TestRecord(object):
 		if 'medications' == section_id:
 			return self.medications
 		
-		print "I don't know what graph to return for section", section_id
+		logging.warning("I don't know what graph to return for section %s" % section_id)
 		return None
 	
 	
@@ -360,7 +361,7 @@ class TestRecord(object):
 				return None
 			return json.loads(res.body)
 		except Exception, e:
-			print e
+			logging.error(e)
 		return None
 	
 	def set_scratchpad_data(self, data):
@@ -369,14 +370,16 @@ class TestRecord(object):
 				encoded = json.dumps(data, cls=JSONRuleEncoder)
 				# print 'STORING SCRATCHPAD', encoded
 				res = self.smart.put_scratchpad_data(encoded)
-				print res.response
+				if '200' != res.response.get('status'):
+					logging.error('Failed to PUT scratchpad data: %s', res)
 			else:
 				# print 'DELETING SCRATCHPAD'
 				res = self.smart.delete_scratchpad_data()
-				print res.response
+				if '200' != res.response.get('status'):
+					logging.error('Failed to delete scratchpad data: %s', res)
 			return True
 		except Exception, e:
-			print e
+			logging.error(e)
 		return False
 	
 	
