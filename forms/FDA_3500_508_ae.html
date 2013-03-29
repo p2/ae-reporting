@@ -199,14 +199,18 @@
 				<div class="inline" style="width:16px; height:42px; padding-left:2px; line-height:1.5;">
 					#1
 				</div><div class="inline" style="width:337px; height:42px; line-height:1.5;">
-					Name:<br/>Strength:<br />Manufacturer:
+					Name: <ins contenteditable="true">{{ medications.meds[0]['rx:name'] }}</ins><br/>
+					Strength: <ins contenteditable="true">{{ medications.meds[0]['rx:strength'] }}</ins><br />
+					Manufacturer: <ins contenteditable="true">{{ medications.meds[0]['rx:manufacturer'] }}</ins>
 				</div>
 			</div>
 			<div style="border-top:1px solid black;">
 				<div class="inline" style="width:16px; height:42px; padding-left:2px; line-height:1.5;">
 					#2
 				</div><div class="inline" style="width:337px; height:42px; line-height:1.5;">
-					Name:<br/>Strength:<br />Manufacturer:
+					Name: <ins contenteditable="true">{{ medications.meds[1]['rx:name'] }}</ins><br/>
+					Strength: <ins contenteditable="true">{{ medications.meds[1]['rx:strength'] }}</ins><br />
+					Manufacturer: <ins contenteditable="true">{{ medications.meds[1]['rx:manufacturer'] }}</ins>
 				</div>
 			</div>
 		</div>
@@ -221,12 +225,12 @@
 					<div style="height:31px; text-align:right;">#2</div>
 				</div><div class="inline" style="width:112px; height:76px; padding:2px 4px;">
 					<h5 style="margin:0;">Dose or Amount</h5>
-					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;"></p>
-					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;"></p>
+					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;">{{ medications.meds[0].quantity }}</p>
+					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;">{{ medications.meds[1].quantity }}</p>
 				</div><div class="inline" style="width:66px; height:76px; padding:2px 4px;">
 					<h5 style="margin:0;">Frequency</h5>
-					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;"></p>
-					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;"></p>
+					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;">{{ medications.meds[0].frequency }}</p>
+					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;">{{ medications.meds[1].frequency }}</p>
 				</div><div class="inline" style="width:138px; height:76px; padding:2px 4px;">
 					<h5 style="margin:0;">Route</h5>
 					<p contenteditable="true" style="height:29px; margin:2px 0 0; border:1px solid black;"></p>
@@ -238,11 +242,11 @@
 					<h5 style="margin:1px 2px;">3. Dates of Use <i>(If unknown, give duration) from/to<br />(or best estimate)</i></h5>
 					<div class="inline" style="width:222px; line-height:17px; margin-left:2px;">
 						#1
-						<ins contenteditable="true"></ins>
+						<ins contenteditable="true">{{ medications.meds[0].period }}</ins>
 					</div>
 					<div class="inline" style="width:222px; line-height:17px; margin-left:2px; border-top:1px solid black;">
 						#2
-						<ins contenteditable="true"></ins>
+						<ins contenteditable="true">{{ medications.meds[1].period }}</ins>
 					</div>
 					<div class="inline" style="border-top:1px solid black;">
 						<h5 style="margin:1px 2px;">4. Diagnosis or Reason for Use <i>(Indication)</i></h5>

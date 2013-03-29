@@ -59,7 +59,8 @@ class SQLite (object):
 	def execute(self, sql, params=()):
 		""" Executes an SQL command and returns the cursor.execute, which can be used as an iterator.
 		
-		Supply the params as tuple, i.e. (param,) and (param1,param2,...)
+		Supply the params as tuple, i.e. (param,) and (param1,param2,...).
+		You can use this method in a for-loop to iterate through, like so: "for row in sqlite.execute():"
 		"""
 		if not sql or len(sql) < 1:
 			raise Exception('no SQL to execute')

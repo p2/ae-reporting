@@ -334,6 +334,8 @@ def post_form(filename):
 	
 	json_str = bottle.request.forms['json']
 	data = json.loads(json_str)
+	record = _testrecord_from_request(bottle.request)
+	record.handle_form_data(data)
 	
 	template = _jinja_forms.get_template(filename)
 	return template.render(data)

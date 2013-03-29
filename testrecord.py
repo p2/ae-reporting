@@ -1,13 +1,16 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 #	2013-01-29	Created by Pascal Pfiffner
 #
 
 
 import json
+import os.path
 from rdflib.graph import Graph
 
 from rule import JSONRuleEncoder
+from lookup import RxNorm
 
 
 class TestRecord(object):
@@ -111,13 +114,23 @@ class TestRecord(object):
 			sparql = """
 				PREFIX sp: <http://smartplatforms.org/terms#>
 				PREFIX dcterms: <http://purl.org/dc/terms/>
-				SELECT ?code ?name ?start_date ?end_date
+				SELECT ?code ?name ?start_date ?end_date ?quant_value ?quant_unit ?freq_value ?freq_unit
 				WHERE {
 					?item sp:drugName ?name_node .
 					?name_node sp:code ?code .
 					OPTIONAL { ?name_node dcterms:title ?name . }
 					OPTIONAL { ?item sp:startDate ?start_date . }
 					OPTIONAL { ?item sp:endDate ?end_date . }
+					OPTIONAL {
+						?item sp:quantity ?quant_node .
+						?quant_node sp:value ?quant_value .
+						?quant_node sp:unit ?quant_unit .
+					}
+					OPTIONAL {
+						?item sp:frequency ?freq_node .
+						?freq_node sp:value ?freq_value .
+						?freq_node sp:unit ?freq_unit .
+					}
 				}
 			"""
 			
@@ -129,10 +142,12 @@ class TestRecord(object):
 			res = list(results)[0]		# can't believe SPARQLQueryResult doesn't reply to "next()"...
 			
 			return {
-				"rxnorm": res[0],
-				"name": res[1],
-				"start_date": res[2],
-				"end_date": res[3]
+				"rxnorm": os.path.basename(unicode(res[0])) if res[0] else None,
+				"name": unicode(res[1]) if res[1] else None,
+				"start_date": unicode(res[2]) if res[2] else None,
+				"end_date": unicode(res[3]) if res[3] else None,
+				"quantity": "%s %s" % (res[4], res[5]) if res[4] and res[5] else None,
+				"frequency": "%s%s" % (res[6], res[7]) if res[6] and res[7] else None
 			}
 		
 		# SNOMED problems
@@ -158,18 +173,48 @@ class TestRecord(object):
 			res = list(results)[0]
 			
 			return {
-				"snomed": res[0],
-				"name": res[1],
-				"start_date": res[2],
-				"end_date": res[3]
+				"snomed": unicode(res[0]) if res[0] else None,
+				"name": unicode(res[1]) if res[1] else None,
+				"start_date": unicode(res[2]) if res[2] else None,
+				"end_date": unicode(res[3]) if res[3] else None
 			}
 		
-		# not yet returned, simply use JSON-LD
-		
+		# not yet returned, should we use JSON-LD?
 		return None
 	
+	def complement_data_for(self, med, item_system):
+		""" You would use this after "data_from_graph" to look up more information about the item, e.g. fetching
+		manufacturer for drugs. This changes the provided data in place (!). """
+		if med is None:
+			return
+		
+		# a medication
+		if 'rxnorm' == item_system and 'rxnorm' in med:
+			details = RxNorm().get_details(med['rxnorm'])
+			if details is not None:
+				med.update(details)
+			
+			# date mangling
+			m_start = med['start_date'] if med['start_date'] is not None else None
+			m_end = med['end_date'] if med['end_date'] is not None else None
+			period = ''
+			if m_start is not None:
+				if m_end is None:
+					period += 'Since '
+				period += m_start
+			if m_end is not None:
+				if m_start is not None:
+					period += ' - '
+				else:
+					period += 'Until '
+				period += m_end
+			
+			if len(period) > 0:
+				med['period'] = period
+	
+	
 	def fetch_item(self, item_url):
-		""" Uses the SMART client to GET RDF for an item
+		""" Uses the SMART client to GET RDF for a single item
 		"""
 		
 		body = None
@@ -234,6 +279,32 @@ class TestRecord(object):
 		
 		print "I don't know what graph to return for section", section_id
 		return None
+	
+	
+	# -------------------------------------------------------------------------- Form Processing
+	def handle_form_data(self, data):
+		""" When we post data to a form, some things (like medications) are just their URL. This method goes ahead and
+		fetches the full items from the SMART container and converts data in place. """
+		if data is None:
+			return
+		
+		# medications?
+		if 'medications' in data:
+			orig = data['medications']
+			drugs = orig['drug'] if 'drug' in orig else []
+			meds = []
+			
+			for drug in drugs:
+				if not isinstance(drug, dict):
+					body = self.fetch_item(drug)
+					if body is not None:
+						graph = Graph().parse(data=body)
+						med = self.data_from_graph(graph, 'rxnorm')
+						if med is not None:
+							self.complement_data_for(med, 'rxnorm')
+							meds.append(med)
+			
+			data['medications']['meds'] = meds
 	
 	
 	# -------------------------------------------------------------------------- App Storage	

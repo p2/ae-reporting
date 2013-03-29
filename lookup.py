@@ -66,6 +66,27 @@ class RxNorm(Lookup):
 		
 		res = self.sqlite.executeOne(query, (object_id, subject_id, relation))[0]
 		return res > 0
+	
+	
+	def get_details(self, rxcui):
+		""" Fetches more information about a given RXCUI. """
+		data = {}
+		
+		# type and name
+		query = "SELECT TTY, STR FROM RXNCONSO WHERE RXCUI = ?"
+		res = self.sqlite.executeOne(query, (rxcui,))
+		if res:
+			data['rx:type'] = res[0]
+			data['rx:name'] = res[1]
+		
+		# strength, ...
+		# query = "SELECT RXAUI, CODE, ATN, ATV FROM RXNSAT WHERE RXCUI = ?"
+		query = "SELECT ATN, ATV FROM RXNSAT WHERE RXCUI = ?"
+		for row in self.sqlite.execute(query, (rxcui,)):
+			if 'RXN_STRENGTH' == row[0]:
+				data['rx:strength'] = row[1]
+		
+		return data
 
 
 
