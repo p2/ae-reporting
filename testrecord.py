@@ -290,10 +290,12 @@ class TestRecord(object):
 			return
 		
 		# medications?
+		meds = []
 		if 'medications' in data:
 			orig = data['medications']
 			drugs = orig['drug'] if 'drug' in orig else []
-			meds = []
+			if not isinstance(drugs, list):
+				drugs = [drugs]
 			
 			for drug in drugs:
 				if not isinstance(drug, dict):
@@ -304,9 +306,13 @@ class TestRecord(object):
 						if med is not None:
 							self.complement_data_for(med, 'rxnorm')
 							meds.append(med)
-			
-			data['medications']['meds'] = meds
-	
+		
+		# our FDA form needs two meds, so make sure to null the second if needed
+		while len(meds) < 2:
+			meds.append(None)
+		
+		data['medications']['meds'] = meds
+
 	
 	# -------------------------------------------------------------------------- App Storage	
 	@property

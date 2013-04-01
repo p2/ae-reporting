@@ -28,6 +28,8 @@ td:last-child { padding-right: 0; }
 
 #rule_inbox { float: left; color: white; }
 
+#rule_box .evaluate_rule { display: none; }
+
 .rule { margin-top: 0; padding: 0.5em 0.75em; border-top: 1px solid #e2e2e2; border-bottom: 1px solid #afafaf; background-color: #c8c8c8; }
 .rule h2 { margin: 0.3em 0; }
 .rule h2 a { color: #1e1e1e; text-decoration: none; }
@@ -37,6 +39,7 @@ td:last-child { padding-right: 0; }
 #rule_inbox .rule h2 a:hover { color: white; }
 .rule.all_good { border-top: 1px solid #c1ffa1; border-bottom: 1px solid #6eff21; background-color: #a0ff6e; }
 .rule .exclamation { float: left; width: 50px; height: 50px; margin: 5px 1em 1em 3px; }
+#rule_box .rule .exclamation { display: none; }
 .rule .buttons { margin-top: 1em; text-align: right; }
 .rule p { margin: 0.3em 0 0; padding: 0; }
 .rule pre { white-space: pre-wrap; }

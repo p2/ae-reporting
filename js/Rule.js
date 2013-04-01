@@ -80,27 +80,22 @@ var Rule = Base.extend({
 		
 		$.ajax('rules/' + self.id + '/run', {
 			success: function(response) {
-				var area = btn.parent().find('.rule_output').first();
 				btn.text("Check").removeAttr('disabled');
+				var div = btn.parentsUntil('.rule').parent();
 				
 				// no match
 				if ('ok' == response) {
-					if (area.is("*")) {
-						area.empty().html('<h3 class="green">No match</h3>');
-					}
-					else {
-						alert("The rule did not match");
+					div.addClass('all_good');
+					if ('rule_box' != div.parent().attr('id')) {
+						$('#rule_box').append(div);
 					}
 				}
 				
 				// match
 				else {
-					if (area.is("*")) {
-						area.empty().append('<h3 class="red">The rule did match</h3>').append('<pre/>');
-						area.find('pre').first().text(response);
-					}
-					else {
-						alert("The rule did match");
+					div.removeClass('all_good');
+					if ('rule_inbox' != div.parent().attr('id')) {
+						$('#rule_inbox').show().append(div);
 					}
 				}
 				

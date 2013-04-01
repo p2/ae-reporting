@@ -93,6 +93,10 @@ td {
 
 #rule_box {
 	// margin-left: $w-column;
+	
+	.evaluate_rule {
+		display: none;
+	}
 }
 
 .rule {
@@ -138,6 +142,10 @@ td {
 	.exclamation {
 		float: left; width: 50px; height: 50px;
 		margin: 5px 1em 1em 3px;
+		
+		#rule_box & {
+			display: none;
+		}
 	}
 	.buttons {
 		margin-top: 1em;
