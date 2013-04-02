@@ -24,16 +24,39 @@ var ProcessController = Base.extend({
 		this.elem.empty();
 		this.sections = sections;
 		
-		// abort header
-		var but = $('<button/>').text('Abort');
-		var self = this;
-		but.click(function() { self.abort(); });
-		
-		// rule info
+		// rule info section
 		var info = $('<div/>').addClass('rule_info');
 		info.append('<h3>Reporting: ' + this.for_rule.name + '</h3>');
 		info.append('<p>' + this.for_rule.description + '</p>');
+		
+		// latest trigger info
+		var latest = this.for_rule.latestPendingResult();
+		if (latest) {
+			var date = moment(latest['date'] * 1000);
+			var latest_section = $("<div><p>This rule last triggered on <b>" + date.format('ll') + "</b> because:</b></div>");
+			
+			var results = latest['results'];
+			if (results) {
+				var list = $('<ul/>');
+				for (var p in results) {
+					for (var i = 0; i < results[p].length; i++) {
+						var item = results[p][i];
+						console.log(p, ' -- ', item);
+						list.append('<li><b>' + p + '</b>: ' + item + '</li>');
+					};
+				}
+				latest_section.append(list);
+			}
+			
+			info.append(latest_section);
+		}
+		
+		// done button
+		var but = $('<button/>').text('Done Reporting');
+		var self = this;
+		but.click(function() { self.abort(); });
 		info.append(but);
+		
 		this.elem.append(info);
 		
 		// setup our sections
