@@ -65,6 +65,32 @@ function compareMedByNameASC(a, b) {
 }
 
 /**
+ *  Sorts problem objects based on their prob['sp:drugName']['dcterms:title'] attribute, ascending.
+ */
+function compareProblemByNameASC(a, b) {
+	if (!('sp:problemName' in a)) {
+		return 1;
+	}
+	if (!('dcterms:title' in a['sp:problemName'])) {
+		return 1;
+	}
+	if (!('sp:problemName' in b)) {
+		return -1;
+	}
+	if (!('dcterms:title' in b['sp:problemName'])) {
+		return -1;
+	}
+	
+	if (a['sp:problemName']['dcterms:title'] < b['sp:problemName']['dcterms:title']) {
+		return -1;
+	}
+	if (a['sp:problemName']['dcterms:title'] > b['sp:problemName']['dcterms:title']) {
+		return 1;
+	}
+	return 0;
+}
+
+/**
  *  Sorts objects based on their "date" attribute, descending.
  */
 function compareByDateDESC(a, b) {

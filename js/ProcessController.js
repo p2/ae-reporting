@@ -6,8 +6,8 @@ var ProcessController = Base.extend({
 	sections: [],
 	first: null,
 	data: null,
-	all: ['demographics', 'adverse_event', 'medications', 'labs', 'reporter'],
-	names: ["Demographics & Vitals", "Adverse Event", "Medications", "Labs", "Reporter"],
+	all: ['demographics', 'adverse_event', 'problems', 'medications', 'labs', 'reporter'],
+	names: ["Demographics & Vitals", "Adverse Event", "Problems", "Medications", "Labs", "Reporter"],
 	elem: null,
 	
 	constructor: function(rule) {

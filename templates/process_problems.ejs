@@ -1,0 +1,44 @@
+<form class="process_form" id="form_problems">
+	<p>Check the problems that you want to include in the report.</p>
+	<ul class="process_list">
+	<% 
+	var probs = (data && 'problems' in data) ? data['problems'] : [];
+	if (probs.length > 0) {
+		probs.sort(compareProblemByNameASC);
+		var check_ids = [];
+		var latest = rule.latestPendingResult();
+		if (latest) {
+			if ('results' in latest && latest.results && 'problem' in latest.results && latest.results.problem.length > 0) {
+				check_ids = latest.results.problem;
+			}
+		}
+		
+		for (var i = 0; i < probs.length; i++) {
+			var prob = probs[i];
+			var html_id = prob['@id'] ? prob['@id'].replace(/[^\w\d]+/g, '') : 'xxx';
+			if ('sp:Problem' == prob['@type']) { %>
+				<li><input type="checkbox" id="<%= html_id %>" name="problem" value="<%= prob['@id'] %>" <% if ($.inArray(prob['@id'], check_ids) >= 0) { %>checked="checked"<% } %> />
+					<label for="<%= html_id %>"><%= prob['sp:problemName']['dcterms:title'] %>
+					
+					<% if ('sp:startDate' in prob || 'sp:endDate' in prob) {
+						var period = '';
+						if ('sp:startDate' in prob) {
+							period = ('sp:endDate' in prob) ? 'from ' : 'since ';
+							period += '<b>' + moment(prob['sp:startDate']).format('ll') + '</b>';
+						}
+						if ('sp:endDate' in prob) {
+							if (period.length > 0) {
+								period += ' until ';
+							}
+							period += '<b>' + moment(prob['sp:endDate']).format('ll') + '</b>';
+						} %>
+					<div class="supplement"><%== period %></div>
+					<% } %>
+					</label>
+				</li><%
+			}
+		}
+	} %>
+		<li id="add_more"><a href="javascript:void(0);" onclick="addCheckableListItem($(this).parent(), 'problem')">Add another</a></li>
+	</ul>
+</form>

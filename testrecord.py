@@ -277,6 +277,8 @@ class TestRecord(object):
 		
 		if 'medications' == section_id:
 			return self.medications
+		if 'problems' == section_id:
+			return self.problems
 		
 		logging.warning("I don't know what graph to return for section %s" % section_id)
 		return None

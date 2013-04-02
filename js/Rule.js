@@ -124,7 +124,7 @@ var Rule = Base.extend({
 		}
 		
 		_reportCtrl = new ProcessController(this);
-		_reportCtrl.init(['demographics', 'adverse_event', 'medications', 'reporter']);
+		_reportCtrl.init(['demographics', 'adverse_event', 'problems', 'medications', 'reporter']);
 		
 		// TODO: this should probably go to another controller
 		$('#rules').hide();
