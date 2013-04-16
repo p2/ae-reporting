@@ -2,8 +2,8 @@
 
 ENDPOINTS = [
 	{
-		"url": "http://sandbox-rest.smartplatforms.org:7000",
-		"name": "REST Sandbox",
+		"url": "http://sandbox-api-v06.smartplatforms.org",
+		"name": "SMART Sandbox",
 		"app_id": "ae-reporting@apps.chip.org",
 		"consumer_key": "ae-reporting@apps.chip.org",
 		"consumer_secret": "xxx"
