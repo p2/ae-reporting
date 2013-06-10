@@ -50,7 +50,8 @@ class TestRecord(object):
 			status = ret.response.get('status')
 			if '200' != status:
 				raise Exception("Failed to get medications: %s" % status)
-			#self._medications.serialize(destination="medications-%s.rdf" % self.record_id)
+			#ret.graph.serialize(destination="medications-%s.rdf" % self.record_id)
+			#ret.graph.serialize(format='json-ld', destination="medications-%s.json" % self.record_id)
 			self._medications = ret.graph
 		
 		return self._medications
@@ -62,7 +63,8 @@ class TestRecord(object):
 			status = ret.response.get('status')
 			if '200' != status:
 				raise Exception("Failed to get problems: %s" % status)
-			#self._problems.serialize(destination="problems-%s.rdf" % self.record_id)
+			#ret.graph.serialize(destination="problems-%s.rdf" % self.record_id)
+			#ret.graph.serialize(format='json-ld', destination="problems-%s.json" % self.record_id)
 			self._problems = ret.graph
 		
 		return self._problems
@@ -74,7 +76,7 @@ class TestRecord(object):
 			status = ret.response.get('status')
 			if '200' != status:
 				raise Exception("Failed to get vitals: %s" % status)
-			#self._vitals.serialize(destination="vitals-%s.rdf" % self.record_id)
+			#ret.graph.serialize(destination="vitals-%s.rdf" % self.record_id)
 			self._vitals = ret.graph
 		
 		return self._vitals
